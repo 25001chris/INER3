@@ -1,0 +1,10 @@
+.btn-primary-dark{
+    background-color: $btn-dark;
+    color:white;
+    @include btn-default-type
+}   
+.btn-primary-light{
+    background-color: $btn-light;
+    color:$font-dark;
+    @include btn-default-type
+}       

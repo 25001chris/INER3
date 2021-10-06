@@ -1,0 +1,25 @@
+@charset "UTF-8";
+@import './utils/mixin.scss';
+@import './utils/color.scss';
+@import './utils/variable.scss';
+@import './utils/gutter.scss';
+@import './utils/position.scss';
+@import './utils/button.scss';
+@import './utils/sizing.scss';
+
+nav {
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li { display: inline-block; }
+
+    a {
+        display: block;
+        padding: 6px 12px;
+        text-decoration: none;
+    }
+}
+
