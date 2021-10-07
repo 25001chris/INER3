@@ -23,3 +23,13 @@ nav {
     }
 }
 
+.van-field__body{
+    border: 1px solid $btn-light;
+    border-radius: 10px;
+    padding: 10px 5px;
+}
+.van-field__label{
+    display: flex;
+    align-items: center;
+}
+

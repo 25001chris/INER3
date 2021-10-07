@@ -14,6 +14,11 @@
             fit="contain"
         />
         <van-col span="24" class="announceTitle">{{announceObj.text}}</van-col>
+        <van-col span="20" type="flex" justify="center" v-show="inputLength">
+            <van-cell-group>
+                <van-field :border="true" v-model="inputValue" placeholder="请输入用户名" :error-message="announceObj.input.errorMessage"/>
+            </van-cell-group>
+        </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
             <van-col v-for="(item, index) in announceObj.btn" :span="btnLength" :key="index">
                 <ButtonTool :type="item.type" :text="item.text"/>
@@ -27,7 +32,7 @@ import ButtonTool from '~/components/tools/ButtonTool';
 export default {
     name:'announceButton',
     components: {
-    ButtonTool
+        ButtonTool
     },
     props:{
         announceObj:{
@@ -36,13 +41,15 @@ export default {
                 return {
                     // icon:'announce',
                     // text:'通報位置',
+                    // input:{},
                     // btn:[
                     //     {text:'圖號座標',type:'btn-primary-light',event:'coordinate'},
                     //     {text:'當下位置',type:'btn-primary-light',event:'location'},
                     //     {text:'手動點選',type:'btn-primary-dark',event:'select'},
-                    // ]
+                    // ],
                     icon:'location',
                     text:'請輸入台電圖號坐標',
+                    input:{errorMessage:'無法找到該筆圖號，請重新輸入!',name:"location"},
                     btn:[
                         {text:'取消',type:'btn-primary-light',event:'cancel'},
                         {text:'確認',type:'btn-primary-dark',event:'confirm'},
@@ -55,7 +62,8 @@ export default {
         return{
             icon : require("@/assets/img/ICON/announce.svg"),
             close : require("@/assets/img/BUTTON/close.svg"),
-            text : '通報'
+            text : '通報',
+            inputValue : ''
         }
     },
     methods: {
@@ -69,7 +77,10 @@ export default {
     computed:{
         btnLength(){
             return 24 / this.announceObj.btn.length
-        }
+        },
+        inputLength(){
+            return Object.keys(this.announceObj.input).length > 0 ? true : false;　
+        },
     }
 };
 </script>

@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    {{windowWidth}}
+    <transition name="van-slide-up">
+      <AuuounceList
+        v-show="announceList" 
+        @closeEvent="toggleAnnounceList" 
+      />
+    </transition>
     <transition name="van-slide-up">
       <AuuounceBox 
         v-show="announceBox" 
@@ -17,11 +22,13 @@
   import { mapState } from 'vuex';
   import AuuounceBtn from '~/components/tools/AnnounceButton';
   import AuuounceBox from '~/components/model/AnnounceBox';
+  import AuuounceList from '~/components/model/AnnounceList';
   export default {
     layout: 'main',
     components: {
       AuuounceBtn,
-      AuuounceBox
+      AuuounceBox,
+      AuuounceList
     },
     async asyncData() {
       let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
@@ -30,7 +37,8 @@
     },
     data:()=>{
       return{
-        announceBox : false
+        announceBox : false,
+        announceList : true
       }
     },
     methods:{
@@ -40,15 +48,19 @@
         }
       },
       toggleAnnounceBox(e){
-        console.log(e)
         if(e){
           this.announceBox = false;
+        }
+      },
+      toggleAnnounceList(e){
+        if(e){
+          this.announceList = false;
         }
       }
     },
     computed:{
       resizeAnnpinceBox(){
-        return this.windowWidth === 1366 ? 'height : 25vh' : 'height : 20vh'
+        return this.windowWidth === 1366 ? 'height : 33vh' : 'height : 25vh'
       },
       ...mapState([
         'windowWidth'
