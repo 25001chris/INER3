@@ -1,20 +1,60 @@
 <template>
   <div class="container">
-    <p>dfdfdfdf</p>
+    {{windowWidth}}
+    <transition name="van-slide-up">
+      <AuuounceBox 
+        v-show="announceBox" 
+        @closeEvent="toggleAnnounceBox" 
+        :style="resizeAnnpinceBox"
+      />
+    </transition>
+    <AuuounceBtn @btnEvent="openAnnounce"/>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import { mapState } from 'vuex';
+  import AuuounceBtn from '~/components/tools/AnnounceButton';
+  import AuuounceBox from '~/components/model/AnnounceBox';
   export default {
     layout: 'main',
     components: {
+      AuuounceBtn,
+      AuuounceBox
     },
     async asyncData() {
       let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
       let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
       return { a: aaa.data, b: bbb.data }
+    },
+    data:()=>{
+      return{
+        announceBox : false
+      }
+    },
+    methods:{
+      openAnnounce(e){
+        if(e){
+          this.announceBox = true;
+        }
+      },
+      toggleAnnounceBox(e){
+        console.log(e)
+        if(e){
+          this.announceBox = false;
+        }
+      }
+    },
+    computed:{
+      resizeAnnpinceBox(){
+        return this.windowWidth === 1366 ? 'height : 25vh' : 'height : 20vh'
+      },
+      ...mapState([
+        'windowWidth'
+      ])
     }
+    
     // page component definitions
   }
 </script>
@@ -22,13 +62,14 @@
 <style lang="scss" scoped>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: calc( 100vh - 60px );
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: $main-color;
   background-color: bisque;
+  position: relative;
 }
 
 .title {

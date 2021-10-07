@@ -3,8 +3,26 @@
     color:white;
     @include btn-default-type
 }   
+.btn-primary-dark-disable{
+    background-color: $font-dark;
+    color:white;
+    @include btn-default-type
+}
 .btn-primary-light{
     background-color: $btn-light;
-    color:$font-dark;
+    color: $font-dark;
     @include btn-default-type
-}       
+}
+.btn-primary-light-disable{
+    background-color: $btn-light-disable;
+    color: $font-dark;
+    @include btn-default-type
+}
+.btn-primary-light-plain{
+    color: $btn-dark;
+    @include btn-default-type
+}
+.btn-primary-light-disable-plain{
+    color: $btn-dark;
+    @include btn-default-type
+}         

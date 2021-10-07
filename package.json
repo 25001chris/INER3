@@ -25,5 +25,20 @@
     "babel-jest": "^27.0.5",
     "jest": "^27.0.5",
     "vue-jest": "^3.0.4"
-  }
+  },
+  "description": "```bash\r # install dependencies\r $ npm install",
+  "main": "jest.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/25001chris/INER3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/25001chris/INER3/issues"
+  },
+  "homepage": "https://github.com/25001chris/INER3#readme"
 }

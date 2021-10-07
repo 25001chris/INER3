@@ -1,40 +1,41 @@
 <template>
-    <van-row type="flex">
-        <van-col :span="setHeaderSpan.logo">
-            <nuxt-link to="/">
-                <van-image
-                    :src=logo
-                    title="智慧電力圖資演算地理資訊應用系統"
-                    class="pd-t-min w-90 mainLogo"
-                    fit="contain"
-                />
-            </nuxt-link>
-        </van-col>
-        <van-col :span="setHeaderSpan.title" offset="2">
-            <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
-        </van-col>
-        <van-col span="2" justify="end" class="pd-t-half">
-            <!-- <ButtonTool text="登出1" type="btn-primary-dark" @btnEvent="isLogout"/> -->
-            <van-button class="btn-primary-dark">登出</van-button>
-        </van-col>
-    </van-row>
+    <div>
+        <van-row type="flex">
+            <van-col :span="setHeaderSpan.logo">
+                <nuxt-link to="/">
+                    <van-image
+                        :src="logo"
+                        title="智慧電力圖資演算地理資訊應用系統"
+                        class="pd-t-min w-90 mainLogo"
+                        fit="contain"
+                    />
+                </nuxt-link>
+            </van-col>
+            <van-col :span="setHeaderSpan.title" offset="2">
+                <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
+            </van-col>
+            <van-col span="2" justify="end" class="pd-t-half">
+                <Button type="btn-primary-dark" text="登出"/>
+            </van-col>
+        </van-row>
+    </div>
 </template>
 
 <script>
-//import ButtonTool from '~/components/tools/ButtonTool.vue';
+import Button from '~/components/tools/ButtonTool.vue';
+import { mapState } from 'vuex';
 export default {
+    name:'headerTool',
     components: {
-        //ButtonTool
+        Button
     },
     data: ()=>{
         return{
             logo : require("@/assets/img/logo.svg"),
-            windowWidth: 0
         }
     },
     mounted() {
-        const self = this;
-        this.setWindowWidth(self);
+        this.setWindowWidth();
     },
     computed:{
         setHeaderSpan(){
@@ -48,13 +49,16 @@ export default {
                 result.logo = 3
             }
             return result;
-        }
+        },
+        ...mapState([
+            'windowWidth'
+        ])
     },
     methods: {
-        setWindowWidth(self){
-            self.windowWidth = window.innerWidth;
+        setWindowWidth(){
+            this.$store.commit('setWindowWidth', window.innerWidth)
             window.onresize = () => {
-                self.windowWidth = window.innerWidth;
+                this.$store.commit('setWindowWidth', window.innerWidth)
             }
         },
         isLogout(e){

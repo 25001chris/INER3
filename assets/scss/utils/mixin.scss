@@ -80,8 +80,20 @@ $font-family: 'Noto Sans TC', sans-serif;
   line-height: normal;
 }
 @mixin noto-sans-tc-24-medium {
-  font-family: "Noto Sans TC";
+  font-family: $font-family;
   font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+}
+@mixin noto-sans-tc-30-bold {
+  font-family: $font-family;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: normal;
+}
+@mixin noto-sans-tc-30-medium {
+  font-family: $font-family;
+  font-size: 30px;
   font-weight: 500;
   line-height: normal;
 }
