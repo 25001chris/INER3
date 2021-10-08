@@ -17,7 +17,7 @@
       />
     </transition>
     <AnnounceBtn @btnEvent="openAnnounce"/>
-    <RightFloatBox/>
+    <RightFloatBox :isAnnounceBox="announceBox"/>
     <van-popup v-model="popShow" class="vw-40" :round="true"><PopupTool @btnEvent="popupConfirm"/></van-popup>
   </div>
 </template>

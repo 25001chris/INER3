@@ -4,10 +4,10 @@
             <FloatButton icon="compass"/>
             <FloatButton icon="list"/>
         </van-col>
-        <van-col class="floatMidBox">
+        <van-col class="floatMidBox" :class="setPosition">
             <FloatButton icon="position"/>
         </van-col>
-        <van-col class="floatBottomBox">
+        <van-col class="floatBottomBox" :class="setPosition">
             <FloatButton icon="plus"/>
             <FloatButton icon="reduce"/>
             <FloatButton icon="home"/>
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapState,mapGetters } from 'vuex';
 import FloatButton from '~/components/tools/FloatButton';
 export default {
     name:'rightFloatBox',
@@ -23,6 +24,10 @@ export default {
         FloatButton
     },
     props:{
+        isAnnounceBox:{
+            type:Boolean,
+            default:false
+        }
     },
     data:()=>{
         return{
@@ -34,6 +39,27 @@ export default {
         }
     },
     computed:{
+        ...mapState([
+            'windowWidth'
+        ]),
+        ...mapGetters([
+            'ishorizontal'
+        ]),
+        setPosition(){
+            const isAnnounceBox = this.isAnnounceBox;
+            const ishorizontal = this.ishorizontal;
+            let result = "";
+            if(isAnnounceBox&&ishorizontal){
+                result = 'onAnnounceHorizontal'
+            }else if(isAnnounceBox&&!ishorizontal){
+                result = 'onAnnounce'
+            }else if(!isAnnounceBox&&ishorizontal){
+                result = 'horizontal'
+            }else{
+                result = ''
+            }
+            return result;
+        }
     }
 };
 </script>
@@ -47,18 +73,36 @@ export default {
     right: 15px;
     .floatTopBox{
         position: absolute;
-        top: 5vh;
+        top: 1vh;
         .floatButton{
             margin-bottom: 1vh;
         }
     }
     .floatMidBox{
         position: absolute;
-        top: 50vh;
+        top: 67vh;
+        &.horizontal{
+            top: 58vh;
+        }
+        &.onAnnounce{
+            top: 42vh;
+        }
+        &.onAnnounceHorizontal{
+            top: 25vh;
+        }
     }
     .floatBottomBox{
         position: absolute;
-        top: 60vh;
+        top: 75vh;
+        &.horizontal{
+            top: 68vh;
+        }
+        &.onAnnounce{
+            top: 50vh;
+        }
+        &.onAnnounceHorizontal{
+            top: 35vh;
+        }
     }
 }
 </style>
