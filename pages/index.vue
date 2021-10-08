@@ -17,6 +17,7 @@
       />
     </transition>
     <AnnounceBtn @btnEvent="openAnnounce"/>
+    <RightFloatBox/>
     <van-popup v-model="popShow" class="vw-40" :round="true"><PopupTool @btnEvent="popupConfirm"/></van-popup>
   </div>
 </template>
@@ -28,13 +29,15 @@
   import AnnounceBox from '~/components/model/AnnounceBox';
   import AnnounceList from '~/components/model/AnnounceList';
   import PopupTool from '~/components/model/PopupTool';
+  import RightFloatBox from '~/components/model/RightFloatBox';
   export default {
     layout: 'main',
     components: {
       AnnounceBtn,
       AnnounceBox,
       AnnounceList,
-      PopupTool
+      PopupTool,
+      RightFloatBox
     },
     async asyncData() {
       let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
