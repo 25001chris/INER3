@@ -10,3 +10,8 @@ export const mutations = {
         state.windowWidth = payload
     }
 }
+export const getters = {
+    ishorizontal: (state) => {
+        return state.windowWidth === 1366
+    }
+}

@@ -1,34 +1,40 @@
 <template>
   <div class="container">
     <transition name="van-slide-up">
-      <AuuounceList
-        v-show="announceList" 
-        @closeEvent="toggleAnnounceList" 
+      <AnnounceList
+        v-show="announceList"
+        @closeEvent="toggleAnnounceList"
+        @submit="setAnnounceListData"
       />
     </transition>
     <transition name="van-slide-up">
-      <AuuounceBox 
+      <AnnounceBox 
         v-show="announceBox" 
+        :announceEvent="announceEvent"
         @closeEvent="toggleAnnounceBox" 
+        @btnEvent="announceListEvent"
         :style="resizeAnnpinceBox"
       />
     </transition>
-    <AuuounceBtn @btnEvent="openAnnounce"/>
+    <AnnounceBtn @btnEvent="openAnnounce"/>
+    <van-popup v-model="popShow" class="vw-40" :round="true"><PopupTool @btnEvent="popupConfirm"/></van-popup>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import { mapState } from 'vuex';
-  import AuuounceBtn from '~/components/tools/AnnounceButton';
-  import AuuounceBox from '~/components/model/AnnounceBox';
-  import AuuounceList from '~/components/model/AnnounceList';
+  import { mapState,mapGetters } from 'vuex';
+  import AnnounceBtn from '~/components/tools/AnnounceButton';
+  import AnnounceBox from '~/components/model/AnnounceBox';
+  import AnnounceList from '~/components/model/AnnounceList';
+  import PopupTool from '~/components/model/PopupTool';
   export default {
     layout: 'main',
     components: {
-      AuuounceBtn,
-      AuuounceBox,
-      AuuounceList
+      AnnounceBtn,
+      AnnounceBox,
+      AnnounceList,
+      PopupTool
     },
     async asyncData() {
       let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
@@ -38,7 +44,10 @@
     data:()=>{
       return{
         announceBox : false,
-        announceList : true
+        announceList : false,
+        announceEvent : 'default',
+        popShow: false,
+        announceListData: {}
       }
     },
     methods:{
@@ -47,16 +56,42 @@
           this.announceBox = true;
         }
       },
+      announceListEvent(e){
+        if(e==="cancel"){
+          this.setDefault();
+        }else if(e==="confirm"){
+          this.openAnnounceList();
+        }else{
+          this.announceEvent = e;
+        }
+      },
       toggleAnnounceBox(e){
         if(e){
-          this.announceBox = false;
+          this.setDefault();
         }
       },
       toggleAnnounceList(e){
         if(e){
           this.announceList = false;
         }
-      }
+      },
+      setDefault(){
+        this.announceBox = false;
+        setTimeout(() => {this.announceEvent = 'default'}, 500);
+      },
+      openAnnounceList(){
+        this.announceList = true;
+        this.setDefault();
+      },
+      setAnnounceListData(e){
+        this.announceListData = e;
+        this.popShow = true;
+      },
+      popupConfirm(e){
+        if(e){
+          this.popShow = false;
+        }
+      },
     },
     computed:{
       resizeAnnpinceBox(){
@@ -64,6 +99,9 @@
       },
       ...mapState([
         'windowWidth'
+      ]),
+      ...mapGetters([
+        'ishorizontal'
       ])
     }
     

@@ -85,16 +85,13 @@
                     placeholder="輸入文字"
                     type="textarea"
                 />
-                <van-row type="flex" offset="2">
-                    <van-col span="8"><UploadTool/></van-col>
-                </van-row>
                 <van-field name="uploader" label="文件上传">
                     <template type="flex" #input>
-                         <van-col span="24"><van-uploader v-model="uploader" offset="2" max-count="3" preview-size="30vh"/></van-col>
+                        <van-col span="24"><van-uploader v-model="uploader" offset="2" max-count="3" preview-size="30vh"/></van-col>
                     </template>
                 </van-field>
                 <van-row class="announceBtnBox" type="flex" style="margin: 16px;">
-                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-light" text="取消" @btnEvent="closeList"/></van-col>
+                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-light" text="取消" @btnEvent="sendClose"/></van-col>
                     <van-col span="10" offset="2"><ButtonTool type="btn-primary-dark" text="通報"/></van-col>
                 </van-row>
             </van-form>
@@ -110,9 +107,6 @@ export default {
     name:'announceList',
     components: {
         ButtonTool
-    },
-    props:{
-        
     },
     data:()=>{
         return{
@@ -150,16 +144,14 @@ export default {
             this.showPicker = false;
         },
         onSubmit(values) {
-            console.log('submit', values);
+            this.$emit("submit",values);
+            this.$emit("closeEvent",true);
         },
-        closeList(e){
+        sendClose(e){
             if(e){
                 this.$emit("closeEvent",true);
             }
         }
-    },
-    computed:{
-
     }
 };
 </script>
@@ -170,9 +162,8 @@ export default {
     height: 100vh;
     background-color: #FFF;
     position: absolute;
-    bottom: 0;
+    top: 0px;
     z-index: 1000;
-    align-content: center;
 }
 .announceBtnBox{
     padding: 0 100px;

@@ -18,11 +18,16 @@ export default {
     text: {
       type: String,
       default: '按鈕'
+    },
+    eventType: {
+      type: String,
+      default: ''
     }
   },
   methods: {
       sendEvent(){
-          this.$emit("btnEvent",true);
+          const event = this.eventType !== "" ? this.eventType : true;
+          this.$emit("btnEvent",event);
       }
   }
 

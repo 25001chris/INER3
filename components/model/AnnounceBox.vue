@@ -21,7 +21,7 @@
         </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
             <van-col v-for="(item, index) in announceObj.btn" :span="btnLength" :key="index">
-                <ButtonTool :type="item.type" :text="item.text"/>
+                <ButtonTool :type="item.type" :text="item.text" :eventType="item.event" @btnEvent="sendEvent"/>
             </van-col>
         </van-row>
     </van-row>
@@ -30,26 +30,46 @@
 <script>
 import ButtonTool from '~/components/tools/ButtonTool';
 export default {
-    name:'announceButton',
+    name:'announceBox',
     components: {
         ButtonTool
     },
     props:{
-        announceObj:{
-            type: Object,
-            default: () => {
-                return {
-                    // icon:'announce',
-                    // text:'通報位置',
-                    // input:{},
-                    // btn:[
-                    //     {text:'圖號座標',type:'btn-primary-light',event:'coordinate'},
-                    //     {text:'當下位置',type:'btn-primary-light',event:'location'},
-                    //     {text:'手動點選',type:'btn-primary-dark',event:'select'},
-                    // ],
+        announceEvent:{
+            type: String,
+            default:''
+        }
+    },
+    data:()=>{
+        return{
+            icon : require("@/assets/img/ICON/announce.svg"),
+            close : require("@/assets/img/BUTTON/close.svg"),
+            text : '通報',
+            inputValue : '',
+            setAnnounceObj:{
+                default:{
+                    icon:'announce',
+                    text:'通報位置',
+                    input:{},
+                    btn:[
+                        {text:'圖號座標',type:'btn-primary-light',event:'coordinate'},
+                        {text:'當下位置',type:'btn-primary-light',event:'location'},
+                        {text:'手動點選',type:'btn-primary-dark',event:'select'},
+                    ],
+                },
+                coordinate:{
                     icon:'location',
                     text:'請輸入台電圖號坐標',
                     input:{errorMessage:'無法找到該筆圖號，請重新輸入!',name:"location"},
+                    btn:[
+                        {text:'取消',type:'btn-primary-light',event:'cancel'},
+                        {text:'確認',type:'btn-primary-dark',event:'confirm'},
+                    ]
+                },
+                select:{
+                    icon:'location',
+                    text:'請點選圖面,點選後請按確認',
+                    input:{},
                     btn:[
                         {text:'取消',type:'btn-primary-light',event:'cancel'},
                         {text:'確認',type:'btn-primary-dark',event:'confirm'},
@@ -58,17 +78,9 @@ export default {
             }
         }
     },
-    data:()=>{
-        return{
-            icon : require("@/assets/img/ICON/announce.svg"),
-            close : require("@/assets/img/BUTTON/close.svg"),
-            text : '通報',
-            inputValue : ''
-        }
-    },
     methods: {
-        sendEvent(){
-            this.$emit("btnEvent",true);
+        sendEvent(e){
+            this.$emit("btnEvent",e);
         },
         sendClose(){
             this.$emit("closeEvent",true);
@@ -81,6 +93,10 @@ export default {
         inputLength(){
             return Object.keys(this.announceObj.input).length > 0 ? true : false;　
         },
+        announceObj(){
+            const event = this.announceEvent;
+            return this.setAnnounceObj[event];
+        }
     }
 };
 </script>

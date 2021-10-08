@@ -23,7 +23,7 @@
 
 <script>
 import Button from '~/components/tools/ButtonTool.vue';
-import { mapState } from 'vuex';
+import { mapState,mapGetters } from 'vuex';
 export default {
     name:'headerTool',
     components: {
@@ -39,9 +39,9 @@ export default {
     },
     computed:{
         setHeaderSpan(){
-            const windowWidth = this.windowWidth;
+            const ishorizontal = this.ishorizontal;
             let result = {}
-            if(windowWidth === 1366){
+            if(ishorizontal){
                 result.title = 18;
                 result.logo = 2
             }else{
@@ -52,6 +52,9 @@ export default {
         },
         ...mapState([
             'windowWidth'
+        ]),
+        ...mapGetters([
+            'ishorizontal'
         ])
     },
     methods: {
