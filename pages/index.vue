@@ -16,8 +16,11 @@
         :style="resizeAnnpinceBox"
       />
     </transition>
+    <transition name="van-slide-right">
+      <RightListBox v-show="rightListBox" />
+    </transition>
     <AnnounceBtn @btnEvent="openAnnounce"/>
-    <RightFloatBox :isAnnounceBox="announceBox"/>
+    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" @listEvent="listEvent"/>
     <van-popup v-model="popShow" class="vw-40" :round="true"><PopupTool @btnEvent="popupConfirm"/></van-popup>
   </div>
 </template>
@@ -27,6 +30,7 @@
   import { mapState,mapGetters } from 'vuex';
   import AnnounceBtn from '~/components/tools/AnnounceButton';
   import AnnounceBox from '~/components/model/AnnounceBox';
+  import RightListBox from '~/components/model/RightListBox';
   import AnnounceList from '~/components/model/AnnounceList';
   import PopupTool from '~/components/model/PopupTool';
   import RightFloatBox from '~/components/model/RightFloatBox';
@@ -37,7 +41,8 @@
       AnnounceBox,
       AnnounceList,
       PopupTool,
-      RightFloatBox
+      RightFloatBox,
+      RightListBox
     },
     async asyncData() {
       let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
@@ -49,6 +54,7 @@
         announceBox : false,
         announceList : false,
         announceEvent : 'default',
+        rightListBox :　false,
         popShow: false,
         announceListData: {}
       }
@@ -95,6 +101,11 @@
           this.popShow = false;
         }
       },
+      listEvent(e){
+        if(e){
+          this.rightListBox = !this.rightListBox;
+        }
+      }
     },
     computed:{
       resizeAnnpinceBox(){

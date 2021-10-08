@@ -1,16 +1,16 @@
 <template>
-    <van-row class="rightFloatBox" type="flex" justify="center">
+    <van-row class="rightFloatBox" type="flex" justify="center" :class="{test:isRightListBox}">
         <van-col class="floatTopBox">
-            <FloatButton icon="compass"/>
-            <FloatButton icon="list"/>
+            <FloatButton icon="compass" @btnEvent="compassEvent"/>
+            <FloatButton icon="list" @btnEvent="listEvent"/>
         </van-col>
         <van-col class="floatMidBox" :class="setPosition">
-            <FloatButton icon="position"/>
+            <FloatButton icon="position" @btnEvent="positionEvent"/>
         </van-col>
         <van-col class="floatBottomBox" :class="setPosition">
-            <FloatButton icon="plus"/>
-            <FloatButton icon="reduce"/>
-            <FloatButton icon="home"/>
+            <FloatButton icon="plus" @btnEvent="plusEvent"/>
+            <FloatButton icon="reduce" @btnEvent="reduceEvent"/>
+            <FloatButton icon="home" @btnEvent="homeEvent"/>
         </van-col>
     </van-row>
 </template>
@@ -27,15 +27,34 @@ export default {
         isAnnounceBox:{
             type:Boolean,
             default:false
-        }
+        },
+        isRightListBox:{
+            type:Boolean,
+            default:false
+        },
     },
     data:()=>{
         return{
         }
     },
     methods:{
-        sendEvent(e){
-            this.$emit("btnEvent",e)
+        compassEvent(e){
+            this.$emit("compassEvent",e);
+        },
+        listEvent(e){
+            this.$emit("listEvent",e);
+        },
+        positionEvent(e){
+            this.$emit("positionEvent",e);
+        },
+        plusEvent(e){
+            this.$emit("plusEvent",e);
+        },
+        reduceEvent(e){
+            this.$emit("reduceEvent",e);
+        },
+        homeEvent(e){
+            this.$emit("homeEvent",e);
         }
     },
     computed:{
@@ -71,6 +90,9 @@ export default {
     align-content: center;
     position: absolute;
     right: 15px;
+    &.test{
+        right:315px;
+    }
     .floatTopBox{
         position: absolute;
         top: 1vh;
