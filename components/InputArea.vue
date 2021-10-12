@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import InputBoxObj from '~/components/inputBox.vue';
+import InputBoxObj from '~/components/InputBox.vue';
 export default {
     components: {
         'InputBox': InputBoxObj,

@@ -1,8 +1,29 @@
 <template>
     <van-row type="flex" class="rightList">
-        <van-col span="16">通報接獲清單</van-col>
-        <van-col span="4">2</van-col>
-        <van-col span="4">2</van-col>
+        <van-col span="16" class="listTitle">通報接獲清單</van-col>
+        <van-col span="4">
+            <van-image
+                :src="require(`@/assets/img/ICON/favicon/list.svg`)"
+                class="listIcon"
+                fit="contain"
+            />
+        </van-col>
+        <van-col span="4">
+            <van-image
+                :src="require(`@/assets/img/ICON/favicon/openEye.svg`)"
+                class="listIcon"
+                fit="contain"
+                v-show="eyeOpen"
+                @click="toggleEyeStatus"
+            />
+             <van-image
+                :src="require(`@/assets/img/ICON/favicon/closeEye.svg`)"
+                class="listIcon"
+                fit="contain"
+                v-show="eyeClose"
+                @click="toggleEyeStatus"
+            />
+        </van-col>
     </van-row>
 </template>
 
@@ -12,19 +33,29 @@ export default {
     name:'rightList',
     data:()=>{
         return{
+            eyeOpen:true,
+            eyeClose:false
         }
     },
     methods: {
         sendEvent(){
             this.$emit("btnEvent",true);
+        },
+        toggleEyeStatus(){
+            this.eyeOpen = !this.eyeOpen;
+            this.eyeClose = !this.eyeClose;
         }
     }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .rightList{
     height: 40px;
     line-height: 40px;
+    padding: 0.25em 0;
+    .listTitle{
+        text-align: left;
+    }
 }
 </style>

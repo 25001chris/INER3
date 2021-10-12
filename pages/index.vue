@@ -13,25 +13,37 @@
         :announceEvent="announceEvent"
         @closeEvent="toggleAnnounceBox" 
         @btnEvent="announceListEvent"
-        :style="resizeAnnpinceBox"
+        :style="resizeAnnounceBox"
       />
     </transition>
-    <transition name="van-slide-right">
-      <RightListBox v-show="rightListBox" />
+    <transition name="van-slide-up">
+      <AnnounceItem 
+        v-show="announceItem" 
+        :announceEvent="announceEvent"
+        @closeEvent="toggleAnnounceItem" 
+        @btnEvent="announceItemEvent"
+        :style="resizeAnnounceBox"
+      />
     </transition>
+    <van-popup v-model="rightListBox" :overlay="false" position="right" :style="{ width:'300px',height: '100vh' }" >
+      <RightListBox @closeEvent="listEvent"/>
+    </van-popup>
     <AnnounceBtn @btnEvent="openAnnounce"/>
     <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" @listEvent="listEvent"/>
-    <van-popup v-model="popShow" class="vw-40" :round="true"><PopupTool @btnEvent="popupConfirm"/></van-popup>
+    <van-popup v-model="popShow" class="vw-40" :round="true">
+      <PopupTool @btnEvent="popupConfirm"/>
+    </van-popup>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
+  //import axios from 'axios'
   import { mapState,mapGetters } from 'vuex';
   import AnnounceBtn from '~/components/tools/AnnounceButton';
   import AnnounceBox from '~/components/model/AnnounceBox';
   import RightListBox from '~/components/model/RightListBox';
   import AnnounceList from '~/components/model/AnnounceList';
+  import AnnounceItem from '~/components/model/AnnounceItem';
   import PopupTool from '~/components/model/PopupTool';
   import RightFloatBox from '~/components/model/RightFloatBox';
   export default {
@@ -42,24 +54,30 @@
       AnnounceList,
       PopupTool,
       RightFloatBox,
-      RightListBox
+      RightListBox,
+      AnnounceItem
     },
     async asyncData() {
-      let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
-      let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
-      return { a: aaa.data, b: bbb.data }
+      // let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
+      // let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
+      //return { a: aaa.data, b: bbb.data }
     },
     data:()=>{
       return{
         announceBox : false,
         announceList : false,
+        announceItem : false,
         announceEvent : 'default',
         rightListBox :　false,
         popShow: false,
-        announceListData: {}
+        announceListData: {},
+        show: false,
       }
     },
     methods:{
+      showPopup() {
+        this.show = true;
+      },
       openAnnounce(e){
         if(e){
           this.announceBox = true;
@@ -74,6 +92,11 @@
           this.announceEvent = e;
         }
       },
+      announceItemEvent(e){
+        if(e){
+          this.announceItem = !this.announceItem
+        }
+      },
       toggleAnnounceBox(e){
         if(e){
           this.setDefault();
@@ -83,6 +106,9 @@
         if(e){
           this.announceList = false;
         }
+      },
+      toggleAnnounceItem(){
+        this.announceItem = false;
       },
       setDefault(){
         this.announceBox = false;
@@ -99,6 +125,7 @@
       popupConfirm(e){
         if(e){
           this.popShow = false;
+          this.announceItem = true;
         }
       },
       listEvent(e){
@@ -108,7 +135,7 @@
       }
     },
     computed:{
-      resizeAnnpinceBox(){
+      resizeAnnounceBox(){
         return this.windowWidth === 1366 ? 'height : 33vh' : 'height : 25vh'
       },
       ...mapState([
