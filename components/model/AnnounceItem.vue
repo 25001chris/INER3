@@ -33,6 +33,10 @@ export default {
         announceEvent:{
             type: String,
             default:''
+        },
+        announceItemType:{
+            type: String,
+            default:'AnnounceResult'
         }
     },
     data:()=>{
@@ -94,9 +98,11 @@ export default {
             return this.setAnnounceObj[event];
         },
         componentInstance () {
-            //const searchType = this.type;
-            const searchType = 'AnnounceResult';
-            return () => import(`~/components/model/AnnounceItemContent/${searchType}`);
+            const searchType = this.announceItemType;
+            if(searchType){
+                return () => import(`~/components/model/AnnounceItemContent/${searchType}.vue`);
+            }
+            
         }
     }
 };

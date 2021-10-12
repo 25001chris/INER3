@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": ";AAoGA,YAAY",
+    "mappings": ";AA0GA,YAAY",
     "sources": [
         "../assets/scss/utils/mixin.scss"
     ],

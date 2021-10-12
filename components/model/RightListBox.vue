@@ -22,7 +22,8 @@
             </van-col>
         </van-col>
         <van-col class="ListContent" span="20">
-            <RightList/>
+            <RightList @rightListEvent = "rightListEvent"/>
+            <RightList @rightListEvent = "rightListEvent"/>
         </van-col>
     </van-row>
 </template>
@@ -54,6 +55,9 @@ export default {
     methods:{
         sendClose(){
             this.$emit("closeEvent",true);
+        },
+        rightListEvent(e){
+            this.$emit("rightListEvent",e)
         }
     },
     computed:{

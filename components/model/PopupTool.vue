@@ -13,7 +13,7 @@
             {{popupObj.tips.text}}
             <nuxt-link :to="popupObj.tips.url">{{popupObj.tips.link}}</nuxt-link>
         </van-col>
-        <van-col span="20" class="popupBtn"><ButtonTool :text="popupObj.btn" @btnEvent="sendEvent"/></van-col>
+        <van-col span="20" class="popupBtn"><ButtonTool :text="popupObj.btn" @btnEvent="sendEvent(popupObj.success)"/></van-col>
     </van-row>
 </template>
 
@@ -31,6 +31,7 @@ export default {
                 return{
                     icon:'success',
                     title:'通報成功',
+                    success: 'AnnounceResult',
                     tips:{
                         url:'/',
                         link:'查看',

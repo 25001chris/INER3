@@ -6,6 +6,7 @@
                 :src="require(`@/assets/img/ICON/favicon/list.svg`)"
                 class="listIcon"
                 fit="contain"
+                @click="$emit('rightListEvent','AnnounceReceived')"
             />
         </van-col>
         <van-col span="4">
@@ -16,7 +17,7 @@
                 v-show="eyeOpen"
                 @click="toggleEyeStatus"
             />
-             <van-image
+            <van-image
                 :src="require(`@/assets/img/ICON/favicon/closeEye.svg`)"
                 class="listIcon"
                 fit="contain"
