@@ -19,6 +19,7 @@
     <transition name="van-slide-up">
       <AnnounceItem 
         v-show="announceItem" 
+        :announceEvent="announceEvent"
         @closeEvent="toggleAnnounceItem" 
         @btnEvent="announceItemEvent"
         :announceItemType="announceItemType"
@@ -88,6 +89,8 @@
         if(e==="cancel"){
           this.setDefault();
         }else if(e==="confirm"){
+          this.openAnnounceList();
+        }else if(e==="location"){
           this.openAnnounceList();
         }else{
           this.announceEvent = e;

@@ -9,7 +9,7 @@
         />
         <van-image
             :src="require(`@/assets/img/ICON/${announceObj.icon}.svg`)"
-            title="通報位置"
+            title="ICON"
             class="announceIcon"
             fit="contain"
         />
