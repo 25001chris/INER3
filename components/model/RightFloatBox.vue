@@ -65,14 +65,9 @@ export default {
             'ishorizontal'
         ]),
         setPosition(){
-            const isAnnounceBox = this.isAnnounceBox;
             const ishorizontal = this.ishorizontal;
             let result = "";
-            if(isAnnounceBox&&ishorizontal){
-                result = 'onAnnounceHorizontal'
-            }else if(isAnnounceBox&&!ishorizontal){
-                result = 'onAnnounce'
-            }else if(!isAnnounceBox&&ishorizontal){
+            if(ishorizontal){
                 result = 'horizontal'
             }else{
                 result = ''
@@ -102,9 +97,9 @@ export default {
     }
     .floatMidBox{
         position: absolute;
-        top: 67vh;
+        bottom: 22vh;
         &.horizontal{
-            top: 58vh;
+            bottom: 28vh;
         }
         &.onAnnounce{
             top: 42vh;
@@ -115,9 +110,10 @@ export default {
     }
     .floatBottomBox{
         position: absolute;
-        top: 75vh;
+        bottom: 2vh;
         &.horizontal{
-            top: 68vh;
+            //top: 68vh;
+            bottom: 2vh;
         }
         &.onAnnounce{
             top: 50vh;

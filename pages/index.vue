@@ -83,6 +83,7 @@
       openAnnounce(e){
         if(e){
           this.announceBox = true;
+          this.rightListBox = false;
         }
       },
       announceListEvent(e){
@@ -143,6 +144,7 @@
       listEvent(e){
         if(e){
           this.rightListBox = !this.rightListBox;
+          this.announceBox = false;
         }
       }
     },
