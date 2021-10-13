@@ -3,7 +3,7 @@
     <transition name="van-slide-up">
       <AnnounceList
         v-show="announceList"
-        @closeEvent="toggleAnnounceList"
+        @sendEvent="toggleAnnounceList"
         @submit="setAnnounceListData"
       />
     </transition>
@@ -72,14 +72,11 @@
         announceEvent : 'default',
         popShow: false,
         announceListData: {},
-        show: false,
-        announceItemType:''
+        announceItemType:'',
+        listData:{}
       }
     },
     methods:{
-      showPopup() {
-        this.show = true;
-      },
       openAnnounce(e){
         if(e){
           this.announceBox = true;
@@ -107,8 +104,19 @@
           this.setDefault();
         }
       },
+      openAnnounceList(){
+        this.announceList = true;
+        this.setDefault();
+      },
+      setAnnounceListData(e){
+        console.log(e)
+        this.announceListData = e;
+      },
       toggleAnnounceList(e){
-        if(e){
+        if(e === "send"){
+          this.announceList = false;
+          this.popShow = true;
+        }else{
           this.announceList = false;
         }
       },
@@ -119,14 +127,6 @@
         this.announceBox = false;
         setTimeout(() => {this.announceEvent = 'default'}, 500);
       },
-      openAnnounceList(){
-        this.announceList = true;
-        this.setDefault();
-      },
-      setAnnounceListData(e){
-        this.announceListData = e;
-        this.popShow = true;
-      },
       listItemType(e){
         if(e){
           this.rightListBox = false;
@@ -135,10 +135,13 @@
         }
       },
       popupConfirm(e){
-        if(e){
-          this.popShow = false;
-          this.announceItem = true;
-          this.announceItemType = e;
+        switch(e){
+          case "AnnounceResult":
+            this.popShow = false;
+            this.announceItem = true;
+            this.announceItemType = e;
+          case "cancel":
+            this.popShow = false;
         }
       },
       listEvent(e){
@@ -153,7 +156,7 @@
         return this.windowWidth === 1366 ? 'height : 33vh' : 'height : 25vh'
       },
       resizeAnnounceItem(){
-        return this.windowWidth === 1366 ? 'height : 45vh' : 'height : 40vh'
+        return this.windowWidth === 1366 ? 'height : 40vh' : 'height : 38vh'
       },
       ...mapState([
         'windowWidth'

@@ -47,11 +47,6 @@ export default {
             close : require("@/assets/img/BUTTON/close.svg"),
         }
     },
-    mounted(){
-        window.onresize = () => {
-            this.$forceUpdate();
-        }
-    },
     methods:{
         sendClose(){
             this.$emit("closeEvent",true);

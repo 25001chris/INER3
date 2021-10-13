@@ -106,7 +106,6 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    padding: 10px 0;
     @include noto-sans-tc-30-bold;
 }
 .announceIcon{

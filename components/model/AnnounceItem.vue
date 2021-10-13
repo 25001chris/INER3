@@ -126,12 +126,12 @@ export default {
 .announceTitle{
     padding-left: 1em !important;
     display: flex;
-    height: 80px;
+    height: 60px;
     color: $main-Title-color;
     border-bottom: 1px solid #C1D5DC;
     @include noto-sans-tc-30-bold;
     .titleIcon{
-        width: 36px;
+        width: 32px;
     }
     h4{
         margin: 0;

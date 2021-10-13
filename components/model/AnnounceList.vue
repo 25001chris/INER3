@@ -1,6 +1,6 @@
 <template>
     <van-row class="announceList" type="flex" justify="center">
-        <van-col span="24" class="announceTitle">通報填寫</van-col>
+        <van-col span="24" type="flex" class="announceTitle">通報填寫</van-col>
         <van-col span="20">
             <van-form @submit="onSubmit">
                 <van-field
@@ -8,13 +8,16 @@
                     name="username"
                     label="通報時間"
                     placeholder="預設文字"
-                    :rules="[{ required: true, message: '请填写用户名' }]"
+                    :readonly="isReadonly"
+                    :class="{isReadonly:isReadonly}"
                 />
                 <van-field
                     v-model="location"
                     name="location"
                     label="通報地點"
                     placeholder="前一步驟選定之坐標"
+                    :readonly="isReadonly"
+                    :class="{isReadonly:isReadonly}"
                 />
                 <van-field
                     readonly
@@ -87,12 +90,12 @@
                 />
                 <van-field name="uploader" label="文件上传">
                     <template type="flex" #input>
-                        <van-col span="24"><van-uploader v-model="uploader" offset="2" max-count="3" preview-size="30vh"/></van-col>
+                        <van-col span="24" :class="{ishorizontal:ishorizontal}"><van-uploader v-model="uploader" offset="2" max-count="3" capture="camera" :preview-size="photoWidth"/></van-col>
                     </template>
                 </van-field>
                 <van-row class="announceBtnBox" type="flex" style="margin: 16px;">
                     <van-col span="10" offset="2"><ButtonTool type="btn-primary-light" text="取消" @btnEvent="sendClose"/></van-col>
-                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-dark" text="通報"/></van-col>
+                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-dark" text="通報" @btnEvent="sendData"/></van-col>
                 </van-row>
             </van-form>
         </van-col>
@@ -101,6 +104,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ButtonTool from '~/components/tools/ButtonTool';
 
 export default {
@@ -126,7 +130,8 @@ export default {
             showPicker: false,
             pickerData:'',
             pickerEvent:'',
-            uploader:[]
+            uploader:[],
+            isReadonly: true
         }
     },
     methods: {
@@ -145,11 +150,27 @@ export default {
         },
         onSubmit(values) {
             this.$emit("submit",values);
-            this.$emit("closeEvent",true);
         },
         sendClose(e){
             if(e){
-                this.$emit("closeEvent",true);
+                this.$emit("sendEvent",'close');
+            }
+        },
+        sendData(e){
+            if(e){
+                this.$emit("sendEvent",'send');
+            }
+        }
+    },
+    computed:{
+        ...mapGetters([
+            'ishorizontal'
+        ]),
+        photoWidth(){
+            if(this.ishorizontal){
+                return '30vh'
+            }else{
+                return '16.666vh'
             }
         }
     }
@@ -159,7 +180,7 @@ export default {
 <style lang="scss">
 .announceList{
     width: 100%;
-    height: 100vh;
+    height: calc( 100vh - 60px );
     background-color: #FFF;
     position: absolute;
     top: 0px;
@@ -174,6 +195,8 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
+    align-content: center;
+    justify-content: center;
     @include noto-sans-tc-30-bold;
 }
 </style>

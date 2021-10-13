@@ -15,7 +15,7 @@
                 <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
             </van-col>
             <van-col span="2" justify="end" class="pd-t-half">
-                <Button type="btn-primary-dark" text="登出"/>
+                <Button type="btn-primary-dark" @btnEvent="logout" text="登出"/>
             </van-col>
         </van-row>
     </div>
@@ -67,6 +67,11 @@ export default {
         isLogout(e){
             if(e){
                 console.log('gogo')
+            }
+        },
+        logout(e){
+            if(e){
+                this.$router.push({ path: '/login' });
             }
         }
     },

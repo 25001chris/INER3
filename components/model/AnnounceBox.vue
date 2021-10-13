@@ -67,7 +67,7 @@ export default {
                     ]
                 },
                 select:{
-                    icon:'location',
+                    icon:'select',
                     text:'請點選圖面,點選後請按確認',
                     input:{},
                     btn:[

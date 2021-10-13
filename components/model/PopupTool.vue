@@ -2,18 +2,18 @@
     <van-row class="popupBox" type="flex" justify="center">
         <van-col span="20">
             <van-image
-                :src="require(`@/assets/img/ICON/${popupObj.icon}.svg`)"
+                :src="require(`@/assets/img/ICON/${popupInit[popupEvent].icon}.svg`)"
                 title="彈出圖示"
                 class="popupIcon"
                 fit="contain"
             />
         </van-col>
-        <van-col span="20" class="popupTitle">{{popupObj.title}}</van-col>
+        <van-col span="20" class="popupTitle">{{popupInit[popupEvent].title}}</van-col>
         <van-col span="20" class="popupTips" v-show="isTips">
-            {{popupObj.tips.text}}
-            <nuxt-link :to="popupObj.tips.url">{{popupObj.tips.link}}</nuxt-link>
+            {{popupInit[popupEvent].tips.text}}
+            <nuxt-link :to="popupInit[popupEvent].tips.url">{{popupInit[popupEvent].tips.link}}</nuxt-link>
         </van-col>
-        <van-col span="20" class="popupBtn"><ButtonTool :text="popupObj.btn" @btnEvent="sendEvent(popupObj.success)"/></van-col>
+        <van-col span="20" class="popupBtn"><ButtonTool :text="popupInit[popupEvent].btn" @btnEvent="sendEvent(popupInit[popupEvent].confirm)"/></van-col>
     </van-row>
 </template>
 
@@ -25,25 +25,37 @@ export default {
         ButtonTool
     },
     props:{
-        popupObj:{
-            type: Object,
-            default:()=>{
-                return{
+        popupEvent:{
+            type: String,
+            default:'success'
+        }
+    },
+    data:()=>{
+        return{
+            popupInit:{
+                success:{
                     icon:'success',
                     title:'通報成功',
-                    success: 'AnnounceResult',
+                    confirm: 'AnnounceResult',
                     tips:{
                         url:'/',
                         link:'查看',
                         text:'2021/5/6 12:11 發布了通報，請立即'
                     },
-                    btn:'確認'    
-                };
+                    btn:'確認'
+                },
+                error:{
+                    icon:'error',
+                    title:'通報失敗',
+                    confirm: 'cancel',
+                    tips:{
+                        url:'/',
+                        link:'',
+                        text:'可以暫存文字請等網路連線狀況良好時，再重新通報一次'
+                    },
+                    btn:'確認'
+                }
             }
-        }
-    },
-    data:()=>{
-        return{
         }
     },
     methods:{
@@ -53,7 +65,8 @@ export default {
     },
     computed:{
         isTips(){
-            const tips = this.popupObj.tips;
+            const popupEvent = this.popupEvent;
+            const tips = this.popupInit[popupEvent].tips;
             if(tips.text!==""){
                 return true;
             }else{

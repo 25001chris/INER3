@@ -3,6 +3,7 @@
         v-model="value"
         :left-icon="inputIcon"
         :placeholder="placeholder"
+        @input="$emit('sendData',{type:type,value:value})"
     />
 </template>
 
@@ -14,7 +15,10 @@ export default {
         },
         placeholder:{
             type: String
-        }
+        },
+        type:{
+            type: String
+        },
     },
     data() {
         return{

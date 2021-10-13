@@ -1,5 +1,5 @@
 <template>
-    <van-row class="rightFloatBox" type="flex" justify="center" :class="{test:isRightListBox}">
+    <van-row class="rightFloatBox" type="flex" justify="center" :class="{isRightListBox:isRightListBox,isAnnounceBox:isAnnounceBox,ishorizontal:ishorizontal}">
         <van-col class="floatTopBox">
             <FloatButton icon="compass" @btnEvent="compassEvent"/>
             <FloatButton icon="list" @btnEvent="listEvent"/>
@@ -85,8 +85,15 @@ export default {
     align-content: center;
     position: absolute;
     right: 15px;
-    &.test{
+    top:0;
+    &.isRightListBox{
         right:315px;
+    }
+    &.isAnnounceBox{
+        height: calc( 75vh - 60px );
+        &.ishorizontal{
+            height: calc( 66vh - 60px );
+        }
     }
     .floatTopBox{
         position: absolute;

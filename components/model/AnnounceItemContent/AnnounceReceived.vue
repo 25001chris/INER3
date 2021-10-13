@@ -12,7 +12,7 @@
                         <td class="td-m">{{item.resource}}</td>
                         <td class="td-l">{{item.time}}</td>
                         <td class="td-m">{{item.event}}</td>
-                        <td class="td-m">{{item.status}}</td>
+                        <td class="td-m"><van-tag :class="tagStyle(item.status)">{{item.status}}</van-tag></td>
                         <td class="td-xl" @click="ToastEvent(item.content)">{{item.content}}</td>
                         <td class="td-s">
                             <van-image
@@ -52,7 +52,7 @@ export default {
                 {id:'04',name:'王小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'已發布',content:'派員處理中，現場無須處理，請於現場待命，等待支援1'},
                 {id:'05',name:'李小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'已發布',content:'派員處理中，現場無須處理，請於現場待命，等待支援2'},
                 {id:'06',name:'--',resource:'外部程式',time:'2021-5-16 12:11:22',event:'設備異常',status:'已結案',content:'派員處理中，現場無須處理，請於現場待命，等待支援3'},
-                {id:'07',name:'王小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'已發布',content:'派員處理中，現場無須處理，請於現場待命，等待支援1'},
+                {id:'07',name:'王小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'審核中',content:'派員處理中，現場無須處理，請於現場待命，等待支援1'},
                 {id:'08',name:'李小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'已發布',content:'派員處理中，現場無須處理，請於現場待命，等待支援2'},
                 {id:'09',name:'--',resource:'外部程式',time:'2021-5-16 12:11:22',event:'設備異常',status:'已結案',content:'派員處理中，現場無須處理，請於現場待命，等待支援3'}
             ]
@@ -67,6 +67,21 @@ export default {
         },
         ToastEvent(e){
             this.$toast(e);
+        },
+        tagStyle(e){
+            let result = '';
+            switch(e){
+                case "已發布":
+                    result = 'tagSuccess';
+                    break;
+                case "審核中":
+                    result = 'tagPanding';
+                    break;
+                case "已結案":
+                    result = 'tagDefault';
+                    break;
+            }
+            return result;
         }
     },
     computed:{
@@ -84,7 +99,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .announceReceivedContent{
     width: 100%;
     height: 30vh;
@@ -105,6 +120,8 @@ export default {
                 th{
                     text-align: left;
                     border-bottom:3px solid #4C7DA2;
+                    border-collapse: separate; 
+                    border-spacing: 5px 5px;
                     @include noto-sans-tc-20-bold;
                 }
             }
@@ -144,7 +161,6 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    padding: 10px 0;
     @include noto-sans-tc-30-bold;
 }
 .announceIcon{
@@ -155,5 +171,21 @@ export default {
     position: absolute;
     top: 5px;
     right: 5px; 
+}
+
+.tagSuccess{
+    background-color: #E2FAE4;
+    border: 1px solid #1DB65A;
+    color: #1DB65A;
+}
+.tagPanding{
+    background-color: #D6FCFA;
+    border: 1px solid #36979D;
+    color:#36979D;
+}
+.tagDefault{
+    background-color: #EEEEEE;
+    border: 1px solid #666666;
+    color:#666666;
 }
 </style>

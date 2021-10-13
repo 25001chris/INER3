@@ -1,20 +1,19 @@
 <template>
     <van-cell-group class="inputArea">
-        <InputBox 
-            v-for="(item,index) in inputObj.data"
-            :inputIcon="item.inputIcon"
-            :placeholder="item.placeholder"
-            v-bind:key="index"
+        <van-icon :name="require(`@/assets/img/ICON/favicon/${inputObj.inputIcon}.svg`)" size="20" />
+        <van-field
+            v-model="value"
+            :name=inputObj.type
+            :placeholder="inputObj.placeholder"
+            @input="$emit('sendData',value)"
+            class="inputBox"
+            :rules="[{ required: true, message: inputObj.placeholder }]"
         />
     </van-cell-group>
 </template>
 
 <script>
-import InputBoxObj from '~/components/InputBox.vue';
 export default {
-    components: {
-        'InputBox': InputBoxObj,
-    },
     props: {
         inputObj:{
             type: Object
@@ -24,14 +23,28 @@ export default {
         return{
             value: "",
         }
+    },
+    methods: {
+        sendInputData(e){
+            this.$emit("sendInputData",e);
+        }
     }
 }
 </script>
 
-<style>
+<style lang="scss">
 .inputArea{
     flex-direction: column;
-    width: 90%;
-    max-width: 360px;
+    width: 100%;
+    position: relative;
+    .van-icon{
+        position: absolute;
+        top: 23px;
+        left: 1.5em;
+        z-index: 100;
+    }
+    .van-field__body{
+        padding-left: 3em;
+    }
 }
 </style>

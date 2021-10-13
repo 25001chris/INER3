@@ -22,7 +22,6 @@ nav {
         text-decoration: none;
     }
 }
-
 .van-field__body{
     border: 1px solid $btn-light;
     border-radius: 10px;
@@ -31,5 +30,32 @@ nav {
 .van-field__label{
     display: flex;
     align-items: center;
+}
+.van-field{
+    &.isReadonly{
+        .van-field__body{
+            background-color: $disableBlue;
+            color:$placeholdGrey;
+        }
+    }
+}
+.van-uploader{
+    .van-uploader__upload,.van-image{
+        background-color: #C2D9EA;
+        max-height: 150px;
+        border-radius: 10px ;
+        .van-icon{
+            color: #2B5B76;
+        }
+    }
+    .ishorizontal{
+        .van-uploader__upload,.van-image{
+            max-height: 200px;
+        }
+    }
+}
+
+.gridBox{
+    display: grid;
 }
 
