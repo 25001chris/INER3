@@ -12,7 +12,7 @@
         v-show="announceBox" 
         :announceEvent="announceEvent"
         @closeEvent="toggleAnnounceBox" 
-        @btnEvent="announceListEvent"
+        @btnEvent="announceBoxEvent"
         :style="resizeAnnounceBox"
       />
     </transition>
@@ -83,7 +83,7 @@
           this.rightListBox = false;
         }
       },
-      announceListEvent(e){
+      announceBoxEvent(e){
         if(e==="cancel"){
           this.setDefault();
         }else if(e==="confirm"){

@@ -129,6 +129,7 @@ export default {
     height: 60px;
     color: $main-Title-color;
     border-bottom: 1px solid #C1D5DC;
+    justify-content: flex-start;
     @include noto-sans-tc-30-bold;
     .titleIcon{
         width: 32px;

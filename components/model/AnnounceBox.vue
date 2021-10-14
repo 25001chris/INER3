@@ -16,7 +16,7 @@
         <van-col span="24" class="announceTitle">{{announceObj.text}}</van-col>
         <van-col span="20" type="flex" justify="center" v-show="inputLength">
             <van-cell-group>
-                <van-field :border="true" v-model="inputValue" placeholder="请输入用户名" :error-message="announceObj.input.errorMessage"/>
+                <van-field :border="true" required v-model="inputValue" placeholder="请输入用户名" :error-message="errorMessage"/>
             </van-cell-group>
         </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
@@ -46,6 +46,7 @@ export default {
             close : require("@/assets/img/BUTTON/close.svg"),
             text : '通報',
             inputValue : '',
+            errorMessage : "",
             setAnnounceObj:{
                 default:{
                     icon:'announce',
@@ -80,7 +81,15 @@ export default {
     },
     methods: {
         sendEvent(e){
-            this.$emit("btnEvent",e);
+            if(this.announceEvent === "coordinate" && e === "confirm"){
+                if(this.inputValue === ""){
+                    this.errorMessage = this.announceObj.input.errorMessage;
+                }else{
+                    this.$emit("btnEvent",e);
+                }
+            }else{
+                this.$emit("btnEvent",e);
+            }
         },
         sendClose(){
             this.$emit("closeEvent",true);

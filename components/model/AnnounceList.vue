@@ -177,7 +177,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .announceList{
     width: 100%;
     height: calc( 100vh - 60px );
@@ -195,7 +195,9 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
+    display: flex;
     align-content: center;
+    align-items: center;
     justify-content: center;
     @include noto-sans-tc-30-bold;
 }

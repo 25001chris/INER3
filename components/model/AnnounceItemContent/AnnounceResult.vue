@@ -1,27 +1,34 @@
 <template>
     <van-row class="announceItemContent" type="flex" justify="center">
-        <van-col span="20" class="announceItemList" type="flex" >
-            <van-col span="4" class="announceItemTitle">通報編號</van-col>
-            <van-col span="20">50</van-col>
+        <van-col :span="listSpan" type="flex" justify="center">
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">通報編號</van-col>
+                <van-col span="20">50</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">通報事項</van-col>
+                <van-col span="20">設備壞掉</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" justify="center">
+                <van-col span="4" class="announceItemTitle">通報備註</van-col>
+                <van-col span="20">預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">通報時間</van-col>
+                <van-col span="20">2021-1-1 12:00:00</van-col>
+            </van-col>
         </van-col>
-        <van-col span="20" class="announceItemList" type="flex" >
-            <van-col span="4" class="announceItemTitle">通報事項</van-col>
-            <van-col span="20">設備壞掉</van-col>
+        <van-col :span="listSpan" class="announcePhotoList" type="flex">
+            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" max-count="3"/>
         </van-col>
-        <van-col span="20" class="announceItemList" type="flex" >
-            <van-col span="4" class="announceItemTitle">通報備註</van-col>
-            <van-col span="20">預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試</van-col>
-        </van-col>
-        <van-col span="24" class="announcePhotoList" type="flex" >
-            <van-uploader v-model="fileList" :deletable="false" max-count="3"/>
-        </van-col>
-        <van-col span="20" class="announceBtnBox w-100" type="flex">
+        <van-col span="24" class="announceBtnBox w-100" type="flex">
             <ButtonTool text="定位至畫面正中間" @btnEvent="sendEvent"/>
         </van-col>
     </van-row>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ButtonTool from '~/components/tools/ButtonTool';
 export default {
     name:'announceItemContent',
@@ -69,6 +76,9 @@ export default {
         }
     },
     computed:{
+        ...mapGetters([
+            'ishorizontal'
+        ]),
         btnLength(){
             return 24 / this.announceObj.btn.length
         },
@@ -78,6 +88,14 @@ export default {
         announceObj(){
             const event = this.announceEvent;
             return this.setAnnounceObj[event];
+        },
+        listSpan(){
+            const ishorizontal = this.ishorizontal;
+            if(ishorizontal){
+                return 10;
+            }else{
+                return 20;
+            }
         }
     }
 };
@@ -94,6 +112,16 @@ export default {
     }
     .announcePhotoList{
         text-align: center;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        display: flex;
+        .van-uploader__preview{
+            width: 30%;
+        }
+        .van-uploader__wrapper{
+            justify-content: center;
+        }
     }
 }
 
