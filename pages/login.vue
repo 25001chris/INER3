@@ -101,10 +101,6 @@
   align-items: center;
   text-align: center;
   flex-direction: column;
-  background-image: url("~/assets/img/Bg.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
 }
 .rememberMe{
   justify-content: end;
