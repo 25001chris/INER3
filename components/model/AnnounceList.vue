@@ -185,11 +185,15 @@ export default {
     position: absolute;
     top: 0px;
     z-index: 1000;
+    @include noto-sans-tc-20-bold;
 }
 .announceBtnBox{
     padding: 0 100px;
     .buttonTool{
         display: grid;
+    }
+    .van-field__control{
+        @include noto-sans-tc-20-bold;
     }
 }
 .announceTitle{

@@ -57,6 +57,7 @@ export default {
     padding: 0.25em 0;
     .listTitle{
         text-align: left;
+        @include noto-sans-tc-20-medium
     }
 }
 </style>

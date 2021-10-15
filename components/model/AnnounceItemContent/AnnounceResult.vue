@@ -110,6 +110,10 @@ export default {
     .announceItemList{
         text-align: left;
     }
+    .announceItemTitle{
+        color:#344059;
+        @include noto-sans-tc-20-bold
+    }
     .announcePhotoList{
         text-align: center;
         align-items: center;

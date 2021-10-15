@@ -123,6 +123,10 @@ export default {
         display: grid;
     }
 }
+.announceItemContent{
+    color: #515A6D;
+    @include noto-sans-tc-20-medium
+}
 .announceTitle{
     padding-left: 1em !important;
     display: flex;
