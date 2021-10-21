@@ -55,6 +55,14 @@ nav {
     }
 }
 
+.van-uploader__preview-delete{
+    width: 24px;
+    height: 24px;
+    .van-uploader__preview-delete-icon{
+        font-size: 24px;
+    }
+}
+
 .gridBox{
     display: grid;
 }
