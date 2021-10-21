@@ -14,7 +14,7 @@
             <van-col :span="setHeaderSpan.title" offset="2">
                 <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
             </van-col>
-            <van-col span="2" justify="end" class="pd-t-half">
+            <van-col span="2" type="flex" justify="center" class="pd-t-half">
                 <Button type="btn-primary-dark" @btnEvent="logout" text="登出"/>
             </van-col>
         </van-row>
@@ -45,8 +45,8 @@ export default {
                 result.title = 18;
                 result.logo = 2
             }else{
-                result.title = 17;
-                result.logo = 3
+                result.title = 15;
+                result.logo = 4
             }
             return result;
         },
@@ -62,6 +62,12 @@ export default {
             this.$store.commit('setWindowWidth', window.innerWidth)
             window.onresize = () => {
                 this.$store.commit('setWindowWidth', window.innerWidth)
+            }
+        },
+        setWindowHeight(){
+            this.$store.commit('setWindowHeight', window.innerHeight)
+            window.onresize = () => {
+                this.$store.commit('setWindowHeight', window.innerHeight)
             }
         },
         isLogout(e){
@@ -85,7 +91,7 @@ export default {
     font-family: Noto Sans TC;
     font-style: normal;
     font-weight: 700;
-    font-size: 2em;
+    font-size: 1.6em;
     line-height: 60px;
     height:60px;
     display: flex;

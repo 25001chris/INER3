@@ -42,8 +42,8 @@ export default {
 
 <style lang="scss">
 .floatButton{
-  width: 84px;
-  height: 82px;
+  width: 65px;
+  height: 64px;
 }
 </style>
  

@@ -93,7 +93,7 @@ export default {
 .popupTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
 }
 .popupIcon{
     width: 64px;

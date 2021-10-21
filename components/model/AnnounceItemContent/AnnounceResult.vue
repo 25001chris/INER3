@@ -3,7 +3,7 @@
         <van-col :span="listSpan" type="flex" justify="center">
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報編號</van-col>
-                <van-col span="20">50</van-col>
+                <van-col span="20" class="test">50</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報事項</van-col>
@@ -11,7 +11,7 @@
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" justify="center">
                 <van-col span="4" class="announceItemTitle">通報備註</van-col>
-                <van-col span="20">預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試</van-col>
+                <van-col span="20" class="announceItemText" @click="ToastEvent(resultText)">{{resultText}}</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報時間</van-col>
@@ -61,7 +61,8 @@ export default {
                     imageFit: 'contain',
                     previewSize: '100%', 
                 }
-            ]
+            ],
+            resultText:'預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試'
         }
     },
     methods: {
@@ -73,6 +74,9 @@ export default {
         },
         onChange(index) {
             this.index = index;
+        },
+        ToastEvent(e){
+            this.$toast(e);
         }
     },
     computed:{
@@ -105,14 +109,27 @@ export default {
 .announceItemContent{
     width: 100%;
     height: 30vh;
-    padding-top: 1em;
     justify-content: center;
+    padding-top: 0.5em;
     .announceItemList{
         text-align: left;
     }
     .announceItemTitle{
         color:#344059;
-        @include noto-sans-tc-20-bold
+        display: inline-block;
+        line-height: 27px !important;
+        height: 27px !important;
+        @include noto-sans-tc-20-medium
+    }
+    .announceItemText{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display:-webkit-box;
+        -webkit-line-clamp: 6; //行數
+        -webkit-box-orient: vertical;
+        white-space: normal;
+        @include noto-sans-tc-20-medium
     }
     .announcePhotoList{
         text-align: center;
@@ -130,7 +147,7 @@ export default {
 }
 
 .announceBtnBox{
-    padding: 0 100px;
+    padding: 0 100px 0.5em;
     .buttonTool{
         display: grid;
     }
@@ -138,7 +155,7 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
 }
 .announceIcon{
     width: 123px;
@@ -148,5 +165,8 @@ export default {
     position: absolute;
     top: 5px;
     right: 5px; 
+}
+.test{
+    @include noto-sans-tc-20-medium;
 }
 </style>

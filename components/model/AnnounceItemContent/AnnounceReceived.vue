@@ -122,7 +122,11 @@ export default {
                     border-bottom:3px solid #4C7DA2;
                     border-collapse: separate; 
                     border-spacing: 5px 5px;
-                    @include noto-sans-tc-20-bold;
+                    min-width: 80px;
+                    @include noto-sans-tc-20-medium;
+                }
+                th:first-child,th:last-child{
+                    min-width: 40px
                 }
             }
             tbody{
@@ -161,7 +165,7 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
 }
 .announceIcon{
     width: 123px;

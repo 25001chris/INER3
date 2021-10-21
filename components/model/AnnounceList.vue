@@ -26,8 +26,17 @@
                     :value="status"
                     label="設備狀態"
                     placeholder="點擊選項"
-                    @click="setPicker({data:'columns1',event:'onConfirm1'})"
+                    @click="setPicker1({data:'columns1',event:'onConfirm1'})"
                 />
+                <van-popup v-model="showPicker1" position="bottom">
+                    <van-picker
+                        show-toolbar
+                        :columns="this.pickerData"
+                        @confirm="this.pickerEvent"
+                        @cancel="showPicker1 = false"
+                        confirm-button-text = "確認"
+                    />
+                </van-popup>
                 <van-field
                     v-model="number"
                     name="number"
@@ -41,14 +50,15 @@
                     :value="camera"
                     label="相別"
                     placeholder="預設選項"
-                    @click="setPicker({data:'columns2',event:'onConfirm2'})"
+                    @click="setPicker2({data:'columns2',event:'onConfirm2'})"
                 />
-                <van-popup v-model="showPicker" position="bottom">
+                <van-popup v-model="showPicker2" position="bottom">
                     <van-picker
                         show-toolbar
                         :columns="this.pickerData"
                         @confirm="this.pickerEvent"
-                        @cancel="showPicker = false"
+                        @cancel="showPicker2 = false"
+                        confirm-button-text = "確認"
                     />
                 </van-popup>
                 <van-field
@@ -127,7 +137,8 @@ export default {
             value6:'',
             columns1: ['選項一', '選項二', '選項三', '選項四', '選項五', '選項六'],
             columns2: ['相別一', '相別二', '相別三', '相別四', '相別五', '相別六'],
-            showPicker: false,
+            showPicker1: false,
+            showPicker2: false,
             pickerData:'',
             pickerEvent:'',
             uploader:[],
@@ -135,18 +146,23 @@ export default {
         }
     },
     methods: {
-        setPicker(e){
-            this.showPicker = true;
+        setPicker1(e){
+            this.showPicker1 = true;
+            this.pickerData = this[e.data];
+            this.pickerEvent = this[e.event];
+        },
+        setPicker2(e){
+            this.showPicker2 = true;
             this.pickerData = this[e.data];
             this.pickerEvent = this[e.event];
         },
         onConfirm1(value) {
             this.status = value;
-            this.showPicker = false;
+            this.showPicker1 = false;
         },
         onConfirm2(value) {
             this.camera = value;
-            this.showPicker = false;
+            this.showPicker2 = false;
         },
         onSubmit(values) {
             this.$emit("submit",values);
@@ -168,9 +184,9 @@ export default {
         ]),
         photoWidth(){
             if(this.ishorizontal){
-                return '30vh'
+                return '33vh'
             }else{
-                return '16.666vh'
+                return '13.667vh'
             }
         }
     }
@@ -185,7 +201,7 @@ export default {
     position: absolute;
     top: 0px;
     z-index: 1000;
-    @include noto-sans-tc-20-bold;
+    @include noto-sans-tc-20-medium;
 }
 .announceBtnBox{
     padding: 0 100px;
@@ -193,7 +209,7 @@ export default {
         display: grid;
     }
     .van-field__control{
-        @include noto-sans-tc-20-bold;
+        @include noto-sans-tc-20-medium;
     }
 }
 .announceTitle{
@@ -203,6 +219,6 @@ export default {
     align-content: center;
     align-items: center;
     justify-content: center;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
 }
 </style>

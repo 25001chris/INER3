@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    {{windowWidth}}
     <transition name="van-slide-up">
       <AnnounceList
         v-show="announceList"
@@ -26,11 +27,11 @@
         :style="resizeAnnounceItem"
       />
     </transition>
-    <van-popup v-model="rightListBox" :overlay="false" position="right" :style="{ width:'300px',height: '100vh' }" >
+    <van-popup v-model="rightListBox" :overlay="false" position="right" :style="{ width:'300px',height: 'calc( 100vh - 60px )',position:'absolute' }" >
       <RightListBox @closeEvent="listEvent" @rightListEvent="listItemType"/>
     </van-popup>
     <AnnounceBtn @btnEvent="openAnnounce"/>
-    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" @listEvent="listEvent"/>
+    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent"/>
     <van-popup v-model="popShow" class="vw-40" :round="true">
       <PopupTool @btnEvent="popupConfirm"/>
     </van-popup>
@@ -148,15 +149,17 @@
         if(e){
           this.rightListBox = !this.rightListBox;
           this.announceBox = false;
+          this.announceItem = false;
         }
       }
     },
     computed:{
       resizeAnnounceBox(){
-        return this.windowWidth === 1366 ? 'height : 33vh' : 'height : 25vh'
+        let verticalHeight = this.announceEvent === "coordinate" ? 'height : 28vh' : 'height : 24vh';
+        return this.windowWidth === 1318 ? 'height : 33vh' : verticalHeight;
       },
       resizeAnnounceItem(){
-        return this.windowWidth === 1366 ? 'height : 40vh' : 'height : 38vh'
+        return this.windowWidth === 1318 ? 'height : 38vh' : 'height : 40vh'
       },
       ...mapState([
         'windowWidth'

@@ -1,5 +1,5 @@
 <template>
-    <van-row class="announceBox" type="flex" justify="center">
+    <van-row class="announceBox" :class="announceEvent" type="flex" justify="center">
         <van-image
             :src="close"
             title="關閉"
@@ -16,7 +16,7 @@
         <van-col span="24" class="announceTitle">{{announceObj.text}}</van-col>
         <van-col span="20" type="flex" justify="center" v-show="inputLength">
             <van-cell-group>
-                <van-field :border="true" required v-model="inputValue" placeholder="请输入用户名" :error-message="errorMessage"/>
+                <van-field :border="false" required v-model="inputValue" placeholder="请输入用户名" :error-message="errorMessage"/>
             </van-cell-group>
         </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
@@ -113,12 +113,14 @@ export default {
 <style lang="scss">
 .announceBox{
     width: 100%;
-    height: 20vh;
     background-color: #FFF;
     position: absolute;
     bottom: 0;
     z-index: 1000;
     align-content: center;
+    &.coordinate{
+        min-height: 320px;
+    }
 }
 .announceBtnBox{
     padding: 0 100px;
@@ -129,7 +131,7 @@ export default {
 .announceTitle{
     color: $main-Title-color;
     line-height: 60px !important;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
 }
 .announceIcon{
     width: 123px;

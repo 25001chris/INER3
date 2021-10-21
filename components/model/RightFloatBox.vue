@@ -1,5 +1,5 @@
 <template>
-    <van-row class="rightFloatBox" type="flex" justify="center" :class="{isRightListBox:isRightListBox,isAnnounceBox:isAnnounceBox,ishorizontal:ishorizontal}">
+    <van-row class="rightFloatBox" type="flex" justify="center" :class="{isRightListBox:isRightListBox,isAnnounceBox:isAnnounceBox,ishorizontal:ishorizontal,isAnnounceItem:isAnnounceItem}">
         <van-col class="floatTopBox">
             <FloatButton icon="compass" @btnEvent="compassEvent"/>
             <FloatButton icon="list" @btnEvent="listEvent"/>
@@ -32,6 +32,10 @@ export default {
             type:Boolean,
             default:false
         },
+        isAnnounceItem:{
+            type:Boolean,
+            default:false
+        }
     },
     data:()=>{
         return{
@@ -93,6 +97,35 @@ export default {
         height: calc( 75vh - 60px );
         &.ishorizontal{
             height: calc( 66vh - 60px );
+            .floatMidBox{
+                bottom: 26vh;
+            }
+            .floatBottomBox{
+                bottom: 0vh;
+            }
+        }
+        .floatMidBox{
+            bottom: 16vh;
+        }
+        .floatBottomBox{
+            bottom: 0vh;
+        }
+    }
+    &.isAnnounceItem{
+        height: calc( 66vh - 60px );
+        &.ishorizontal{
+            .floatMidBox{
+                bottom: 30vh;
+            }
+            .floatBottomBox{
+                bottom: 6vh;
+            }
+        }
+        .floatMidBox{
+            bottom: 23.5vh;
+        }
+        .floatBottomBox{
+            bottom: 7.5vh;
         }
     }
     .floatTopBox{
@@ -104,29 +137,16 @@ export default {
     }
     .floatMidBox{
         position: absolute;
-        bottom: 22vh;
+        bottom: 18vh;
         &.horizontal{
             bottom: 28vh;
-        }
-        &.onAnnounce{
-            top: 42vh;
-        }
-        &.onAnnounceHorizontal{
-            top: 25vh;
         }
     }
     .floatBottomBox{
         position: absolute;
         bottom: 2vh;
         &.horizontal{
-            //top: 68vh;
             bottom: 2vh;
-        }
-        &.onAnnounce{
-            top: 50vh;
-        }
-        &.onAnnounceHorizontal{
-            top: 35vh;
         }
     }
 }

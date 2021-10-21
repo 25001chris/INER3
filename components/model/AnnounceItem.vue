@@ -116,6 +116,7 @@ export default {
     position: absolute;
     bottom: 0;
     z-index: 1000;
+    align-content: flex-start;
 }
 .announceBtnBox{
     padding: 0 100px;
@@ -134,7 +135,7 @@ export default {
     color: $main-Title-color;
     border-bottom: 1px solid #C1D5DC;
     justify-content: flex-start;
-    @include noto-sans-tc-30-bold;
+    @include noto-sans-tc-30-medium;
     .titleIcon{
         width: 32px;
     }
