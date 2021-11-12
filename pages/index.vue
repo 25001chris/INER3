@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" id="body">
     {{windowWidth}}
     <transition name="van-slide-up">
       <AnnounceList
@@ -48,6 +48,7 @@
   import AnnounceItem from '~/components/model/AnnounceItem';
   import PopupTool from '~/components/model/PopupTool';
   import RightFloatBox from '~/components/model/RightFloatBox';
+  import { documentLoad } from '~/publish/loadMap';
   export default {
     layout: 'main',
     components: {
@@ -58,6 +59,158 @@
       RightFloatBox,
       RightListBox,
       AnnounceItem
+    },
+    head:{
+      script: [
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Framework.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/SGSEarth.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/iner3_mobile/EarthApp.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/MVTDocument.js',
+        },
+                {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/vector_tile.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/pbf.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/TileLayer.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/VectorTube.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/EPSG.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/CoordSys.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Projection.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/I3SDocument.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/iner3_mobile/Scripts/TaipowerCoords_LngLat.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/ClusterLayer.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/AjaxAgent.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Base64.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Geometry.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Graphic.js',
+        },
+                {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Render.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Tracker.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Window.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Interpolation.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/earcut.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/suncalc.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/SGServer.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/glMatrix.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/DDDCore.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/OGC.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/DDDEarth.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/WMS.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/WMTS.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/KML.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Collada.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/OGCGlobe.js',
+        },
+        {
+          src:
+            'http://192.168.1.103/ServerGate/scripts/Marker.js',
+        },
+        {
+          src:
+            'https://code.jquery.com/jquery-1.12.4.js',
+        },
+        {
+          src:
+            'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
+        },
+      ],
     },
     async asyncData() {
       // let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
@@ -77,7 +230,14 @@
         listData:{}
       }
     },
+    mounted(){
+      documentLoad();
+      this.jqTest();
+    },
     methods:{
+      jqTest(){
+        console.log('test')
+      },
       openAnnounce(e){
         if(e){
           this.announceBox = true;
