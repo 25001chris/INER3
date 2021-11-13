@@ -323,6 +323,8 @@
         topo_down_x, topo_down_y,
         bDown : false,
         bPan : false,
+        host_url : "https://demo.supergeotek.com/",
+		    data_url : "https://demo.supergeotek.com/INERADMS_Integration/磚New/"
       }
     },
     mounted(){
@@ -334,6 +336,163 @@
         $('body').append('<p>XXXXXXX</p>')
         //console.log($('body'));
       },
+      /*map methods*/
+      documentLoad(){
+		    SuperGIS.Initialize("/ServerGate/", function () {
+		        SuperGIS.ServerEarth.Initialize(InitEarth)
+		    })
+		  },
+      
+      InitEarth(){
+	      var pBody = new SuperGIS.Windows.HTMLContainer(document.getElementById("body"));
+	      var sHost = location.href;
+	      var idx = sHost.indexOf("/", 8);
+	      if (idx >= 0) sHost = sHost.substring(0, idx);
+	      CreateHTML5Earth(pBody, function (pEarth){
+          var material = pEarth.CreateModelMaterial(0, pEarth.CreateColor(0, 0, 0, 1));
+          // 載入定義圖示的文件
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', 'icons/OCTIcons.txt');
+          xhr.onreadystatechange = function(){
+					var toload = 0;
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
+            var lines = xhr.responseText.split('\r\n');
+            for (var ln in lines){
+              var val = lines[ln];
+              if (val.length == 0)
+                continue;
+              
+              toload++;
+              var texture = pEarth.CreateModelTexture("");
+              IconTextures[val] = texture;
+              var img = new Image;
+              img.src = "icons/" + val + ".png";
+              img.onload = function() {
+                toload--;
+                if (toload == 0)
+                  EarthLoaded(pEarth); // 等 Icons 載完
+                }
+                texture.SetupTexture(img, 50, 50, 1);
+              }
+					  }
+				  }
+				  xhr.send();
+			  });
+        function EarthLoaded(pEarth){
+          earth_ = pEarth;
+          pEarth.Scene.BackgroundColor = pEarth.CreateColor(0.2, 0.2, 0.2, 1);
+          pEarth.SetupSystem(false, SR_3857);
+          pEarth.HasTerrain = false;
+            
+          Basemap = new SuperGIS.TileLayer("https://demo.supergeotek.com/INER_NLSCEMAP/Agent.aspx",
+          pEarth, { layer: 'mask', sr: SR_3857 }, null);					
+          BaseMapLayer["NLSCMAP"] = Basemap;
+          
+          Photo = new SuperGIS.TileLayer("https://wmts.nlsc.gov.tw/wmts",
+          pEarth, { layer: 'PHOTO2' }, null);
+          Photo.setVisible(false)				
+          BaseMapLayer["PHOTO"] = Photo;
+          
+          LineData = new MVTDocument(data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
+            LineFinish(name, features);
+          });
+          
+          LineData1 = null;
+          TextData = null;
+          
+          
+          IconData = new SuperGIS.VectorTileLayers(data_url + "IconData",
+          pEarth, [ 'pole', 'dsbnroom', 'substation', 'edgechange', 'node', 'mxfmr', 'terminal', 'sxfmr', 'distributedenergy', 'jumper', 'switch-3', 'switch-2', 'switch-0', 'youxiu', 'breaker', 'hicustomer', 'faultindicator', 'capacitor' ],
+          function (layer) { IconReady(layer); },
+          function (array, layer) { IconFinish(array, layer); });
+
+          pEarth.SetViewpoint(120.414247, 23.650445, 70000, 0, 0, false);
+              
+          pGlobe = pEarth.GetGlobe();
+          pCam = pEarth.GetCamera();
+          pCam.addEventListener("changed", CameraChanged, false);
+          pScene = pEarth.GetScene();
+          pEarth.addEventListener("mousedown", MouseDown, false);
+          //行動端監聽
+          pEarth.addEventListener("touchstart", MouseDown, false);										
+          setTimeout(function() { CheckChangeInfo(); }, changeinfo_interval);
+        }
+      },
+      CameraChanged(){
+        if(LineData1 == null){
+          if(pCam.Position.Z < 7500){
+            LineData1 = new MVTDocument(data_url + "LineData", earth_, {minzoom: 13, maxzoom: 13, loadlayers: ['busbar', 'edge1', 'energy', 'connection']}, function (name, features) {
+                  LineFinish(name, features);
+            });
+          }
+        }
+        if(TextData == null){
+          if(pCam.Position.Z < 10000){
+            TextData = new MVTDocument(data_url + "TextData", earth_, {maxzoom: 15});
+          }
+        }
+      },
+      QueryInfo(obj){
+        // Icon 底色須設為透明 (搭配 TextureMixType.Plus), 藉此由線條呈現效果
+        Highlight(obj, true, 0.5);
+
+        var feaData = IsPlacemark(obj) ? obj.GetFieldValues() : obj.values;
+        var infoStr = '<table width="100%">';
+        for (var f in feaData)
+        {
+          infoStr += "<tr><td width=\"30%\">";
+          infoStr += "<font color=\"#44abc9\">";
+          infoStr += f;
+          infoStr += "</font>";
+          infoStr += "</td><td width=\"70%\" style=\"word-break: break-all;\">";
+          infoStr += feaData[f];
+          infoStr += "</td></tr>";
+        }
+        infoStr += '</table>';
+        $("#div_infowindow").dialog("open");
+        $("#info_context").html(infoStr);
+		  },
+      IsPlacemark(obj){
+			  return (obj.DDDSymbol != null);
+		  },
+		  GetValue(obj, field){
+			  return IsPlacemark(obj) ? obj.GetFieldValue(field) : obj.values[field];
+		  },
+      Highlight(obj, restore, sec, color){
+        if (color == null)
+          color = [1, 0, 0];
+        
+        if (IsPlacemark(obj))
+        {
+          if (obj.GeoType == 2)
+            color.push(0);
+          else
+            color.push(1);
+          obj.Highlight(color, restore, sec);
+        }
+        else
+        {
+          if (obj.type == 1)
+            color.push(0);
+          else
+            color.push(1);
+          LineData.HighlightFeature(obj, color, restore, sec);
+        }
+      },
+      SameDevice(dv1, dv2){
+        return (dv1.clr == dv2.clr && dv1.dir == dv2.dir && dv1.fdr1 == dv2.fdr1 && dv1.fsc == dv2.fsc && dv1.ufid == dv2.ufid);
+      },
+      CheckChange(arr1, arr2){
+        if (arr1.length != arr2.length)
+          return true;
+
+        for (var i = 0; i < arr1.length; i++){
+          if (!SameDevice(arr1[i], arr2[i]))
+            return true;
+        }
+        return false;
+      },
+      /*map methods*/
       openAnnounce(e){
         if(e){
           this.announceBox = true;
