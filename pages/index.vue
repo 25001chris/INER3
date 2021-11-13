@@ -417,6 +417,18 @@
       resizeAnnounceItem(){
         return this.windowWidth === 1318 ? 'height : 38vh' : 'height : 40vh'
       },
+      SR_3828(){
+        return EPSG.CreateSpatialReference(3828)
+      },
+      SR_3826(){
+        return EPSG.CreateSpatialReference(3826)
+      },
+      SR_3857(){
+        return EPSG.CreateSpatialReference(3857)
+      },
+      SR_4326(){
+        return EPSG.CreateSpatialReference(4326)
+      },
       ...mapState([
         'windowWidth'
       ]),
