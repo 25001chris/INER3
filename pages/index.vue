@@ -1,5 +1,5 @@
 <template>
-  <div class="container" id="body">
+  <div class="container" id="body" >
     {{windowWidth}}
     <transition name="van-slide-up">
       <AnnounceList
@@ -48,7 +48,7 @@
   import AnnounceItem from '~/components/model/AnnounceItem';
   import PopupTool from '~/components/model/PopupTool';
   import RightFloatBox from '~/components/model/RightFloatBox';
-  import { documentLoad } from '~/publish/loadMap';
+  //import { documentLoad } from '~/publish/loadMap';
   export default {
     layout: 'main',
     components: {
@@ -227,16 +227,112 @@
         popShow: false,
         announceListData: {},
         announceItemType:'',
-        listData:{}
+        listData:{},
+
+        /*map data*/
+        earth_ : null,
+        pGlobe : null,
+        pCam : null,
+        pScene : null,
+        IconTextures : {},
+        IconSymbols : {},
+        MouseType : 0,
+        current_visible : true,
+        dirty_pms : [],
+        changedDevices : [],
+        changeinfo_interval : 2000,
+        g_pms : {}, // 20201201
+        g_surfaces : {}, // 20201201
+        g_surfaces2 : {},
+        eventMarkers : { 
+          VisibleFlag:true, 
+          fdr_labels:{} , 
+          MPoweroff:[], 
+          MFault:[], 
+          MShortcircuit:[], 
+          MTransfer:[], 
+          PPoweroff:0, 
+          PFault:0, 
+          PTransfer:0, 
+          PShortcircuit:0
+        },
+        Layers : {},
+		    BaseMapLayer : {},
+		    IconLayers : {},
+		    TextOfIcon : {
+          'pole' : ['pole_t'],
+          'dsbnroom' : ['dsbnroom_t'],
+          'Connection' : ['connection_t'],
+          'breaker' : ['breaker_t'],
+          'hicustomer' : ['hicustomer_t'],
+          'substation' : ['substation_t', 'substation_n'],
+          'switch' : ['switch_t'],
+        },
+        LayerHeight : {
+          'dsbnroom' : 0.05,
+          'pole' : 0.1,
+          'substation' : 0.09,
+          'edgechange' : 0.1,
+          'edgecross' : 0.11,
+          'node' : 0.1,
+          'station' : 0.1,
+          'mxfmr' : 0.12,
+          'terminal' : 0.1,
+          'sxfmr' : 0.1,
+          'switch-3' : 0.15,
+          'switch-2' : 0.13,
+          'switch-0' : 0.12,
+          'youxiu' : 0.1,
+          'distributedenergy' : 0.11,
+          'jumper' : 0.1,
+          'breaker' : 0.11,
+          'hicustomer' : 0.09,
+          'faultindicator' : 0.11,
+          'capacitor' : 0.09
+        },
+        LayerAlias : {
+          'busbar' : "匯流排",
+          'edge0' : "高壓導線",
+          'edge1' : "高壓導線",
+          'energy' : "再生能源",
+          'connection' : "直接連接",
+          'dsbnroom' : "配電室",
+          'pole' : "電桿",
+          'substation' : "變電所",
+          'edgechange' : "導線變更",
+          'edgecross' : "導線交叉",
+          'node' : "高壓節點",
+          'station' : "電驛",
+          'mxfmr' : "主變壓器",
+          'terminal' : "終端",
+          'sxfmr' : "線路變壓器",
+          'switch-3' : "開關",
+          'switch-2' : "開關",
+          'switch-0' : "開關",
+          'youxiu' : "游休",
+          'distributedenergy' : "再生能源",
+          'jumper' : "高壓跳線",
+          'breaker' : "斷路器",
+          'hicustomer' : "高壓用戶",
+          'faultindicator' : "故障指示器",
+          'capacitor' : "電容",
+        },
+        arrowCount : 0,
+        current_visible : false,
+        buffer_visible : true,
+        topo_down_x, topo_down_y,
+        bDown : false,
+        bPan : false,
       }
     },
     mounted(){
-      documentLoad();
+      //documentLoad();
       this.jqTest();
     },
     methods:{
       jqTest(){
-        console.log('test')
+        $('body').append('<p>XXXXXXX</p>')
+        //console.log($('body'));
       },
       openAnnounce(e){
         if(e){
