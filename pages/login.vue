@@ -85,7 +85,21 @@
         }
       },
       onSubmit(values) {
-        this.$router.push({ path: '/' });
+        console.log(values);
+        // const data = `account=${this.account}&password=${this.password}&captcha=${this.captcha}`;
+        // loginReq(data).then((r) => {
+        //   if (r.data[0].status) {
+        //     sessionStorage.setItem('loginStatus', r.data[0].status);
+        //     this.$router.push('/');
+        //   } else {
+        //     console.log('驗證碼錯誤');
+        //   }
+        // }).catch((e) => {
+        //   console.log(e);
+        //   this.loginErrorTitle = '登入錯誤';
+        //   this.loginErrorText = '請確認帳號密碼是否正確';
+        //   this.loginError = true;
+        // });
       },
     }
   }
