@@ -292,7 +292,7 @@
           'faultindicator' : 0.11,
           'capacitor' : 0.09
         },
-        /*no used*/
+        /*no use*/
         LayerAlias : {
           'busbar' : "匯流排",
           'edge0' : "高壓導線",
@@ -322,13 +322,9 @@
         },
         arrowCount : 0,
         buffer_visible : true,
-        /*no used*/
         topo_down_x:'',
-        /*no used*/
         topo_down_y:'',
-        /*no used*/
         bDown : false,
-        /*no used*/
         bPan : false,
         host_url : "https://demo.supergeotek.com/",
 		    data_url : "https://demo.supergeotek.com/INERADMS_Integration/磚New/",
@@ -341,21 +337,109 @@
       }
     },
     mounted(){
-      //documentLoad();
+      this.documentLoad();
+      this.documentReady();
       this.jqTest();
     },
     methods:{
       jqTest(){
         $('body').append('<p>XXXXXXX</p>')
-        //console.log($('body'));
+        console.log($('body'));
       },
       /*map methods*/
       documentLoad(){
+        let _this = this
+        console.log(SuperGIS)
 		    SuperGIS.Initialize("/ServerGate/", function () {
-		        SuperGIS.ServerEarth.Initialize(this.InitEarth)
+            console.log(_this.InitEarth)
+		        SuperGIS.ServerEarth.Initialize(_this.InitEarth)
 		    })
 		  },
-      
+      documentReady(){
+        const _this = this;
+        $("#div_infowindow").dialog({
+          autoOpen: false,
+          resizable: false,
+          position: { my: "right-45 top+5", at: "right-45 top+5" },
+        });
+        $("#div_layer").dialog({
+          autoOpen: false,
+          resizable: false,
+          position: { my: "right-45 top", at: "right-45 top" },
+        });
+        $("#div_results").dialog({
+          autoOpen: false,
+          resizable: false,
+          position: { my: "right-45 top+5", at: "right-45 top+5" },
+        });
+        $("#btn_layer").on("click", function () {
+          if ($("#div_layer").dialog("isOpen")) {
+            $("#div_layer").dialog("close");
+            $("#btn_layer").attr("src", "images/menu/layers.png")
+          }
+          else {
+            $("#div_layer").dialog("open");
+            $("#btn_layer").attr("src", "images/menu/layers2.png")
+          }
+        });
+        $("#div_FeederTopo").dialog({
+          autoOpen: false,
+          resizable: false,
+          width: "auto",
+          height: "auto",
+          position: { my: "right-45 top+5", at: "right-45 top+5" },
+          close: function (event, ui) {
+          }
+        });
+        $("#div_FeederAni").dialog({
+          autoOpen: false,
+          resizable: false,
+          width: "auto",
+          height: "auto",
+          position: { my: "right-45 top+5", at: "right-45 top+5" },
+          close: function (event, ui) {
+            CloseFeederAni();
+          }
+        });
+			  $("#tabs").tabs();
+			  $("#div_TopoResult").dialog({
+          open: function(){
+            this.scrollLeft = 0;
+            this.scrollTop = 0;
+          },
+          autoOpen: false,
+          resizable: true,
+          width: "500",
+          height: "320",
+          position: { my: "right-45 top+5", at: "right-45 top+5" }
+        });
+			  $("#div_TopoResult").mousedown(function (event) {
+          _this.topo_down_x = event.offsetX;
+          _this.topo_down_y = event.offsetY;
+          _this.bDown = true;
+				  _this.bPan = false;
+        });
+        $("#div_TopoResult").mousemove(function (event) {
+          if (this.bDown) {
+            var x = _this.topo_down_x - event.offsetX + this.scrollLeft;
+            var y = _this.topo_down_y - event.offsetY + this.scrollTop;
+            this.scrollTo(x, y);
+					  _this.bPan = true;
+                }
+            });
+        $("#div_TopoResult").mouseup(function (event) {
+          _this.bDown = false;
+          //if (!bPan)
+          //source?
+          ClickElement(_this.topo_down_x, _this.topo_down_y);
+        });
+        $("#div_TopoResult").mouseleave(function (event) {
+          _this.bDown = false;
+        });
+        $("#div_TopoResult").scroll(function (event) {
+          _this.bPan = true;
+        });
+      },
       InitEarth(){
 	      var pBody = new SuperGIS.Windows.HTMLContainer(document.getElementById("body"));
 	      var sHost = location.href;
@@ -673,12 +757,12 @@
           setTimeout(function() { this.CheckChangeInfo(); }, this.changeinfo_interval);
         }
       },
-      /*no used*/
+      /*no use*/
       Update(){
         this.changedDevices = [];
         this.CheckChangeInfo();
       },
-      /*no used*/
+      /*no use*/
       RestoreDefault(){
         for (var i = 0; i < this.dirty_pms.length; i++)
         {
@@ -740,7 +824,7 @@
           }
         }
       },
-      /*no used*/
+      /*no use*/
       MouseMove(tEvent){
         if (MouseType == 1)
           this.earth_.Invalidate();
@@ -1258,7 +1342,7 @@
         }
         this.earth_.Invalidate();
       },
-      /*no used*/
+      /*no use*/
       QueryOpen(){
         if(!this.query)
         {
@@ -1275,7 +1359,7 @@
           this.query = false;
         }
       },
-      /*no used*/
+      /*no use*/
       QueryTPLIDOpen(){
         if(!this.queryTPCLID)
         {
@@ -1292,11 +1376,11 @@
           document.getElementById("querybutton2").value = "開啟坐標查詢";
         }
       },
-      /*no used*/
+      /*no use*/
       locate(){
 			  this.earth_.SetViewpoint(120.3358,23.6276,1000,0,0); //X Y 高度 方位角 傾角
 		  },
-      /*no used*/
+      /*no use*/
       createmarker(){
         var tpclidlist = ["K0046FD31", "J9532AE52","J9652FB41","K0349DE63","K0546DB66","K0242BE22"];
         //以圖號坐標取得坐標值，並建立地圖標記
@@ -1312,7 +1396,7 @@
           this.markerlist.push(pmlabel);
         }
       },
-      /*no used*/
+      /*no use*/
       markercluster(){
         this.clusterlayer = new SuperGIS.ClusterLayer(
             this.earth_, // 地圖物件
