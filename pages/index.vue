@@ -352,7 +352,7 @@
       /*map methods*/
       documentLoad(){
 		    SuperGIS.Initialize("/ServerGate/", function () {
-		        SuperGIS.ServerEarth.Initialize(InitEarth)
+		        SuperGIS.ServerEarth.Initialize(this.InitEarth)
 		    })
 		  },
       
@@ -407,7 +407,7 @@
           this.BaseMapLayer["PHOTO"] = Photo;
           
           LineData = new MVTDocument(this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
-            LineFinish(name, features);
+            this.LineFinish(name, features);
           });
           
           LineData1 = null;
@@ -416,26 +416,26 @@
           
           IconData = new SuperGIS.VectorTileLayers(this.data_url + "IconData",
           pEarth, [ 'pole', 'dsbnroom', 'substation', 'edgechange', 'node', 'mxfmr', 'terminal', 'sxfmr', 'distributedenergy', 'jumper', 'switch-3', 'switch-2', 'switch-0', 'youxiu', 'breaker', 'hicustomer', 'faultindicator', 'capacitor' ],
-          function (layer) { IconReady(layer); },
-          function (array, layer) { IconFinish(array, layer); });
+          function (layer) { this.IconReady(layer); },
+          function (array, layer) { this.IconFinish(array, layer); });
 
           pEarth.SetViewpoint(120.414247, 23.650445, 70000, 0, 0, false);
               
           this.pGlobe = pEarth.GetGlobe();
           this.pCam = pEarth.GetCamera();
-          this.pCam.addEventListener("changed", CameraChanged, false);
+          this.pCam.addEventListener("changed", this.CameraChanged, false);
           this.pScene = pEarth.GetScene();
-          pEarth.addEventListener("mousedown", MouseDown, false);
+          pEarth.addEventListener("mousedown", this.MouseDown, false);
           //行動端監聽
-          pEarth.addEventListener("touchstart", MouseDown, false);										
-          setTimeout(function() { CheckChangeInfo(); }, this.changeinfo_interval);
+          pEarth.addEventListener("touchstart", this.MouseDown, false);										
+          setTimeout(function() { this.CheckChangeInfo(); }, this.changeinfo_interval);
         }
       },
       CameraChanged(){
         if(LineData1 == null){
           if(this.pCam.Position.Z < 7500){
             LineData1 = new MVTDocument(this.data_url + "LineData", this.earth_, {minzoom: 13, maxzoom: 13, loadlayers: ['busbar', 'edge1', 'energy', 'connection']}, function (name, features) {
-                  LineFinish(name, features);
+              this.LineFinish(name, features);
             });
           }
         }
@@ -447,9 +447,9 @@
       },
       QueryInfo(obj){
         // Icon 底色須設為透明 (搭配 TextureMixType.Plus), 藉此由線條呈現效果
-        Highlight(obj, true, 0.5);
+        this.Highlight(obj, true, 0.5);
 
-        var feaData = IsPlacemark(obj) ? obj.GetFieldValues() : obj.values;
+        var feaData = this.IsPlacemark(obj) ? obj.GetFieldValues() : obj.values;
         var infoStr = '<table width="100%">';
         for (var f in feaData)
         {
@@ -469,13 +469,13 @@
 			  return (obj.DDDSymbol != null);
 		  },
 		  GetValue(obj, field){
-			  return IsPlacemark(obj) ? obj.GetFieldValue(field) : obj.values[field];
+			  return this.IsPlacemark(obj) ? obj.GetFieldValue(field) : obj.values[field];
 		  },
       Highlight(obj, restore, sec, color){
         if (color == null)
           color = [1, 0, 0];
         
-        if (IsPlacemark(obj))
+        if (this.IsPlacemark(obj))
         {
           if (obj.GeoType == 2)
             color.push(0);
@@ -500,7 +500,7 @@
           return true;
 
         for (var i = 0; i < arr1.length; i++){
-          if (!SameDevice(arr1[i], arr2[i]))
+          if (!this.SameDevice(arr1[i], arr2[i]))
             return true;
         }
         return false;
@@ -532,14 +532,14 @@
           
           // 取得所有變更的導線及設備
           var tmp_dvs = JSON.parse(e.target.responseText);
-          tmp_dvs.sort(SortDevice);
-          if (!CheckChange(tmp_dvs, this.changedDevices))
+          tmp_dvs.sort(this.SortDevice);
+          if (!this.CheckChange(tmp_dvs, this.changedDevices))
           {
             setTimeout(function() { CheckChangeInfo(); }, this.changeinfo_interval);
             return;
           }
           this.changedDevices = tmp_dvs;
-          EventMarkerClear();
+          this.EventMarkerClear();
           
           var tmp_pms = [];
           for (var i = 0; i < tmp_dvs.length; i++)
@@ -558,7 +558,7 @@
             for (var j = 0; j < pms.length; j++)
             {
               var pm = pms[j];
-              if ((IsPlacemark(pm) && pm.GetMeshes() == null) || (!IsPlacemark(pm) && pm.parent.VecBuf == null))
+              if ((this.IsPlacemark(pm) && pm.GetMeshes() == null) || (!this.IsPlacemark(pm) && pm.parent.VecBuf == null))
               {
                 // 此 pm 未載入, 同上
                 dv.ufid = -1;
@@ -572,15 +572,15 @@
               else if (dv.dir == -2) // 視為異常
                 clr = [0, 0, 0];
               else
-                clr = HexToRGB(dv.clr);
+                clr = this.HexToRGB(dv.clr);
                         
-              Highlight(pm, false, null, clr);
+              this.Highlight(pm, false, null, clr);
                 
               if (dv.fsc == 106) // 導線
               {
-                var oid = GetValue(pm, "oid");
+                var oid = this.GetValue(pm, "oid");
                 pm.dir_changed = true;
-                UpdateSurface(pm, dv.dir, clr);
+                this.UpdateSurface(pm, dv.dir, clr);
                 //取得出狀況饋線的編號、最大最小邊界
                 var dirstring = (dv.dir != 99 && dv.dir != -1 && dv.dir != -2) ? "1" : dv.dir.toString();
                 var name = dv.fdr1.toString() + ":" + dirstring;
@@ -652,48 +652,50 @@
             if (found)
               continue;
 
-            var clr = HexToRGB(GetValue(pm, "symcolor"));
+            var clr = this.HexToRGB(this.GetValue(pm, "symcolor"));
             if (pm.GeoType == 2) // 設備
             {
-              var tid = GetValue(pm, "tid");
-              var ostatus = GetValue(pm, "ostatus");
+              var tid = this.GetValue(pm, "tid");
+              var ostatus = this.GetValue(pm, "ostatus");
               if (tid == 114 && ostatus == 0) // 常用開關為黑
                 clr = [0, 0, 0];
             }
-            Highlight(pm, false, null, clr);
+            this.Highlight(pm, false, null, clr);
             if (pm.dir_changed)
             {
-              var dir = GetValue(pm, "dir");
-              UpdateSurface(pm, dir);
+              var dir = this.GetValue(pm, "dir");
+              this.UpdateSurface(pm, dir);
               pm.dir_changed = null;
             }
           }
           this.dirty_pms = tmp_pms;
           
-          setTimeout(function() { CheckChangeInfo(); }, this.changeinfo_interval);
+          setTimeout(function() { this.CheckChangeInfo(); }, this.changeinfo_interval);
         }
       },
+      /*no used*/
       Update(){
         this.changedDevices = [];
-        CheckChangeInfo();
+        this.CheckChangeInfo();
       },
+      /*no used*/
       RestoreDefault(){
         for (var i = 0; i < this.dirty_pms.length; i++)
         {
           var pm = this.dirty_pms[i];
-          var clr = HexToRGB(GetValue(pm, "symcolor"));
+          var clr = this.HexToRGB(this.GetValue(pm, "symcolor"));
           if (pm.GeoType == 2) // 設備
           {
-            var tid = GetValue(pm, "tid");
-            var ostatus = GetValue(pm, "ostatus");
+            var tid = this.GetValue(pm, "tid");
+            var ostatus = this.GetValue(pm, "ostatus");
             if (tid == 114 && ostatus == 0) // 常用開關為黑
               clr = [0, 0, 0];
           }
-          Highlight(pm, false, null, clr);
+          this.Highlight(pm, false, null, clr);
           if (pm.dir_changed)
           {
-            var dir = GetValue(pm, "dir");
-            UpdateSurface(pm, dir);
+            var dir = this.GetValue(pm, "dir");
+            this.UpdateSurface(pm, dir);
             pm.dir_changed = null;
           }
         }
@@ -712,13 +714,13 @@
 			  // if (tEvent.x != this.down_x || tEvent.y != this.down_y)
 				//return;
 				
-			if (this.query)// 單點查詢
-			{
-				var pm = PickPlacemark(this.down_x, this.down_y);
-				if (!pm)
-					return;
-				QueryInfo(pm); // 單點查詢
-			}
+        if (this.query)// 單點查詢
+        {
+          var pm = this.PickPlacemark(this.down_x, this.down_y);
+          if (!pm)
+            return;
+          this.QueryInfo(pm); // 單點查詢
+        }
 			
         if (this.queryTPCLID)
         {
@@ -738,6 +740,7 @@
           }
         }
       },
+      /*no used*/
       MouseMove(tEvent){
         if (MouseType == 1)
           this.earth_.Invalidate();
@@ -819,19 +822,19 @@
           {
             if (dist >= 400 && feature.name == 'edge0')
             {
-              var aps_13 = CreateArrowPoints(first, second, angle, 36);
+              var aps_13 = this.CreateArrowPoints(first, second, angle, 36);
               tmps.push(this.earth_.AddPolygonSurface(oid, aps_13, rgb, "", 8, 11));
             }
             if (dist >= 400)
             {
-              var aps_14 = CreateArrowPoints(first, second, angle, 12);
+              var aps_14 = this.CreateArrowPoints(first, second, angle, 12);
               tmps.push(this.earth_.AddPolygonSurface(oid, aps_14, rgb, "", 12, 13));
             }
           }
           this.arrowCount++;
           if (dist >= 100)
           {
-            var aps_14 = CreateArrowPoints(first, second, angle, 3);
+            var aps_14 = this.CreateArrowPoints(first, second, angle, 3);
             tmps.push(this.earth_.AddPolygonSurface(oid, aps_14, rgb, "", 14, 18));
           }
           for (var j = 0; j < tmps.length; j++)
@@ -926,11 +929,11 @@
           size = 6;
         else if (surface.minLevel == 14)
           size = 3;
-        var aps = CreateArrowPoints(first, second, angle, size)
+        var aps = this.CreateArrowPoints(first, second, angle, size)
         var wkt = "POLYGON((" + aps[0].toString() + " " + aps[1].toString() + "," +
                   aps[2].toString() + " " + aps[3].toString() + "," +
                   aps[4].toString() + " " + aps[5].toString() + "))";
-        return ProcessSurfaceGeometry(this.pGlobe, wkt);
+        return this.ProcessSurfaceGeometry(this.pGlobe, wkt);
       },
       CreateBufferWKT(surface){
         var f = surface.fp;
@@ -972,7 +975,7 @@
         return wkt;
       },
       UpdateSurface(pm, dir, clr){
-        var oid = GetValue(pm, "oid");
+        var oid = this.GetValue(pm, "oid");
         var fdr = pm.values.fdr1;
         var surfaces = this.g_surfaces[oid];
         var surfaces2 = this.g_surfaces2[oid];
@@ -986,10 +989,10 @@
             else
             {
               surface.Visible = true;
-              surface.Geometry = CreateArrowGeometry(surface, dir);
+              surface.Geometry = this.CreateArrowGeometry(surface, dir);
             }
 
-            var rgb = (clr != null) ? clr.slice(0) : HexToRGB(GetValue(pm, "symcolor"));
+            var rgb = (clr != null) ? clr.slice(0) : this.HexToRGB(this.GetValue(pm, "symcolor"));
             for (var j = 0; j < 3; j++)
               rgb[j] = rgb[j] * 255;
 
@@ -1011,8 +1014,8 @@
             this.g_surfaces2[oid] = [];
             for (var i in surfaces)
             {
-              var wkt50 = CreateBufferWKT(surfaces[i], 75);
-              //var wkt100 = CreateBufferWKT(surfaces[i], 100);
+              var wkt50 = this.CreateBufferWKT(surfaces[i], 75);
+              //var wkt100 = this.CreateBufferWKT(surfaces[i], 100);
               if(this.buffer_visible)
                 var rgb = (dir == 99) ? "#bebebeff" : (dir == -1) ? "#ffb4b4ff" : "#ff7f27ff";
               else
@@ -1053,7 +1056,7 @@
           var clr = feature.values["symcolor"];
 
           if (name == "edge0" || name == "edge1") // 導線才加電流方向
-            AddArrow(feature, oid, clr);
+            this.AddArrow(feature, oid, clr);
             
           var id = tid.toString() + "." + oid.toString();
           if (this.g_pms[id] == null)
@@ -1093,7 +1096,7 @@
           var symbol = this.IconSymbols[clr + sym];
           if (!symbol)
           {
-            var rgb = HexToRGB(clr);
+            var rgb = this.HexToRGB(clr);
             // 底色皆設為透明 (需搭配 TextureMixType.Plus), 藉此由線條呈現效果, 包括 Highlight
             var material = this.earth_.CreateModelMaterial(0, this.earth_.CreateColor(rgb[0], rgb[1], rgb[2], 0));
             symbol = this.IconSymbols[clr + sym] = this.earth_.CreateSimpleDDDFillSymbol(material, null);
@@ -1164,6 +1167,7 @@
           }
         this.changedDevices = []; // 使強制 CheckChangeInfo
       },
+      /* no used*/
       LayerManager(){
         $("#div_layer").dialog("open");
       },
@@ -1250,45 +1254,49 @@
         if (t_names)
         {
           for (var i in t_names)
-            LayerVisible(t_names[i]);
+            this.LayerVisible(t_names[i]);
         }
         this.earth_.Invalidate();
       },
+      /*no used*/
       QueryOpen(){
         if(!this.query)
         {
-          this.earth_.addEventListener("mouseup", MouseUp, false);							
-          this.earth_.addEventListener("touchend", MouseUp, false);
+          this.earth_.addEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.addEventListener("touchend", this.MouseUp, false);
           document.getElementById("querybutton").value = "關閉圖資查詢";
           this.query = true;
         }
         else
         {
-          this.earth_.removeEventListener("mouseup", MouseUp, false);							
-          this.earth_.removeEventListener("touchend", MouseUp, false);
+          this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.removeEventListener("touchend", this.MouseUp, false);
           document.getElementById("querybutton").value = "開啟圖資查詢";
           this.query = false;
         }
       },
+      /*no used*/
       QueryTPLIDOpen(){
         if(!this.queryTPCLID)
         {
           this.queryTPCLID = true;
-          this.earth_.addEventListener("mouseup", MouseUp, false);							
-          this.earth_.addEventListener("touchend", MouseUp, false);				
+          this.earth_.addEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.addEventListener("touchend", this.MouseUp, false);				
           document.getElementById("querybutton2").value = "關閉坐標查詢";
         }
         else
         {
           this.queryTPCLID = false;
-          this.earth_.removeEventListener("mouseup", MouseUp, false);							
-          this.earth_.removeEventListener("touchend", MouseUp, false);				
+          this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.removeEventListener("touchend", this.MouseUp, false);				
           document.getElementById("querybutton2").value = "開啟坐標查詢";
         }
       },
+      /*no used*/
       locate(){
 			  this.earth_.SetViewpoint(120.3358,23.6276,1000,0,0); //X Y 高度 方位角 傾角
 		  },
+      /*no used*/
       createmarker(){
         var tpclidlist = ["K0046FD31", "J9532AE52","J9652FB41","K0349DE63","K0546DB66","K0242BE22"];
         //以圖號坐標取得坐標值，並建立地圖標記
@@ -1304,6 +1312,7 @@
           this.markerlist.push(pmlabel);
         }
       },
+      /*no used*/
       markercluster(){
         this.clusterlayer = new SuperGIS.ClusterLayer(
             this.earth_, // 地圖物件
@@ -1317,7 +1326,7 @@
                   'cluster-radius': [20, 100, 30, 750, 40],
                   'text-size': 12,
                   'text-font': 'DIN Offc Pro Medium',
-                  'text-color': 'black' }}, function() { clusterReady(); });
+                  'text-color': 'black' }}, function() { this.clusterReady(); });
                   
         for (var i = 0; i < this.markerlist.length; i++) //擴充標記的屬性，讓他有x,y給cluster的方法吃
         {
