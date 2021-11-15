@@ -580,9 +580,6 @@
           PFault:0, 
           PTransfer:0, 
           PShortcircuit:0,
-          /*test*/
-          LineData:{},
-          LineData1:{}
         },
         Layers : {},
 		    BaseMapLayer : {},
@@ -659,7 +656,12 @@
         query: false,
         queryTPCLID : false,
         markerlist : [],
-        clusterlayer:{}
+        clusterlayer:{},
+        /*test*/
+        LineData:null,
+        LineData1:null,
+        TextData:null,
+        IconData:null
       }
     },
     mounted(){
@@ -820,15 +822,15 @@
           Photo.setVisible(false)				
           _this.BaseMapLayer["PHOTO"] = Photo;
           
-          LineData = new MVTDocument(_this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
+          _this.LineData = new MVTDocument(_this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
             this.LineFinish(name, features);
           });
           
-          LineData1 = null;
-          TextData = null;
+          _this.LineData1 = null;
+          _this.TextData = null;
           
           
-          IconData = new SuperGIS.VectorTileLayers(this.data_url + "IconData",
+          _this.IconData = new SuperGIS.VectorTileLayers(this.data_url + "IconData",
           pEarth, [ 'pole', 'dsbnroom', 'substation', 'edgechange', 'node', 'mxfmr', 'terminal', 'sxfmr', 'distributedenergy', 'jumper', 'switch-3', 'switch-2', 'switch-0', 'youxiu', 'breaker', 'hicustomer', 'faultindicator', 'capacitor' ],
           function (layer) { this.IconReady(layer); },
           function (array, layer) { this.IconFinish(array, layer); });
@@ -846,16 +848,16 @@
         }
       },
       CameraChanged(){
-        if(LineData1 == null){
+        if(this.LineData1 == null){
           if(this.pCam.Position.Z < 7500){
-            LineData1 = new MVTDocument(this.data_url + "LineData", this.earth_, {minzoom: 13, maxzoom: 13, loadlayers: ['busbar', 'edge1', 'energy', 'connection']}, function (name, features) {
+            this.LineData1 = new MVTDocument(this.data_url + "LineData", this.earth_, {minzoom: 13, maxzoom: 13, loadlayers: ['busbar', 'edge1', 'energy', 'connection']}, function (name, features) {
               this.LineFinish(name, features);
             });
           }
         }
-        if(TextData == null){
+        if(this.TextData == null){
           if(this.pCam.Position.Z < 10000){
-            TextData = new MVTDocument(this.data_url + "TextData", this.earth_, {maxzoom: 15});
+            this.TextData = new MVTDocument(this.data_url + "TextData", this.earth_, {maxzoom: 15});
           }
         }
       },
@@ -903,7 +905,7 @@
             color.push(0);
           else
             color.push(1);
-          LineData.HighlightFeature(obj, color, restore, sec);
+          this.LineData.HighlightFeature(obj, color, restore, sec);
         }
       },
       SameDevice(dv1, dv2){
@@ -1166,8 +1168,8 @@
       {
         for (var j = y - 2; j < y + 2; j++)
         {
-                  if(LineData) feature0 = LineData.HitTestFeature(i, j);
-                  if(LineData1) feature1 = LineData1.HitTestFeature(i, j);
+                  if(this.LineData) feature0 = LineData.HitTestFeature(i, j);
+                  if(this.LineData1) feature1 = LineData1.HitTestFeature(i, j);
           if (feature0 || feature1)
             break;
         }
@@ -1616,15 +1618,15 @@
         }
         else if (name == "edge0")
         {
-          LineData.SetLayerVisible(name, !LineData.GetLayerVisible(name));
+          this.LineData.SetLayerVisible(name, !LineData.GetLayerVisible(name));
         }
         else if (name == "edge1" || name == "busbar" || name == "energy" || name == "connection")
         {
-          LineData1.SetLayerVisible(name, !LineData1.GetLayerVisible(name));
+          this.LineData1.SetLayerVisible(name, !LineData1.GetLayerVisible(name));
         }
         else if (name == "annotation" || name == "dsbnroom_t" || name == "pole_t" || name == "substation_t" || name == "substation_n" || name == "connection_t" || name == "switch_t" || name == "breaker_t" || name == "hicustomer_t")
         {
-          TextData.SetLayerVisible(name, !TextData.GetLayerVisible(name));
+          this.TextData.SetLayerVisible(name, !this.TextData.GetLayerVisible(name));
         }
         else if (name == "buffer")
         {
