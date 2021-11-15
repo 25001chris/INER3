@@ -1,6 +1,330 @@
 <template>
-  <div class="container" id="body" >
-    {{windowWidth}}
+  <div class="container">
+    <div id="body" style="width:100%;height:100%;" />
+    <div id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
+      <div id="list_context">
+      </div>
+    </div>
+    <div id="div_infowindow" class="ui-widget-content" title="屬性查詢" style="background-color:rgba(255,255,255,0.8)">
+      <div id="info_context">
+      </div>
+    </div>
+    <div id="div_layer" class="ui-widget-content" title="圖層" style="background-color:rgba(255,255,255,0.3)">
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-0">底圖</a></li>
+          <li><a href="#tabs-1">饋線</a></li>
+          <li><a href="#tabs-2">設備</a></li>
+          <li><a href="#tabs-3">應用</a></li>
+        </ul>
+        <div id="tabs-0">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('NLSCMAP');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>通用版電子地圖</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" onclick="LayerVisible('PHOTO');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>衛星影像</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="tabs-1">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('busbar');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>匯流排</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('edge0');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>高壓導線(主幹線)</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('edge1');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>高壓導線(分歧線)</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('energy');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>再生能源</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('connection');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>直接連接</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('current_dir');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電流方向</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="tabs-2">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('capacitor');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電容</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('faultindicator');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>故障指示器</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('hicustomer');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>高壓用戶</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('breaker');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>斷路器</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('jumper');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>高壓跳線</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('distributedenergy');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>再生能源</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('youxiu');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>游休</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('switch');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>開關</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('sxfmr');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>線路變壓器</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('terminal');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>終端</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('mxfmr');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>主變壓器</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('station');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電驛</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('node');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>高壓節點</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('edgecross');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>導線交叉</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('edgechange');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>導線變更</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('substation');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>變電所</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('pole');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電桿</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('dsbnroom');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>配電室</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('annotation');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>備註文字</td>
+              </tr>	
+            </tbody>				
+          </table>
+        </div>
+        <div id="tabs-3">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" onclick="LayerVisible('current_dir');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電流方向</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('buffer');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電力潮流醒目區間</td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input class="switch-input" type="checkbox" checked onclick="LayerVisible('bufferlabel');" />
+                    <span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span>
+                  </label>
+                </td>
+                <td>電力潮流醒目標記</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+	  <table style="position:absolute; top:0px;">
+      <tbody>
+        <tr>
+          <td><input type="button" style="width:100px" value="圖層管理" @click="LayerManager"></td>
+          <td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" @click="QueryOpen"></td>		
+          <td><input id="querybutton2" style="width:100px" type="button" value="開啟坐標查詢" @click="QueryTPLIDOpen"></td>
+          <td><input id="querybutton2" style="width:100px" type="button" value="定位方法" @click="locate"></td>
+          <td><input id="Createmarker" style="width:100px" type="button" value="建立標記" @click="createmarker"></td>		
+          <td><input id="Createmarker" style="width:100px" type="button" value="標記群聚" @click="markercluster"></td>
+        </tr>
+      </tbody>
+    </table>
     <transition name="van-slide-up">
       <AnnounceList
         v-show="announceList"
@@ -213,7 +537,7 @@
       ],
     },
     async asyncData() {
-      // let aaa = await axios.get(`http://192.168.1.229/ineradms_integration/REST/GetXMLSettings`)
+      // let aaa = await axios.get(`http://192.168.1.103/ineradms_integration/REST/GetXMLSettings`)
       // let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
       //return { a: aaa.data, b: bbb.data }
     },
@@ -239,7 +563,6 @@
         MouseType : 0,
         current_visible : true,
         current_visible : false,
-        /*step1*/
         dirty_pms : [],
         changedDevices : [],
         changeinfo_interval : 2000,
@@ -256,7 +579,10 @@
           PPoweroff:0, 
           PFault:0, 
           PTransfer:0, 
-          PShortcircuit:0
+          PShortcircuit:0,
+          /*test*/
+          LineData:{},
+          LineData1:{}
         },
         Layers : {},
 		    BaseMapLayer : {},
@@ -343,15 +669,15 @@
     },
     methods:{
       jqTest(){
-        $('body').append('<p>XXXXXXX</p>')
         console.log($('body'));
       },
       /*map methods*/
       documentLoad(){
         let _this = this
-        console.log(SuperGIS)
+        // console.log(SuperGIS)
+        // console.log(_this.InitEarth)
 		    SuperGIS.Initialize("/ServerGate/", function () {
-            console.log(_this.InitEarth)
+            console.log('test')
 		        SuperGIS.ServerEarth.Initialize(_this.InitEarth)
 		    })
 		  },
@@ -444,6 +770,7 @@
 	      var pBody = new SuperGIS.Windows.HTMLContainer(document.getElementById("body"));
 	      var sHost = location.href;
 	      var idx = sHost.indexOf("/", 8);
+        var _this = this;
 	      if (idx >= 0) sHost = sHost.substring(0, idx);
 	      CreateHTML5Earth(pBody, function (pEarth){
           var material = pEarth.CreateModelMaterial(0, pEarth.CreateColor(0, 0, 0, 1));
@@ -461,12 +788,13 @@
               
               toload++;
               var texture = pEarth.CreateModelTexture("");
-              this.IconTextures[val] = texture;
+              _this.IconTextures[val] = texture;
               var img = new Image;
               img.src = "icons/" + val + ".png";
               img.onload = function() {
                 toload--;
                 if (toload == 0)
+                  console.log(toload)
                   EarthLoaded(pEarth); // 等 Icons 載完
                 }
                 texture.SetupTexture(img, 50, 50, 1);
@@ -476,21 +804,23 @@
 				  xhr.send();
 			  });
         function EarthLoaded(pEarth){
-          this.earth_ = pEarth;
+          console.log(pEarth)
+          _this.earth_ = pEarth;
           pEarth.Scene.BackgroundColor = pEarth.CreateColor(0.2, 0.2, 0.2, 1);
-          pEarth.SetupSystem(false, SR_3857);
+          pEarth.SetupSystem(false, _this.SR_3857);
           pEarth.HasTerrain = false;
             
-          Basemap = new SuperGIS.TileLayer("https://demo.supergeotek.com/INER_NLSCEMAP/Agent.aspx",
-          pEarth, { layer: 'mask', sr: SR_3857 }, null);					
-          this.BaseMapLayer["NLSCMAP"] = Basemap;
+          var Basemap = new SuperGIS.TileLayer("https://demo.supergeotek.com/INER_NLSCEMAP/Agent.aspx",
+          pEarth, { layer: 'mask', sr: _this.SR_3857 }, null);		
+          console.log(Basemap);			
+          _this.BaseMapLayer["NLSCMAP"] = Basemap;
           
-          Photo = new SuperGIS.TileLayer("https://wmts.nlsc.gov.tw/wmts",
+          var Photo = new SuperGIS.TileLayer("https://wmts.nlsc.gov.tw/wmts",
           pEarth, { layer: 'PHOTO2' }, null);
           Photo.setVisible(false)				
-          this.BaseMapLayer["PHOTO"] = Photo;
+          _this.BaseMapLayer["PHOTO"] = Photo;
           
-          LineData = new MVTDocument(this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
+          LineData = new MVTDocument(_this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
             this.LineFinish(name, features);
           });
           
@@ -534,7 +864,7 @@
         this.Highlight(obj, true, 0.5);
 
         var feaData = this.IsPlacemark(obj) ? obj.GetFieldValues() : obj.values;
-        var infoStr = '<table width="100%">';
+        var infoStr = '<table width="100%"><tbody>';
         for (var f in feaData)
         {
           infoStr += "<tr><td width=\"30%\">";
@@ -545,7 +875,7 @@
           infoStr += feaData[f];
           infoStr += "</td></tr>";
         }
-        infoStr += '</table>';
+        infoStr += '</tbody></table>';
         $("#div_infowindow").dialog("open");
         $("#info_context").html(infoStr);
 		  },
@@ -816,8 +1146,8 @@
             var pt = this.pGlobe.GeodeticFromCartesian(CurLocation);
             var pt84 = { X: pt.X, Y: pt.Y, Z: 0 };
             if (!this.pGlobe.IsGCS())
-              pt84 = SpatialReference.CoordinateTransform(this.pGlobe.SpatialReference, SR_4326, null, pt84);
-            var pt97 = SpatialReference.CoordinateTransform(SR_4326, SR_3826, null, pt84);
+              pt84 = SpatialReference.CoordinateTransform(this.pGlobe.SpatialReference, this.SR_4326, null, pt84);
+            var pt97 = SpatialReference.CoordinateTransform(this.SR_4326, this.SR_3826, null, pt84);
 
             var sTPCPoint = "台電圖號坐標( " + TPC.LngLatToTPCPoint(pt84) + " )";
             alert(sTPCPoint);
@@ -1201,7 +1531,7 @@
             w = w * 1.3;
           if (this.pGlobe.IsGCS())
           {
-            pt = SpatialReference.CoordinateTransform(SR_3857, SR_4326, null, pt);
+            pt = SpatialReference.CoordinateTransform(_this.SR_3857, SR_4326, null, pt);
             w /= 111000;
           }
           
@@ -1253,6 +1583,7 @@
       },
       /* no used*/
       LayerManager(){
+        console.log('gogo')
         $("#div_layer").dialog("open");
       },
       LayerVisible(name){
@@ -1344,20 +1675,21 @@
       },
       /*no use*/
       QueryOpen(){
-        if(!this.query)
-        {
-          this.earth_.addEventListener("mouseup", this.MouseUp, false);							
-          this.earth_.addEventListener("touchend", this.MouseUp, false);
-          document.getElementById("querybutton").value = "關閉圖資查詢";
-          this.query = true;
-        }
-        else
-        {
-          this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
-          this.earth_.removeEventListener("touchend", this.MouseUp, false);
-          document.getElementById("querybutton").value = "開啟圖資查詢";
-          this.query = false;
-        }
+        console.log(this.earth_)
+        // if(!this.query)
+        // {
+        //   this.earth_.addEventListener("mouseup", this.MouseUp, false);							
+        //   this.earth_.addEventListener("touchend", this.MouseUp, false);
+        //   document.getElementById("querybutton").value = "關閉圖資查詢";
+        //   this.query = true;
+        // }
+        // else
+        // {
+        //   this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
+        //   this.earth_.removeEventListener("touchend", this.MouseUp, false);
+        //   document.getElementById("querybutton").value = "開啟圖資查詢";
+        //   this.query = false;
+        // }
       },
       /*no use*/
       QueryTPLIDOpen(){

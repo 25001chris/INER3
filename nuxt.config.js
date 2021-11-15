@@ -1,5 +1,8 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  router: {
+    base: '/INER3_Mobile/'
+  },
   head: {
     title: 'INER3',
     htmlAttrs: {
@@ -49,6 +52,6 @@ export default {
   },
   
   server: {
-    host: '192.168.1.103'
+    host: 'localhost'
   }
 }
