@@ -314,6 +314,7 @@
       </div>
     </div>
 	  <table style="position:absolute; top:0px;">
+      <div @click="jqTest">TESTETSS</div>
       <tbody>
         <tr>
           <td><input type="button" style="width:100px" value="圖層管理" @click="LayerManager"></td>
@@ -526,6 +527,10 @@
           src:
             'http://192.168.1.103/ServerGate/scripts/Marker.js',
         },
+        // {
+        //   src:
+        //     'http://192.168.1.103/iner3_mobile/EarthStartApp.js',
+        // },
         {
           src:
             'https://code.jquery.com/jquery-1.12.4.js',
@@ -533,7 +538,10 @@
         {
           src:
             'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
-        },         
+        },
+        { 
+          src: '~assets/jquery-ui.css',
+        }     
       ],
     },
     async asyncData() {
@@ -1579,6 +1587,7 @@
       },
       /* no used*/
       LayerManager(){
+        console.log('test111');
         $("#div_layer").dialog("open");
       },
       LayerVisible(name){
@@ -1770,6 +1779,9 @@
       /*map methods*/
       openAnnounce(e){
         if(e){
+          console.log(e)
+          console.log(QueryTPLIDOpen)
+          QueryTPLIDOpen();
           this.announceBox = true;
           this.rightListBox = false;
         }
