@@ -384,7 +384,7 @@
       RightListBox,
       AnnounceItem
     },
-    head:{
+    head:{      
       script: [
         {
           src:
@@ -533,7 +533,7 @@
         {
           src:
             'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
-        },
+        },         
       ],
     },
     async asyncData() {
@@ -676,10 +676,7 @@
       /*map methods*/
       documentLoad(){
         let _this = this
-        // console.log(SuperGIS)
-        // console.log(_this.InitEarth)
 		    SuperGIS.Initialize("/ServerGate/", function () {
-            console.log('test')
 		        SuperGIS.ServerEarth.Initialize(_this.InitEarth)
 		    })
 		  },
@@ -777,44 +774,38 @@
 	      CreateHTML5Earth(pBody, function (pEarth){
           var material = pEarth.CreateModelMaterial(0, pEarth.CreateColor(0, 0, 0, 1));
           // 載入定義圖示的文件
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', 'icons/OCTIcons.txt');
-          xhr.onreadystatechange = function(){
-					var toload = 0;
-					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
-            var lines = xhr.responseText.split('\r\n');
-            for (var ln in lines){
+          //Gary 20200923:not originally by Gary但還是換個modern點的寫法(COG ASKED)
+          var OCTIcons = $.get("/INER3_Mobile/icons/OCTIcons.txt");
+          $.when(OCTIcons).done(function (OCTIcons) {
+            var toload = 0;
+            var lines = OCTIcons.split('\r\n');
+            for (var ln in lines) {
               var val = lines[ln];
-              if (val.length == 0)
-                continue;
-              
+                if (val.length == 0)
+                  continue;
+
               toload++;
-              var texture = pEarth.CreateModelTexture("");
+              var texture = pEarth.CreateModelTexture(null);
               _this.IconTextures[val] = texture;
               var img = new Image;
-              img.src = "icons/" + val + ".png";
-              img.onload = function() {
+              img.src = "/INER3_Mobile/icons/" + val + ".png";
+              img.onload = function () {
                 toload--;
                 if (toload == 0)
-                  console.log(toload)
                   EarthLoaded(pEarth); // 等 Icons 載完
-                }
-                texture.SetupTexture(img, 50, 50, 1);
               }
-					  }
-				  }
-				  xhr.send();
+              texture.SetupTexture(img, 50, 50, 1);
+            }
+          });
 			  });
         function EarthLoaded(pEarth){
-          console.log(pEarth)
           _this.earth_ = pEarth;
           pEarth.Scene.BackgroundColor = pEarth.CreateColor(0.2, 0.2, 0.2, 1);
           pEarth.SetupSystem(false, _this.SR_3857);
           pEarth.HasTerrain = false;
             
           var Basemap = new SuperGIS.TileLayer("https://demo.supergeotek.com/INER_NLSCEMAP/Agent.aspx",
-          pEarth, { layer: 'mask', sr: _this.SR_3857 }, null);		
-          console.log(Basemap);			
+          pEarth, { layer: 'mask', sr: _this.SR_3857 }, null);				
           _this.BaseMapLayer["NLSCMAP"] = Basemap;
           
           var Photo = new SuperGIS.TileLayer("https://wmts.nlsc.gov.tw/wmts",
@@ -823,28 +814,28 @@
           _this.BaseMapLayer["PHOTO"] = Photo;
           
           _this.LineData = new MVTDocument(_this.data_url + "LineData", pEarth, {minzoom: 13, maxzoom: 13, loadlayers: ["edge0"]}, function (name, features) {
-            this.LineFinish(name, features);
+            _this.LineFinish(name, features);
           });
           
           _this.LineData1 = null;
           _this.TextData = null;
           
           
-          _this.IconData = new SuperGIS.VectorTileLayers(this.data_url + "IconData",
+          _this.IconData = new SuperGIS.VectorTileLayers(_this.data_url + "IconData",
           pEarth, [ 'pole', 'dsbnroom', 'substation', 'edgechange', 'node', 'mxfmr', 'terminal', 'sxfmr', 'distributedenergy', 'jumper', 'switch-3', 'switch-2', 'switch-0', 'youxiu', 'breaker', 'hicustomer', 'faultindicator', 'capacitor' ],
-          function (layer) { this.IconReady(layer); },
-          function (array, layer) { this.IconFinish(array, layer); });
+          function (layer) { _this.IconReady(layer); },
+          function (array, layer) { _this.IconFinish(array, layer); });
 
           pEarth.SetViewpoint(120.414247, 23.650445, 70000, 0, 0, false);
               
-          this.pGlobe = pEarth.GetGlobe();
-          this.pCam = pEarth.GetCamera();
-          this.pCam.addEventListener("changed", this.CameraChanged, false);
-          this.pScene = pEarth.GetScene();
-          pEarth.addEventListener("mousedown", this.MouseDown, false);
+          _this.pGlobe = pEarth.GetGlobe();
+          _this.pCam = pEarth.GetCamera();
+          _this.pCam.addEventListener("changed", _this.CameraChanged, false);
+          _this.pScene = pEarth.GetScene();
+          pEarth.addEventListener("mousedown", _this.MouseDown, false);
           //行動端監聽
-          pEarth.addEventListener("touchstart", this.MouseDown, false);										
-          setTimeout(function() { this.CheckChangeInfo(); }, this.changeinfo_interval);
+          pEarth.addEventListener("touchstart", _this.MouseDown, false);										
+          setTimeout(function() { _this.CheckChangeInfo(); }, _this.changeinfo_interval);
         }
       },
       CameraChanged(){
@@ -942,6 +933,7 @@
       CheckChangeInfo(){
         var url = this.host_url + "FeederAnalysis/GetChangedDeviceList";
         var xmlHttp = new XMLHttpRequest();
+        var _this = this;
         xmlHttp.open("GET", url, true);
         xmlHttp.send(null);
         xmlHttp.onload = function (e) {
@@ -949,20 +941,20 @@
           // 取得所有變更的導線及設備
           var tmp_dvs = JSON.parse(e.target.responseText);
           tmp_dvs.sort(this.SortDevice);
-          if (!this.CheckChange(tmp_dvs, this.changedDevices))
+          if (!_this.CheckChange(tmp_dvs, _this.changedDevices))
           {
-            setTimeout(function() { CheckChangeInfo(); }, this.changeinfo_interval);
+            setTimeout(function() { _this.CheckChangeInfo(); }, _this.changeinfo_interval);
             return;
           }
-          this.changedDevices = tmp_dvs;
-          this.EventMarkerClear();
+          _this.changedDevices = tmp_dvs;
+          _this.EventMarkerClear();
           
           var tmp_pms = [];
           for (var i = 0; i < tmp_dvs.length; i++)
           {
             var dv = tmp_dvs[i];
             var id = dv.fsc.toString() + "." + dv.ufid.toString();
-            var pms = this.g_pms[id];
+            var pms = _this.g_pms[id];
             if (pms == null)
             {
               // 此 dv 對應的 pms 未載入, 為確保下次依然 CheckChange 會判為有變更再次進入這裡
@@ -1016,10 +1008,10 @@
             }
           }
           // 針對出狀況的饋線，建立醒目label標示			
-          for (var i in this.eventMarkers.fdr_labels)
+          for (var i in _this.eventMarkers.fdr_labels)
           {
             var state = i.split(":")[1];
-            var ext = this.eventMarkers.fdr_labels[i];
+            var ext = _this.eventMarkers.fdr_labels[i];
             if (state == -1)
             {
               state = "Fault";
@@ -1053,9 +1045,9 @@
           }
           
           // 若這次要變更的還是在上次的 dirty_pms 中, 不用還原
-          for (var i = 0; i < this.dirty_pms.length; i++)
+          for (var i = 0; i < _this.dirty_pms.length; i++)
           {
-            var pm = this.dirty_pms[i];
+            var pm = _this.dirty_pms[i];
             var found = false;
             for (var j = 0; j < tmp_pms.length; j++)
             {
@@ -1068,25 +1060,25 @@
             if (found)
               continue;
 
-            var clr = this.HexToRGB(this.GetValue(pm, "symcolor"));
+            var clr = _this.HexToRGB(_this.GetValue(pm, "symcolor"));
             if (pm.GeoType == 2) // 設備
             {
-              var tid = this.GetValue(pm, "tid");
-              var ostatus = this.GetValue(pm, "ostatus");
+              var tid = _this.GetValue(pm, "tid");
+              var ostatus = _this.GetValue(pm, "ostatus");
               if (tid == 114 && ostatus == 0) // 常用開關為黑
                 clr = [0, 0, 0];
             }
-            this.Highlight(pm, false, null, clr);
+            _this.Highlight(pm, false, null, clr);
             if (pm.dir_changed)
             {
-              var dir = this.GetValue(pm, "dir");
-              this.UpdateSurface(pm, dir);
+              var dir = _this.GetValue(pm, "dir");
+              _this.UpdateSurface(pm, dir);
               pm.dir_changed = null;
             }
           }
-          this.dirty_pms = tmp_pms;
+          _this.dirty_pms = tmp_pms;
           
-          setTimeout(function() { this.CheckChangeInfo(); }, this.changeinfo_interval);
+          setTimeout(function() { _this.CheckChangeInfo(); }, _this.changeinfo_interval);
         }
       },
       /*no use*/
@@ -1211,7 +1203,7 @@
         var pts = feature.geometry[0];
         var dir = feature.values["dir"];
         var rgb = clr;
-        if (current_visible)
+        if (this.current_visible)
           rgb = rgb + "FF";
         else
           rgb = rgb + "00";
@@ -1291,7 +1283,7 @@
               var xyz = pair.trim().split(' ');
               pts.push(parseFloat(xyz[0]), parseFloat(xyz[1]), 0);
             }
-            CoordinateTransform(true, pGlobe.SpatialReference, s_WGS84, pts, pts.length / 3);
+            CoordinateTransform(true, _this.pGlobe.SpatialReference, s_WGS84, pts, pts.length / 3);
             for (var j = 0; j < pts.length; j += 3)
             {
               pGeos.push(pts[j], pts[j + 1]);
@@ -1415,7 +1407,7 @@
             var hc = "#";
             for (var j = 0; j < 3; j++)
               hc += rgb[j].toString(16).padStart(2, '0');
-            hc += (current_visible) ? "ff" : "00";
+            hc += (this.current_visible) ? "ff" : "00";
             surface.Style = hc;
 
             for (var j = 0; j < surface.CoveredTiles.length; j++)
@@ -1463,6 +1455,7 @@
         }
       },
       LineFinish(name, features){
+        var _this = this;
         for (var i = 0; i < features.length; i++)
         {
           var feature = features[i];
@@ -1471,16 +1464,16 @@
           var oid = feature.values["oid"];
           var clr = feature.values["symcolor"];
 
-          if (name == "edge0" || name == "edge1") // 導線才加電流方向
-            this.AddArrow(feature, oid, clr);
+          // if (name == "edge0" || name == "edge1") // 導線才加電流方向
+          //   _this.AddArrow(feature, oid, clr);
             
           var id = tid.toString() + "." + oid.toString();
-          if (this.g_pms[id] == null)
-            this.g_pms[id] = [feature];
+          if (_this.g_pms[id] == null)
+            _this.g_pms[id] = [feature];
           else
-            this.g_pms[id].push(feature);
+            _this.g_pms[id].push(feature);
         }
-        this.changedDevices = []; // 使強制 CheckChangeInfo
+        _this.changedDevices = []; // 使強制 CheckChangeInfo
       },
       IconReady(layer){
         this.Layers[layer.Name] = this.IconLayers[layer.Name] = layer;
@@ -1492,6 +1485,7 @@
         var pLayerOrigin = [(bbox.MinX + bbox.MaxX) / 2, (bbox.MinY + bbox.MaxY) / 2, 0];
         this.pGlobe.CartesiansFromGeodetics(1, pLayerOrigin, pLayerOrigin);
         h = this.LayerHeight[layer.Name];
+        var _this = this;
         for (var i = 0; i < array.length; i++)
         {
           var mark = array[i];
@@ -1502,20 +1496,20 @@
           var ang = mark.GetFieldValueByIndex(12);
           var sym = mark.GetFieldValueByIndex(13);
           var ostatus = mark.GetFieldValueByIndex(15);
-          var texture = this.IconTextures[sym];
+          var texture = _this.IconTextures[sym];
           if (!texture)
             console.log("no texture: " + sym);
             
           if (tid == 114 && ostatus == 0) // 常用開關為黑
             clr = "#000000";
             
-          var symbol = this.IconSymbols[clr + sym];
+          var symbol = _this.IconSymbols[clr + sym];
           if (!symbol)
           {
-            var rgb = this.HexToRGB(clr);
+            var rgb = _this.HexToRGB(clr);
             // 底色皆設為透明 (需搭配 TextureMixType.Plus), 藉此由線條呈現效果, 包括 Highlight
-            var material = this.earth_.CreateModelMaterial(0, this.earth_.CreateColor(rgb[0], rgb[1], rgb[2], 0));
-            symbol = this.IconSymbols[clr + sym] = this.earth_.CreateSimpleDDDFillSymbol(material, null);
+            var material = _this.earth_.CreateModelMaterial(0, _this.earth_.CreateColor(rgb[0], rgb[1], rgb[2], 0));
+            symbol = _this.IconSymbols[clr + sym] = _this.earth_.CreateSimpleDDDFillSymbol(material, null);
             symbol.Texture = texture;
           }
 
@@ -1531,7 +1525,7 @@
           var w = Math.sqrt((pts[0] - pts[3]) * (pts[0] - pts[3]) + (pts[1] - pts[4]) * (pts[1] - pts[4])) / 2;
           if (mark.Name == 'sxfmr')
             w = w * 1.3;
-          if (this.pGlobe.IsGCS())
+          if (_this.pGlobe.IsGCS())
           {
             pt = SpatialReference.CoordinateTransform(_this.SR_3857, SR_4326, null, pt);
             w /= 111000;
@@ -1563,7 +1557,7 @@
           varIndex.push(0, 1, 2, 1, 2, 3);
           varTexture.push(0, 1, 0, 0, 1, 1, 1, 0);
 
-          this.pGlobe.CartesiansFromGeodetics(xy.length / 3, xy, xy);
+          _this.pGlobe.CartesiansFromGeodetics(xy.length / 3, xy, xy);
           for (var j = 0; j < xy.length; j += 3)
           {
             varCoord.push(xy[j] - pLayerOrigin[0], xy[j + 1] - pLayerOrigin[1], xy[j + 2] - pLayerOrigin[2]);
@@ -1576,16 +1570,15 @@
           pMesh.setIndex(varIndex);
           
           var id = tid.toString() + "." + oid.toString();
-          if (this.g_pms[id] == null)
-            this.g_pms[id] = [mark];
+          if (_this.g_pms[id] == null)
+            _this.g_pms[id] = [mark];
           else
-            this.g_pms[id].push(mark);
+            _this.g_pms[id].push(mark);
           }
         this.changedDevices = []; // 使強制 CheckChangeInfo
       },
       /* no used*/
       LayerManager(){
-        console.log('gogo')
         $("#div_layer").dialog("open");
       },
       LayerVisible(name){
@@ -1602,7 +1595,7 @@
             for (var j in surfaces)
             {
               var sf = surfaces[j];
-              if (current_visible)
+              if (this.current_visible)
                 sf.Style = sf.Style.slice(0, 7) + "00";
               else
                 sf.Style = sf.Style.slice(0, 7) + "FF";
@@ -1614,7 +1607,7 @@
             }
           }
           this.earth_.Invalidate();
-          current_visible = !current_visible;
+          this.current_visible = !this.current_visible;
         }
         else if (name == "edge0")
         {
@@ -1677,21 +1670,20 @@
       },
       /*no use*/
       QueryOpen(){
-        console.log(this.earth_)
-        // if(!this.query)
-        // {
-        //   this.earth_.addEventListener("mouseup", this.MouseUp, false);							
-        //   this.earth_.addEventListener("touchend", this.MouseUp, false);
-        //   document.getElementById("querybutton").value = "關閉圖資查詢";
-        //   this.query = true;
-        // }
-        // else
-        // {
-        //   this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
-        //   this.earth_.removeEventListener("touchend", this.MouseUp, false);
-        //   document.getElementById("querybutton").value = "開啟圖資查詢";
-        //   this.query = false;
-        // }
+        if(!this.query)
+        {
+          this.earth_.addEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.addEventListener("touchend", this.MouseUp, false);
+          document.getElementById("querybutton").value = "關閉圖資查詢";
+          this.query = true;
+        }
+        else
+        {
+          this.earth_.removeEventListener("mouseup", this.MouseUp, false);							
+          this.earth_.removeEventListener("touchend", this.MouseUp, false);
+          document.getElementById("querybutton").value = "開啟圖資查詢";
+          this.query = false;
+        }
       },
       /*no use*/
       QueryTPLIDOpen(){
@@ -1732,6 +1724,7 @@
       },
       /*no use*/
       markercluster(){
+        var _this = this;
         this.clusterlayer = new SuperGIS.ClusterLayer(
             this.earth_, // 地圖物件
             { geojson: '', // 空的即可，這個是給外部資源引入的
@@ -1744,7 +1737,7 @@
                   'cluster-radius': [20, 100, 30, 750, 40],
                   'text-size': 12,
                   'text-font': 'DIN Offc Pro Medium',
-                  'text-color': 'black' }}, function() { this.clusterReady(); });
+                  'text-color': 'black' }}, function() { _this.clusterReady(); });
                   
         for (var i = 0; i < this.markerlist.length; i++) //擴充標記的屬性，讓他有x,y給cluster的方法吃
         {
