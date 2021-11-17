@@ -11,9 +11,10 @@
         <van-col span="20" class="popupTitle">{{popupInit[popupEvent].title}}</van-col>
         <van-col span="20" class="popupTips" v-show="isTips">
             {{popupInit[popupEvent].tips.text}}
-            <nuxt-link :to="popupInit[popupEvent].tips.url">{{popupInit[popupEvent].tips.link}}</nuxt-link>
+            <!--<nuxt-link :to="popupInit[popupEvent].tips.url">{{popupInit[popupEvent].tips.link}}</nuxt-link>-->
+            <span class="checkLink" @click="sendEvent(popupInit[popupEvent].confirm)">{{popupInit[popupEvent].tips.link}}</span>
         </van-col>
-        <van-col span="20" class="popupBtn"><ButtonTool :text="popupInit[popupEvent].btn" @btnEvent="sendEvent(popupInit[popupEvent].confirm)"/></van-col>
+        <van-col span="20" class="popupBtn"><ButtonTool :text="popupInit[popupEvent].btn" @btnEvent="sendEvent('cancel')"/></van-col>
     </van-row>
 </template>
 

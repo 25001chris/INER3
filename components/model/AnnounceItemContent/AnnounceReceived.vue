@@ -135,17 +135,18 @@ export default {
                     text-align: left;
                     @include noto-sans-tc-20-medium;
                     &.td-s{
-                        width: 40px;
+                        min-width: 40px;
                     }
                     &.td-m{
-                        width: 80px;
+                        min-width: 80px;
                     }
                     &.td-l{
-                        width: 180px;
+                        min-width: 120px;
+                        max-width: 160px;
                     }
                     &.td-xl{
                         min-width: 120px;
-                        max-width: 180px;
+                        max-width: 260px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;

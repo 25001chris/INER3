@@ -81,8 +81,6 @@ export default {
     },
     methods: {
         sendEvent(e){
-            console.log(this.inputValue);
-            console.log(e)
             if(this.announceEvent === "coordinate" && e === "confirm"){
                 if(this.inputValue === ""){
                     this.errorMessage = this.announceObj.input.errorMessage;

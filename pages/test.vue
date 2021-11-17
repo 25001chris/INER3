@@ -569,106 +569,14 @@
     },
     mounted(){
       this.documentLoad();
-      //this.documentReady();
-      //this.jqTest();
-      console.log(selectLocation)
     },
     methods:{
-      jqTest(){
-        console.log($('body'));
-      },
       /*map methods*/
       documentLoad(){
-        //let _this = this
 		    SuperGIS.Initialize("/ServerGate/", function () {
 		      SuperGIS.ServerEarth.Initialize(InitEarth)
 		    })
 		  },
-      documentReady(){
-        // const _this = this;
-        // $("#div_infowindow").dialog({
-        //   autoOpen: false,
-        //   resizable: false,
-        //   position: { my: "right-45 top+5", at: "right-45 top+5" },
-        // });
-        // $("#div_layer").dialog({
-        //   autoOpen: false,
-        //   resizable: false,
-        //   position: { my: "right-45 top", at: "right-45 top" },
-        // });
-        // $("#div_results").dialog({
-        //   autoOpen: false,
-        //   resizable: false,
-        //   position: { my: "right-45 top+5", at: "right-45 top+5" },
-        // });
-        // $("#btn_layer").on("click", function () {
-        //   if ($("#div_layer").dialog("isOpen")) {
-        //     $("#div_layer").dialog("close");
-        //     $("#btn_layer").attr("src", "images/menu/layers.png")
-        //   }
-        //   else {
-        //     $("#div_layer").dialog("open");
-        //     $("#btn_layer").attr("src", "images/menu/layers2.png")
-        //   }
-        // });
-        // $("#div_FeederTopo").dialog({
-        //   autoOpen: false,
-        //   resizable: false,
-        //   width: "auto",
-        //   height: "auto",
-        //   position: { my: "right-45 top+5", at: "right-45 top+5" },
-        //   close: function (event, ui) {
-        //   }
-        // });
-        // $("#div_FeederAni").dialog({
-        //   autoOpen: false,
-        //   resizable: false,
-        //   width: "auto",
-        //   height: "auto",
-        //   position: { my: "right-45 top+5", at: "right-45 top+5" },
-        //   close: function (event, ui) {
-        //     CloseFeederAni();
-        //   }
-        // });
-			  // $("#tabs").tabs();
-			  // $("#div_TopoResult").dialog({
-        //   open: function(){
-        //     this.scrollLeft = 0;
-        //     this.scrollTop = 0;
-        //   },
-        //   autoOpen: false,
-        //   resizable: true,
-        //   width: "500",
-        //   height: "320",
-        //   position: { my: "right-45 top+5", at: "right-45 top+5" }
-        // });
-			  // $("#div_TopoResult").mousedown(function (event) {
-        //   _this.topo_down_x = event.offsetX;
-        //   _this.topo_down_y = event.offsetY;
-        //   _this.bDown = true;
-				//   _this.bPan = false;
-        // });
-        // $("#div_TopoResult").mousemove(function (event) {
-        //   if (this.bDown) {
-        //     var x = _this.topo_down_x - event.offsetX + this.scrollLeft;
-        //     var y = _this.topo_down_y - event.offsetY + this.scrollTop;
-        //     this.scrollTo(x, y);
-				// 	  _this.bPan = true;
-        //         }
-        //     });
-        // $("#div_TopoResult").mouseup(function (event) {
-        //   _this.bDown = false;
-        //   //if (!bPan)
-        //   //source?
-        //   ClickElement(_this.topo_down_x, _this.topo_down_y);
-        // });
-        // $("#div_TopoResult").mouseleave(function (event) {
-        //   _this.bDown = false;
-        // });
-        // $("#div_TopoResult").scroll(function (event) {
-        //   _this.bPan = true;
-        // });
-      },
       /*map methods*/
       openAnnounce(e){
         if(e){
@@ -681,10 +589,9 @@
         if(event==="cancel"){
           this.setDefault();
         }else if(event==="confirm"){
-          //this.getLocation = e.val;
           this.openAnnounceList(e.val);
         }else if(event==="location"){
-          this.openAnnounceList();
+          this.getLocation1();
         }else if(event==="select"){
           this.openMapEvent();
         }else{
@@ -710,7 +617,6 @@
         this.setDefault();
       },
       setAnnounceListData(e){
-        console.log(e)
         this.announceListData = e;
       },
       toggleAnnounceList(e){
@@ -760,12 +666,22 @@
       listenMapEvent(e){
         if(selectLocation && queryTPCLID && this.isMapEvent){
           QueryTPLIDOpen();
-          //this.getLocation = selectLocation;
           this.openAnnounceList(selectLocation);
           this.getLocate = setLocate(this.getLocation);
           this.$toast('已選取座標:'+ this.getLocation);
           this.isMapEvent = false;
         }
+      },
+      getLocation1() {//取得 經緯度
+        if (navigator.geolocation) {//
+          navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
+        } else {
+          alert("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
+        }
+      },
+      showPosition(position) {
+        this.openAnnounceList(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
+        this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
       }
     },
     computed:{

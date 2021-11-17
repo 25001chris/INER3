@@ -19,7 +19,7 @@
             </van-col>
         </van-col>
         <van-col :span="listSpan" class="announcePhotoList" type="flex">
-            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" max-count="3"/>
+            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" :preview-options="previewOption" max-count="3"/>
         </van-col>
         <van-col span="24" class="announceBtnBox w-100" type="flex">
             <ButtonTool text="定位至畫面正中間" @btnEvent="sendEvent"/>
@@ -49,19 +49,23 @@ export default {
                 { 
                     url: require(`@/assets/img/PHOTO/image1.png`),
                     imageFit: 'contain',
-                    previewSize: '100%', 
+                    previewSize: '100%'
                 },
                 {
                     url: require(`@/assets/img/PHOTO/image2.png`),
                     imageFit: 'contain',
-                    previewSize: '100%', 
+                    previewSize: '100%'
                 },
                 {
                     url: require(`@/assets/img/PHOTO/image3.png`),
                     imageFit: 'contain',
-                    previewSize: '100%', 
+                    previewSize: '100%'
                 }
             ],
+            previewOption:{
+                closeable: true,
+                showIndicators: true
+            },
             resultText:'預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試'
         }
     },
