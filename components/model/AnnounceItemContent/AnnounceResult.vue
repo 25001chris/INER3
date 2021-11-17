@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         sendEvent(e){
-            this.$emit("btnEvent",e);
+            this.$emit("btnEvent",{status:true,type:'setLocate'});
         },
         sendClose(){
             this.$emit("closeEvent",true);

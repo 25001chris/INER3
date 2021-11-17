@@ -1,7 +1,8 @@
 export const state = () => ({
     counter: 0,
     windowWidth: 0,
-    windowHeight: 0
+    windowHeight: 0,
+    announceList:null
 })
 export const mutations = {
     increment(state) {
@@ -12,6 +13,9 @@ export const mutations = {
     },
     setWindowHeight(state,payload){
         state.windowHeight = payload
+    },
+    saveAnnounceList(state,payload){
+        state.announceList = payload
     }
 }
 export const getters = {

@@ -170,7 +170,9 @@ export default {
             this.showPicker2 = false;
         },
         onSubmit(values) {
+            this.$store.commit('saveAnnounceList', values);
             this.$emit("submit",values);
+            this.clearData();
         },
         sendClose(e){
             if(e){
@@ -181,6 +183,19 @@ export default {
             if(e){
                 this.$emit("sendEvent",'send');
             }
+        },
+        clearData(){
+            this.username=''
+            this.status='',
+            this.camera='',
+            this.number='',
+            this.value1='',
+            this.value2='',
+            this.value3='',
+            this.value4='',
+            this.value5='',
+            this.value6='',
+            this.uploader=[]
         }
     },
     computed:{

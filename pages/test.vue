@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <div id="body" class="mainBody"  @click="listenMapEvent"/>
-    <div id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
+    <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
     </div>
-    <div id="div_infowindow" class="ui-widget-content" title="屬性查詢" style="background-color:rgba(255,255,255,0.8)">
+    <div v-show="testOpen" id="div_infowindow" class="ui-widget-content" title="屬性查詢" style="background-color:rgba(255,255,255,0.8)">
       <div id="info_context">
       </div>
     </div>
-    <div id="div_layer" class="ui-widget-content" title="圖層" style="background-color:rgba(255,255,255,0.3)">
+    <div v-show="testOpen" id="div_layer" class="ui-widget-content" title="圖層" style="background-color:rgba(255,255,255,0.3)">
       <div id="tabs">
         <ul>
           <li><a href="#tabs-0">底圖</a></li>
@@ -313,7 +313,7 @@
         </div>
       </div>
     </div>
-    <table style="position:absolute; top:0px;">
+    <table style="position:absolute; top:0px;" v-show="testOpen">
       <tbody>
       <tr>
 			<td><input type="button" style="width:100px" value="圖層管理" onclick="LayerManager();" />
@@ -561,8 +561,10 @@
         announceListData: {},
         announceItemType:'',
         listData:{},
+        testOpen:false,
         isMapEvent:false,
-        getLocation:''
+        getLocation:'',
+        getLocate:null
       }
     },
     mounted(){
@@ -675,21 +677,26 @@
         }
       },
       announceBoxEvent(e){
-        if(e==="cancel"){
+        const event = e.type;
+        if(event==="cancel"){
           this.setDefault();
-        }else if(e==="confirm"){
+        }else if(event==="confirm"){
+          //this.getLocation = e.val;
+          this.openAnnounceList(e.val);
+        }else if(event==="location"){
           this.openAnnounceList();
-        }else if(e==="location"){
-          this.openAnnounceList();
-        }else if(e==="select"){
+        }else if(event==="select"){
           this.openMapEvent();
         }else{
-          this.announceEvent = e;
+          this.announceEvent = event;
         }
       },
       announceItemEvent(e){
         if(e){
           this.announceItem = !this.announceItem
+          if(e.type="setLocate"){
+            locate1(this.getLocate);
+          }
         }
       },
       toggleAnnounceBox(e){
@@ -697,7 +704,8 @@
           this.setDefault();
         }
       },
-      openAnnounceList(){
+      openAnnounceList(data){
+        this.getLocation = data;
         this.announceList = true;
         this.setDefault();
       },
@@ -745,15 +753,18 @@
         }
       },
       openMapEvent(){
+        this.$toast('請點擊地圖選取座標');
         this.isMapEvent = true;
         QueryTPLIDOpen();
       },
       listenMapEvent(e){
         if(selectLocation && queryTPCLID && this.isMapEvent){
           QueryTPLIDOpen();
-          this.getLocation = selectLocation;
+          //this.getLocation = selectLocation;
+          this.openAnnounceList(selectLocation);
+          this.getLocate = setLocate(this.getLocation);
+          this.$toast('已選取座標:'+ this.getLocation);
           this.isMapEvent = false;
-          this.openAnnounceList();
         }
       }
     },

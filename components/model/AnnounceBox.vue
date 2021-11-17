@@ -16,7 +16,7 @@
         <van-col span="24" class="announceTitle">{{announceObj.text}}</van-col>
         <van-col span="20" type="flex" justify="center" v-show="inputLength">
             <van-cell-group>
-                <van-field :border="false" required v-model="inputValue" placeholder="请输入用户名" :error-message="errorMessage"/>
+                <van-field :border="false" required v-model="inputValue" placeholder="請輸入座標" :error-message="errorMessage"/>
             </van-cell-group>
         </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
@@ -81,14 +81,16 @@ export default {
     },
     methods: {
         sendEvent(e){
+            console.log(this.inputValue);
+            console.log(e)
             if(this.announceEvent === "coordinate" && e === "confirm"){
                 if(this.inputValue === ""){
                     this.errorMessage = this.announceObj.input.errorMessage;
                 }else{
-                    this.$emit("btnEvent",e);
+                    this.$emit("btnEvent",{status:true,type:e,val:this.inputValue});
                 }
             }else{
-                this.$emit("btnEvent",e);
+                this.$emit("btnEvent",{type:e});
             }
         },
         sendClose(){
