@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div id="body" class="mainBody" />
+    <div id="body" class="mainBody"  @click="listenMapEvent"/>
     <div id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -330,6 +330,7 @@
         v-show="announceList"
         @sendEvent="toggleAnnounceList"
         @submit="setAnnounceListData"
+        :location="getLocation"
       />
     </transition>
     <transition name="van-slide-up">
@@ -560,6 +561,8 @@
         announceListData: {},
         announceItemType:'',
         listData:{},
+        isMapEvent:false,
+        getLocation:''
       }
     },
     mounted(){
@@ -679,7 +682,7 @@
         }else if(e==="location"){
           this.openAnnounceList();
         }else if(e==="select"){
-          QueryTPLIDOpen();
+          this.openMapEvent();
         }else{
           this.announceEvent = e;
         }
@@ -739,6 +742,18 @@
           this.rightListBox = !this.rightListBox;
           this.announceBox = false;
           this.announceItem = false;
+        }
+      },
+      openMapEvent(){
+        this.isMapEvent = true;
+        QueryTPLIDOpen();
+      },
+      listenMapEvent(e){
+        if(selectLocation && queryTPCLID && this.isMapEvent){
+          QueryTPLIDOpen();
+          this.getLocation = selectLocation;
+          this.isMapEvent = false;
+          this.openAnnounceList();
         }
       }
     },

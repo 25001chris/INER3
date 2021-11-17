@@ -122,10 +122,15 @@ export default {
     components: {
         ButtonTool
     },
+    props:{
+        location: {
+            type: String,
+            default: ''
+        }
+    },
     data:()=>{
         return{
             username:'',
-            location:'',
             status:'',
             camera:'',
             number:'',
