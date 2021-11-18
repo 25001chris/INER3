@@ -184,6 +184,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'vant/lib/index.css',
+    'assets/main.css',
     { src: '~assets/scss/main.scss', lang: 'scss' }
   ],
 

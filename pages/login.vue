@@ -83,7 +83,7 @@
     methods:{
       onSubmit(values) {
         sessionStorage.setItem('loginStatus', 1);
-        this.$router.push({ path: '/test/' });
+        this.$router.push({ path: '/' });
         // const data = `account=${this.account}&password=${this.password}&captcha=${this.captcha}`;
         // loginReq(data).then((r) => {
         //   if (r.data[0].status) {
