@@ -677,6 +677,7 @@
       this.documentReady();
       this.jqTest();
     },
+    middleware:'routerAuth',
     methods:{
       jqTest(){
         console.log($('body'));

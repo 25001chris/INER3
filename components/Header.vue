@@ -77,6 +77,7 @@ export default {
         },
         logout(e){
             if(e){
+                sessionStorage.setItem('loginStatus', 0);
                 this.$router.push({ path: '/login' });
             }
         }
