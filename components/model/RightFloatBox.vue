@@ -98,34 +98,34 @@ export default {
         &.ishorizontal{
             height: calc( 66vh - 60px );
             .floatMidBox{
-                bottom: 26vh;
+                bottom: 40vh;
             }
             .floatBottomBox{
-                bottom: 0vh;
+                bottom: 5vh;
             }
         }
         .floatMidBox{
-            bottom: 16vh;
+            bottom: 32vh;
         }
         .floatBottomBox{
-            bottom: 0vh;
+            bottom: 15vh;
         }
     }
     &.isAnnounceItem{
         height: calc( 66vh - 60px );
         &.ishorizontal{
             .floatMidBox{
-                bottom: 30vh;
+                bottom: 40vh;
             }
             .floatBottomBox{
-                bottom: 6vh;
+                bottom: 15vh;
             }
         }
         .floatMidBox{
-            bottom: 23.5vh;
+            bottom: 34vh;
         }
         .floatBottomBox{
-            bottom: 7.5vh;
+            bottom: 16vh;
         }
     }
     .floatTopBox{
@@ -137,16 +137,16 @@ export default {
     }
     .floatMidBox{
         position: absolute;
-        bottom: 18vh;
+        bottom: 30vh;
         &.horizontal{
-            bottom: 28vh;
+            bottom: 44vh;
         }
     }
     .floatBottomBox{
         position: absolute;
-        bottom: 2vh;
+        bottom: 12vh;
         &.horizontal{
-            bottom: 2vh;
+            bottom: 16vh;
         }
     }
 }

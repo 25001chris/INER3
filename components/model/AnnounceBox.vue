@@ -16,7 +16,7 @@
         <van-col span="24" class="announceTitle">{{announceObj.text}}</van-col>
         <van-col span="20" type="flex" justify="center" v-show="inputLength">
             <van-cell-group>
-                <van-field :border="false" required v-model="inputValue" placeholder="請輸入座標" :error-message="errorMessage"/>
+                <van-field :border="false" required v-model="inputValue" placeholder="請輸入坐標" :error-message="errorMessage"/>
             </van-cell-group>
         </van-col>
         <van-row span="24" class="announceBtnBox w-100" type="flex" gutter="10">
@@ -53,7 +53,7 @@ export default {
                     text:'通報位置',
                     input:{},
                     btn:[
-                        {text:'圖號座標',type:'btn-primary-light',event:'coordinate'},
+                        {text:'圖號坐標',type:'btn-primary-light',event:'coordinate'},
                         {text:'當下位置',type:'btn-primary-light',event:'location'},
                         {text:'手動點選',type:'btn-primary-dark',event:'select'},
                     ],

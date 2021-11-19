@@ -40,6 +40,10 @@ export default {
       },
       {
         src:
+          'http://192.168.1.103/ServerGate/scripts/MVTWorker.js',
+      },
+      {
+        src:
           'http://192.168.1.103/ServerGate/scripts/vector_tile.js',
       },
       {
@@ -214,6 +218,6 @@ export default {
   },
   
   server: {
-    host: 'localhost'
+    host: '192.168.1.103'
   }
 }

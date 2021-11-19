@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div id="body" class="mainBody"  @click="listenMapEvent"/>
+    <div id="body" class="mainBody" @click="listenMapEvent"/>
     <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -500,20 +500,22 @@
         }
       },
       openMapEvent(){
-        this.$toast('請點擊地圖選取座標');
+        this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
         QueryTPLIDOpen();
       },
       listenMapEvent(e){
+        console.log('test2')
         if(selectLocation && queryTPCLID && this.isMapEvent){
           QueryTPLIDOpen();
           this.openAnnounceList(selectLocation);
           this.getLocate = setLocate(this.getLocation);
-          this.$toast('已選取座標:'+ this.getLocation);
+          this.$toast('已選取坐標:'+ this.getLocation);
           this.isMapEvent = false;
         }
       },
       getLocation1() {//取得 經緯度
+        console.log(navigator.geolocation)
         if (navigator.geolocation) {//
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
@@ -521,14 +523,16 @@
         }
       },
       showPosition(position) {
+        console.log(position)
         this.openAnnounceList(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
         this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
+        console.log(this.getLocate)
       }
     },
     computed:{
       resizeAnnounceBox(){
-        let verticalHeight = this.announceEvent === "coordinate" ? 'height : 28vh' : 'height : 24vh';
-        return this.windowWidth === 1318 ? 'height : 33vh' : verticalHeight;
+        let verticalHeight = this.announceEvent === "coordinate" ? 'height : 40vh' : 'height : 36vh';
+        return this.windowWidth === 1318 ? 'height : 60vh' : verticalHeight;
       },
       resizeAnnounceItem(){
         return this.windowWidth === 1318 ? 'height : 38vh' : 'height : 40vh'
@@ -587,6 +591,7 @@
 .mainBody{
   width: 100vw;
   height: calc(100vh-60px);
+  touch-action: none;
 }
 
 .links {
