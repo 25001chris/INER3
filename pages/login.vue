@@ -54,6 +54,7 @@
   import Title from '~/components/Title.vue';
   import InputArea from '~/components/InputArea.vue';
   import ButtonTool from '~/components/tools/ButtonTool.vue';
+  import axios from 'axios';
   export default {
     layout: 'login',
     // page component definitions
@@ -82,22 +83,15 @@
     mounted(){},
     methods:{
       onSubmit(values) {
-        sessionStorage.setItem('loginStatus', 1);
-        this.$router.push({ path: '/' });
-        // const data = `account=${this.account}&password=${this.password}&captcha=${this.captcha}`;
-        // loginReq(data).then((r) => {
-        //   if (r.data[0].status) {
-        //     sessionStorage.setItem('loginStatus', r.data[0].status);
-        //     this.$router.push('/');
-        //   } else {
-        //     console.log('驗證碼錯誤');
-        //   }
-        // }).catch((e) => {
-        //   console.log(e);
-        //   this.loginErrorTitle = '登入錯誤';
-        //   this.loginErrorText = '請確認帳號密碼是否正確';
-        //   this.loginError = true;
-        // });
+        const data = `UserID=${values.user}&Password=${values.password}`;
+        axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/Login`,data).then(r=>{
+          sessionStorage.setItem('loginStatus', 1);
+          sessionStorage.setItem('loginUser', r.data[0].CURRENTUSERID);
+          this.$store.commit('setUserInfo', r);
+          this.$router.push({ path: '/' });
+        }).catch(e=>{
+          console.log(e)
+        })
       },
     }
   }

@@ -364,7 +364,7 @@
 </template>
 
 <script>
-  //import axios from 'axios'
+  import axios from 'axios'
   import { mapState,mapGetters } from 'vuex';
   import AnnounceBtn from '~/components/tools/AnnounceButton';
   import AnnounceBox from '~/components/model/AnnounceBox';
@@ -386,9 +386,10 @@
       AnnounceItem
     },
     async asyncData() {
-      // let aaa = await axios.get(`http://192.168.1.103/ineradms_integration/REST/GetXMLSettings`)
+      //const data = 'UserID=ineradmin&Password=inertest';
+      //let aaa = await axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/Login`,data)
       // let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
-      //return { a: aaa.data, b: bbb.data }
+      //return { a: aaa.data }
     },
     data:()=>{
       return{
@@ -404,7 +405,7 @@
         testOpen:false,
         isMapEvent:false,
         getLocation:'',
-        getLocate:null
+        getLocate:null,
       }
     },
     middleware:'routerAuth',
@@ -458,7 +459,54 @@
         this.setDefault();
       },
       setAnnounceListData(e){
-        this.announceListData = e;
+        console.log(e)
+        const _this = this;
+        //const data = `UserID=${values.user}&Password=${values.password}`;
+        //console.log(e.uploader[0].content);
+        const data = {
+          "report_user": sessionStorage.getItem('loginUser'),
+          "report_tpclid": e.location,
+          "switch_tpclid": e.location,
+          "report_status": 1,
+          "report_feederid": "XF27",
+          "report_loopid": "S01",
+          "report_phase": "A",
+          "report_i": 60,
+          "report_vsc": 11.4,
+          "report_vb": 3.5,
+          "report_temp": 35.4,
+          "report_rssi": -90,
+          "report_photo1":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKVSURBVHgBjVVLbhpBEH3dEDnxJuQEcW4wjj/KsjlB8CbCbIATQE4AnCDkBMAmWFnNDdzZRZEtzw3MEcaKHFvRzHRezScywxBSEuqe7q5Xv1eFQoUY02rcY7/r4IwDPAUcyDn3K+4DDfg/7HJRpavKB6fmQytBfUb1Bn82gfYVXJgBqoamEW5bKgMfl4HXAI9MZ0rlAbfTCA+TwPphlReeaR/UgJGC6tHM5MpejDcAj01nzJAGNbhh2eqJac9cFva3p8rH5nzI5ZM4cGWXH+VM5wpiaQRE/arcJFCGtg2tvy7O3tFLfg+YBolieMRU/QXk4xELML+2X31UiORL1lyZnrVNBH2TcB8DTfFQoTbzWEwt3kk4vJhgp7gwi0Zd0oEwhmsG9ksQYU90G8+w19W0+p5B+YG9WG2DYaFW2apoXJEBCGI8HBY6gZ2L55aOGYasJBcW/yESCQHnZECzzAAa8x20V+czj1wLt4FkJJeipJDja7usTE2M5E7TOY1/iFTyHi8uc8pAKWWxQ7S0k0bSqAKLmXxS5oCfvssrvU1q0C+5BHXpTeZFOPS5uDwxHS8CxLOUFoFdBtghLm3JZKWZTCukFQ5lYCmNclokh0IL6Qj+bk7NebcKTKLh0nLS957pNer4fUsbcwLfZR0DcsudCS3kcQR1m+uGbLFXZUBGNEvoIQv2RguH6E2f50MBo3d+RouMY494TgaonAVuI3SZTtTvcTuW77TKRJaWm2ZP4sVTjonBiKHTUC/C49m6Z+1ePuqETukMWBtfnDgjuWRe5zUkk+9buke4+RP742LUFZNmA1DkLa0ScJRPaV+KJqSVO6EGwxNGmGxQRP3yQFHYIgKs0z5PgT05K/4CyE1O8l+LqgH8BwH5PJGZ/TDqAAAAAElFTkSuQmCC",
+          "report_photo2":"",
+          "report_photo3":"",
+          "report_note": "開關瞬時故障"
+        }
+
+        // const data = {
+        //   "report_user": 'ineradmin',
+        //   "report_tpclid": e.location,
+        //   "switch_tpclid": e.location,
+        //   "report_status": e.status,
+        //   "report_feederid": "XF27",
+        //   "report_loopid": "S01",
+        //   "report_phase": "A",
+        //   "report_i": 60,
+        //   "report_vsc": 11.4,
+        //   "report_vb": 3.5,
+        //   "report_temp": 35.4,
+        //   "report_rssi": -90,
+        //   "report_photo1":e.uploader[0].content,
+        //   "report_photo2":e.uploader[1].content,
+        //   "report_photo3":e.uploader[2].content,
+        //   "report_note": "開關瞬時故障"
+        // }
+
+        axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
+          console.log(r);
+          _this.announceListData = e;
+        }).catch(e=>{
+          console.log(e)
+        })
       },
       toggleAnnounceList(e){
         if(e === "send"){
@@ -502,7 +550,11 @@
       openMapEvent(){
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
-        QueryTPLIDOpen();
+        QueryTPLIDOpen()
+        // $.when(QueryTPLIDOpen()).then(function (res) {
+        //   console.log(res);
+        //   console.log(selectLocation);
+        // })
       },
       listenMapEvent(e){
         console.log('test2')

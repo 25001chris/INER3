@@ -24,6 +24,7 @@
 <script>
 import Button from '~/components/tools/ButtonTool.vue';
 import { mapState,mapGetters } from 'vuex';
+import axios from 'axios';
 export default {
     name:'headerTool',
     components: {
@@ -77,8 +78,13 @@ export default {
         },
         logout(e){
             if(e){
-                sessionStorage.setItem('loginStatus', 0);
-                this.$router.push({ path: '/login' });
+                axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/Logout`).then(r=>{
+                    console.log(r);
+                    sessionStorage.setItem('loginStatus', 0);
+                    this.$router.push({ path: '/login' });
+                }).catch(e=>{
+                    console.log(e)
+                })
             }
         }
     },

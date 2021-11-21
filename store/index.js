@@ -3,7 +3,8 @@ export const state = () => ({
     windowWidth: 0,
     windowHeight: 0,
     announceList:null,
-    loginStatus:0
+    loginStatus:0,
+    userInfo:{}
 })
 export const mutations = {
     increment(state) {
@@ -20,6 +21,9 @@ export const mutations = {
     },
     setLoginStatus(state,payload){
         state.loginStatus = payload.status
+    },
+    setUserInfo(state,payload){
+        state.userInfo = payload.data[0]
     }
 }
 export const getters = {

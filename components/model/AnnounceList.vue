@@ -98,7 +98,7 @@
                     placeholder="輸入文字"
                     type="textarea"
                 />
-                <van-field name="uploader" label="文件上传">
+                <van-field name="uploader" label="現場照片">
                     <template type="flex" #input>
                         <van-col span="24" :class="{ishorizontal:ishorizontal}"><van-uploader v-model="uploader" offset="2" max-count="3" capture="camera" :preview-size="photoWidth"/></van-col>
                     </template>
