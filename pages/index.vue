@@ -462,7 +462,7 @@
         console.log(e)
         const _this = this;
         //const data = `UserID=${values.user}&Password=${values.password}`;
-        //console.log(e.uploader[0].content);
+        console.log(e.uploader[0].content);
         const data = {
           "report_user": sessionStorage.getItem('loginUser'),
           "report_tpclid": e.location,
@@ -476,7 +476,7 @@
           "report_vb": 3.5,
           "report_temp": 35.4,
           "report_rssi": -90,
-          "report_photo1":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKVSURBVHgBjVVLbhpBEH3dEDnxJuQEcW4wjj/KsjlB8CbCbIATQE4AnCDkBMAmWFnNDdzZRZEtzw3MEcaKHFvRzHRezScywxBSEuqe7q5Xv1eFQoUY02rcY7/r4IwDPAUcyDn3K+4DDfg/7HJRpavKB6fmQytBfUb1Bn82gfYVXJgBqoamEW5bKgMfl4HXAI9MZ0rlAbfTCA+TwPphlReeaR/UgJGC6tHM5MpejDcAj01nzJAGNbhh2eqJac9cFva3p8rH5nzI5ZM4cGWXH+VM5wpiaQRE/arcJFCGtg2tvy7O3tFLfg+YBolieMRU/QXk4xELML+2X31UiORL1lyZnrVNBH2TcB8DTfFQoTbzWEwt3kk4vJhgp7gwi0Zd0oEwhmsG9ksQYU90G8+w19W0+p5B+YG9WG2DYaFW2apoXJEBCGI8HBY6gZ2L55aOGYasJBcW/yESCQHnZECzzAAa8x20V+czj1wLt4FkJJeipJDja7usTE2M5E7TOY1/iFTyHi8uc8pAKWWxQ7S0k0bSqAKLmXxS5oCfvssrvU1q0C+5BHXpTeZFOPS5uDwxHS8CxLOUFoFdBtghLm3JZKWZTCukFQ5lYCmNclokh0IL6Qj+bk7NebcKTKLh0nLS957pNer4fUsbcwLfZR0DcsudCS3kcQR1m+uGbLFXZUBGNEvoIQv2RguH6E2f50MBo3d+RouMY494TgaonAVuI3SZTtTvcTuW77TKRJaWm2ZP4sVTjonBiKHTUC/C49m6Z+1ePuqETukMWBtfnDgjuWRe5zUkk+9buke4+RP742LUFZNmA1DkLa0ScJRPaV+KJqSVO6EGwxNGmGxQRP3yQFHYIgKs0z5PgT05K/4CyE1O8l+LqgH8BwH5PJGZ/TDqAAAAAElFTkSuQmCC",
+          "report_photo1":e.uploader[0].content,
           "report_photo2":"",
           "report_photo3":"",
           "report_note": "開關瞬時故障"
@@ -504,17 +504,26 @@
         axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
           console.log(r);
           _this.announceListData = e;
+          _this.announceList = false;
+          _this.popShow = true;
+          axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
+            console.log(r)
+          }).catch(e=>{
+            console.log(e)
+          })
         }).catch(e=>{
+          _this.announceList = false;
+          this.$toast('error');
           console.log(e)
         })
       },
       toggleAnnounceList(e){
-        if(e === "send"){
-          this.announceList = false;
-          this.popShow = true;
-        }else{
-          this.announceList = false;
-        }
+        // if(e === "send"){
+        //   this.announceList = false;
+        //   this.popShow = true;
+        // }else{
+        //   this.announceList = false;
+        // }
       },
       toggleAnnounceItem(){
         this.announceItem = false;
