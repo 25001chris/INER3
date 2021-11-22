@@ -39,9 +39,7 @@ export default {
                     title:'通報成功',
                     confirm: 'AnnounceResult',
                     tips:{
-                        url:'/',
-                        link:'查看',
-                        text:'2021/5/6 12:11 發布了通報，請立即'
+                        text:''
                     },
                     btn:'確認'
                 },
@@ -55,7 +53,18 @@ export default {
                         text:'可以暫存文字請等網路連線狀況良好時，再重新通報一次'
                     },
                     btn:'確認'
-                }
+                },
+                warning:{
+                    icon:'success',
+                    title:'',
+                    confirm: 'AnnounceResult',
+                    tips:{
+                        url:'/',
+                        link:'查看',
+                        text:'2021/5/6 12:11 發布了通報，請立即'
+                    },
+                    btn:'確認'
+                },
             }
         }
     },

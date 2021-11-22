@@ -20,12 +20,22 @@
                     :class="{isReadonly:isReadonly}"
                 />
                 <van-field
+                    v-model="report_loopid"
+                    name="report_loopid"
+                    label="迴路別"
+                    :required="true"
+                    placeholder="輸入迴路別"
+                    :error-message="errorMsg.loop"
+                />
+                <van-field
                     readonly
                     clickable
                     name="status"
                     :value="status"
                     label="設備狀態"
                     placeholder="點擊選項"
+                    :required="true"
+                    :error-message="errorMsg.status"
                     @click="setPicker1({data:'columns1',event:'onConfirm1'})"
                 />
                 <van-popup v-model="showPicker1" position="bottom">
@@ -38,8 +48,8 @@
                     />
                 </van-popup>
                 <van-field
-                    v-model="number"
-                    name="number"
+                    v-model="report_feederid"
+                    name="report_feederid"
                     label="饋線編號"
                     placeholder="輸入文字"
                 />
@@ -62,38 +72,38 @@
                     />
                 </van-popup>
                 <van-field
-                    v-model="value1"
-                    name="value1"
+                    v-model="report_i"
+                    name="report_i"
                     label="電流值"
                     placeholder="輸入數值"
                 />
                 <van-field
-                    v-model="value2"
-                    name="value2"
+                    v-model="report_vsc"
+                    name="report_vsc"
                     label="電壓值"
                     placeholder="輸入數值"
                 />
                 <van-field
-                    v-model="value3"
-                    name="value3"
+                    v-model="report_vb"
+                    name="report_vb"
                     label="電池電壓"
                     placeholder="輸入數值"
                 />
                 <van-field
-                    v-model="value4"
-                    name="value4"
+                    v-model="report_temp"
+                    name="report_temp"
                     label="溫度"
                     placeholder="輸入數值"
                 />
                 <van-field
-                    v-model="value5"
-                    name="value5"
+                    v-model="report_rssi"
+                    name="report_rssi"
                     label="信號強度"
                     placeholder="輸入數值"
                 />
                 <van-field
-                    v-model="value6"
-                    name="value6"
+                    v-model="report_note"
+                    name="report_note"
                     label="通報備註"
                     placeholder="輸入文字"
                     type="textarea"
@@ -126,22 +136,36 @@ export default {
         location: {
             type: String,
             default: ''
-        }
+        },
+        errorMsg:{
+            type:Object,
+            default: () => {
+                return {
+                    loop: '',
+                    status: ''
+                };
+            }
+        },
+        isSubmit: {
+            type: Boolean,
+            default: false
+        },
     },
     data:()=>{
         return{
             username:'',
             status:'',
             camera:'',
-            number:'',
-            value1:'',
-            value2:'',
-            value3:'',
-            value4:'',
-            value5:'',
-            value6:'',
-            columns1: ['選項一', '選項二', '選項三', '選項四', '選項五', '選項六'],
-            columns2: ['相別一', '相別二', '相別三', '相別四', '相別五', '相別六'],
+            report_loopid:'',
+            report_feederid:'',
+            report_i:'',
+            report_vsc:'',
+            report_vb:'',
+            report_temp:'',
+            report_rssi:'',
+            report_note:'',
+            columns1: ['正常', '瞬時故障', '永久性故障', '復電', '線路湧流', '切開', '投入'],
+            columns2: ['空', 'A', 'B', 'C'],
             showPicker1: false,
             showPicker2: false,
             pickerData:'',
@@ -152,14 +176,18 @@ export default {
     },
     methods: {
         setPicker1(e){
+            console.log(e);
             this.showPicker1 = true;
             this.pickerData = this[e.data];
             this.pickerEvent = this[e.event];
+            console.log(this.pickerEvent);
         },
         setPicker2(e){
+            console.log(e);
             this.showPicker2 = true;
             this.pickerData = this[e.data];
             this.pickerEvent = this[e.event];
+            console.log(this.pickerEvent);
         },
         onConfirm1(value) {
             this.status = value;
@@ -172,7 +200,7 @@ export default {
         onSubmit(values) {
             this.$store.commit('saveAnnounceList', values);
             this.$emit("submit",values);
-            this.clearData();
+            //this.clearData();
         },
         sendClose(e){
             if(e){
@@ -181,20 +209,21 @@ export default {
         },
         sendData(e){
             if(e){
-                this.$emit("sendEvent",'send');
+                //this.$emit("sendEvent",'send');
             }
         },
         clearData(){
             this.username=''
             this.status='',
+            this.report_loopid = ''
             this.camera='',
-            this.number='',
-            this.value1='',
-            this.value2='',
-            this.value3='',
-            this.value4='',
-            this.value5='',
-            this.value6='',
+            this.report_feederid='',
+            this.report_i='',
+            this.report_vsc='',
+            this.report_vb='',
+            this.report_temp='',
+            this.report_rssi='',
+            this.report_note='',
             this.uploader=[]
         }
     },
@@ -207,6 +236,14 @@ export default {
                 return '33vh'
             }else{
                 return '13.667vh'
+            }
+        }
+    },
+    watch:{
+        isSubmit(n){
+            console.log(n)
+            if(n){
+                this.clearData();
             }
         }
     }

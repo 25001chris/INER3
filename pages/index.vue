@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div id="body" class="mainBody" @click="listenMapEvent"/>
+    <div id="body" class="mainBody"/>
     <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -331,6 +331,8 @@
         @sendEvent="toggleAnnounceList"
         @submit="setAnnounceListData"
         :location="getLocation"
+        :errorMsg="announceListError"
+        :isSumbit="sumbitStatus"
       />
     </transition>
     <transition name="van-slide-up">
@@ -406,6 +408,11 @@
         isMapEvent:false,
         getLocation:'',
         getLocate:null,
+        sumbitStatus:false,
+        announceListError:{
+          status:'',
+          loop:''
+        }
       }
     },
     middleware:'routerAuth',
@@ -461,69 +468,69 @@
       setAnnounceListData(e){
         console.log(e)
         const _this = this;
-        //const data = `UserID=${values.user}&Password=${values.password}`;
-        console.log(e.uploader[0].content);
+        const uploaderLength = e.uploader.length;
+        const photo1 = uploaderLength >= 1 ? window.btoa(e.uploader[0].content) : "";
+        const photo2 = uploaderLength >= 2 ? window.btoa(e.uploader[1].content) : "";
+        const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
+        _this.sumbitStatus = false;
         const data = {
           "report_user": sessionStorage.getItem('loginUser'),
           "report_tpclid": e.location,
           "switch_tpclid": e.location,
-          "report_status": 1,
-          "report_feederid": "XF27",
-          "report_loopid": "S01",
-          "report_phase": "A",
-          "report_i": 60,
-          "report_vsc": 11.4,
-          "report_vb": 3.5,
-          "report_temp": 35.4,
-          "report_rssi": -90,
-          "report_photo1":e.uploader[0].content,
-          "report_photo2":"",
-          "report_photo3":"",
-          "report_note": "開關瞬時故障"
+          "report_status": this.switchSelect(e.status),
+          "report_feederid": e.report_feederid,
+          "report_loopid": e.report_loopid,
+          "report_phase": this.switchSelect(e.camera),
+          "report_i": e.report_i,
+          "report_vsc": e.report_vsc,
+          "report_vb": e.report_vb,
+          "report_temp": e.report_temp,
+          "report_rssi": e.report_rssi,
+          "report_photo1":photo1,
+          "report_photo2":photo2,
+          "report_photo3":photo3,
+          "report_note": e.report_note
         }
 
-        // const data = {
-        //   "report_user": 'ineradmin',
-        //   "report_tpclid": e.location,
-        //   "switch_tpclid": e.location,
-        //   "report_status": e.status,
-        //   "report_feederid": "XF27",
-        //   "report_loopid": "S01",
-        //   "report_phase": "A",
-        //   "report_i": 60,
-        //   "report_vsc": 11.4,
-        //   "report_vb": 3.5,
-        //   "report_temp": 35.4,
-        //   "report_rssi": -90,
-        //   "report_photo1":e.uploader[0].content,
-        //   "report_photo2":e.uploader[1].content,
-        //   "report_photo3":e.uploader[2].content,
-        //   "report_note": "開關瞬時故障"
-        // }
-
-        axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
-          console.log(r);
-          _this.announceListData = e;
-          _this.announceList = false;
-          _this.popShow = true;
-          axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
-            console.log(r)
+        if(e.status === "" || e.report_loopid === ""){
+          this.announceListError.status = e.status === "" ? "狀態不得為空" : "";
+          this.announceListError.loop = e.report_loopid === "" ? "迴路別不得為空" : "";
+          console.log(this.announceListError)
+          //return;
+        }else{
+          axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
+            console.log(r);
+            _this.announceListData = e;
+            _this.announceList = false;
+            _this.popShow = true;
+            _this.sumbitStatus = true;
+            axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`).then(r=>{
+              console.log(r)
+            }).catch(e=>{
+              console.log(e)
+            })
+            axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/GetFaultReportPhoto?id=3677`).then(r=>{
+              //const img1 = r.data[0].report_photo1;
+              //const imgData = img1.replace("data:image/jpg;base64,","")
+              //console.log(window.atob(imgData));
+              console.log(r);
+            }).catch(e=>{
+              console.log(e);
+            })
           }).catch(e=>{
+            _this.announceList = false;
+            this.$toast('error');
             console.log(e)
           })
-        }).catch(e=>{
-          _this.announceList = false;
-          this.$toast('error');
-          console.log(e)
-        })
+        }
       },
       toggleAnnounceList(e){
-        // if(e === "send"){
-        //   this.announceList = false;
-        //   this.popShow = true;
-        // }else{
-        //   this.announceList = false;
-        // }
+        if(e === "close"){
+          this.announceList = false;
+        }else{
+          this.announceList = false;
+          this.popShow = true;
+        }
       },
       toggleAnnounceItem(){
         this.announceItem = false;
@@ -559,14 +566,15 @@
       openMapEvent(){
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
-        QueryTPLIDOpen()
-        // $.when(QueryTPLIDOpen()).then(function (res) {
-        //   console.log(res);
-        //   console.log(selectLocation);
-        // })
+        const _this = this;
+        QueryTPLIDOpen();
+        setTimeout(function(){
+          _this.listenMapEvent();
+        }, 2000);
       },
       listenMapEvent(e){
-        console.log('test2')
+        console.log(selectLocation)
+        console.log(queryTPCLID)
         if(selectLocation && queryTPCLID && this.isMapEvent){
           QueryTPLIDOpen();
           this.openAnnounceList(selectLocation);
@@ -576,19 +584,54 @@
         }
       },
       getLocation1() {//取得 經緯度
-        console.log(navigator.geolocation)
-        if (navigator.geolocation) {//
+        alert(navigator.geolocation);
+        console.log('test1');
+        if (navigator.geolocation) {
+          console.log('test2');
+          console.log(navigator.geolocation.getCurrentPosition)
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
           alert("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
         }
       },
       showPosition(position) {
-        console.log(position)
         this.openAnnounceList(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
         this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
         console.log(this.getLocate)
-      }
+      },
+      switchSelect(data){
+        let result;
+            switch(data){
+                case "正常":
+                    result = 0;
+                    break;
+                case "瞬時故障":
+                    result = 1;
+                    break;
+                case "永久性故障":
+                    result = 2;
+                    break;
+                case "復電":
+                    result = 4;
+                    break;
+                case "切開":
+                    result = 5;
+                    break;
+                case "投入":
+                    result = 6;
+                    break;
+                case "線路湧流":
+                    result = 7;
+                    break;
+                case "空":
+                    result = '';
+                    break;
+                default:
+                    result = data;
+                    break;
+        }
+        return result;
+      },
     },
     computed:{
       resizeAnnounceBox(){

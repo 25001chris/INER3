@@ -1,6 +1,6 @@
 <template>
     <van-row type="flex" class="rightList">
-        <van-col span="16" class="listTitle">通報接獲清單</van-col>
+        <van-col span="16" class="listTitle">{{title}}</van-col>
         <van-col span="4">
             <van-image
                 :src="require(`@/assets/img/ICON/favicon/list.svg`)"
@@ -32,6 +32,12 @@
 
 export default {
     name:'rightList',
+    props:{
+        title:{
+            type:String,
+            default:''
+        }
+    },
     data:()=>{
         return{
             eyeOpen:true,

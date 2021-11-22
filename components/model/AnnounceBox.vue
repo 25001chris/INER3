@@ -55,7 +55,7 @@ export default {
                     btn:[
                         {text:'圖號坐標',type:'btn-primary-light',event:'coordinate'},
                         {text:'當下位置',type:'btn-primary-light',event:'location'},
-                        {text:'手動點選',type:'btn-primary-dark',event:'select'},
+                        {text:'手動點選',type:'btn-primary-light',event:'select'},
                     ],
                 },
                 coordinate:{
