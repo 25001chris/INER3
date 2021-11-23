@@ -44,21 +44,8 @@ export default {
             default:''
         },
     },
-    async asyncData() {
-      //const data = 'UserID=ineradmin&Password=inertest';
-      //let aaa = await axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`);
-      // let bbb = await axios.get(`http://192.168.1.103/INER3/%E7%A3%9ANew/LineData/metadata.json`)
-      //return { receviedList1 : aaa }
-    //   axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`).then(r=>{
-    //     console.log(r);
-    //     this
-    //   }).catch(e=>{
-    //     console.log(e)
-    //   })
-    },
     data:()=>{
         return{
-            receviedList1:[],
             tableHeader:[
                 '編號','通報人員','通報時間','通報事項','狀態','回覆','定位'
             ],
@@ -154,6 +141,11 @@ export default {
         announceObj(){
             const event = this.announceEvent;
             return this.setAnnounceObj[event];
+        }
+    },
+    watch:{
+        tbData(){
+            this.getData();
         }
     }
 };
