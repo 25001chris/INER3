@@ -42,7 +42,7 @@
         </van-cell-group>
       </van-col>
       <van-col span="24" type="flex">
-        <ButtonTool text="登入" class="gridBox"/>
+        <ButtonTool text="登入" class="gridBox" :isSubmitType="true"/>
         <van-checkbox v-model="checked" shape="square" type="flex" class="rememberMe">記住我</van-checkbox>
       </van-col>
     </van-form>

@@ -351,6 +351,7 @@
         @closeEvent="toggleAnnounceItem" 
         @btnEvent="announceItemEvent"
         :announceItemType="announceItemType"
+        :announceItemData="announceItemData"
         :style="resizeAnnounceItem"
       />
     </transition>
@@ -409,6 +410,7 @@
         getLocation:'',
         getLocate:null,
         sumbitStatus:false,
+        announceItemData:'',
         announceListError:{
           status:'',
           loop:''
@@ -540,10 +542,12 @@
         setTimeout(() => {this.announceEvent = 'default'}, 500);
       },
       listItemType(e){
+        console.log(e)
         if(e){
           this.rightListBox = false;
           this.announceItem = true;
-          this.announceItemType = e;
+          this.announceItemType = e.layout;
+          this.announceItemData = e.tb;
         }
       },
       popupConfirm(e){

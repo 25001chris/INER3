@@ -22,8 +22,8 @@
             </van-col>
         </van-col>
         <van-col class="ListContent" span="20">
-            <RightList @rightListEvent = "rightListEvent"/>
-            <RightList @rightListEvent = "rightListEvent"/>
+            <RightList @rightListEvent="rightListEvent" titleText="通報接獲清單" setList="allList"/>
+            <RightList @rightListEvent="rightListEvent" titleText="我的通報清單" setList="myList"/>
         </van-col>
     </van-row>
 </template>

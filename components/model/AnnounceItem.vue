@@ -17,7 +17,7 @@
             />
         </van-col>
         <van-col span="22" type="flex" justify="center">
-            <component :is="componentInstance" @btnEvent="sendEvent" />
+            <component :is="componentInstance" @btnEvent="sendEvent" :tbData="announceItemData"/>
         </van-col>
     </van-row>
 </template>
@@ -37,6 +37,10 @@ export default {
         announceItemType:{
             type: String,
             default:'AnnounceResult'
+        },
+        announceItemData:{
+            type: String,
+            default:''
         }
     },
     data:()=>{

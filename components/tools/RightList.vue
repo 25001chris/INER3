@@ -1,12 +1,12 @@
 <template>
     <van-row type="flex" class="rightList">
-        <van-col span="16" class="listTitle">{{title}}</van-col>
+        <van-col span="16" class="listTitle">{{titleText}}</van-col>
         <van-col span="4">
             <van-image
                 :src="require(`@/assets/img/ICON/favicon/list.svg`)"
                 class="listIcon"
                 fit="contain"
-                @click="$emit('rightListEvent','AnnounceReceived')"
+                @click="$emit('rightListEvent',{layout:'AnnounceReceived',tb:setList})"
             />
         </van-col>
         <van-col span="4">
@@ -33,10 +33,14 @@
 export default {
     name:'rightList',
     props:{
-        title:{
+        titleText:{
             type:String,
             default:''
-        }
+        },
+        setList:{
+            type:String,
+            default:''
+        },
     },
     data:()=>{
         return{
