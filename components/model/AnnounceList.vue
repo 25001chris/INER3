@@ -114,8 +114,8 @@
                     </template>
                 </van-field>
                 <van-row class="announceBtnBox" type="flex" style="margin: 16px;">
-                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-light" text="取消" @btnEvent="sendClose"/></van-col>
-                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-dark" text="通報" @btnEvent="sendData"/></van-col>
+                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-light" text="取消" :isSubmitType="false" @btnEvent="sendClose"/></van-col>
+                    <van-col span="10" offset="2"><ButtonTool type="btn-primary-dark" text="通報" :isSubmitType="true" /></van-col>
                 </van-row>
             </van-form>
         </van-col>
@@ -146,7 +146,7 @@ export default {
                 };
             }
         },
-        isSubmit: {
+        sendSubmit: {
             type: Boolean,
             default: false
         },
@@ -240,7 +240,7 @@ export default {
         }
     },
     watch:{
-        isSubmit(n){
+        sendSubmit:function(n){
             console.log(n)
             if(n){
                 this.clearData();

@@ -332,7 +332,7 @@
         @submit="setAnnounceListData"
         :location="getLocation"
         :errorMsg="announceListError"
-        :isSumbit="sumbitStatus"
+        :sendSubmit="sumbitStatus"
       />
     </transition>
     <transition name="van-slide-up">
@@ -467,12 +467,12 @@
       },
       setAnnounceListData(e){
         console.log(e)
-        const _this = this;
+        //const _this = this;
         const uploaderLength = e.uploader.length;
         const photo1 = uploaderLength >= 1 ? window.btoa(e.uploader[0].content) : "";
         const photo2 = uploaderLength >= 2 ? window.btoa(e.uploader[1].content) : "";
         const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
-        _this.sumbitStatus = false;
+        this.sumbitStatus = false;
         const data = {
           "report_user": sessionStorage.getItem('loginUser'),
           "report_tpclid": e.location,
@@ -500,10 +500,10 @@
         }else{
           axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
             console.log(r);
-            _this.announceListData = e;
-            _this.announceList = false;
-            _this.popShow = true;
-            _this.sumbitStatus = true;
+            this.announceListData = e;
+            this.announceList = false;
+            this.popShow = true;
+            this.sumbitStatus = true;
             axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`).then(r=>{
               console.log(r)
             }).catch(e=>{
@@ -518,7 +518,7 @@
               console.log(e);
             })
           }).catch(e=>{
-            _this.announceList = false;
+            this.announceList = false;
             this.$toast('error');
             console.log(e)
           })
