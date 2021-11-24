@@ -8,12 +8,13 @@
                 <tbody>
                     <tr v-for="(item, key) in receviedList" :key="key">
                         <td class="td-s">{{item.report_id}}</td>
-                        <td class="td-m">{{item.report_user}}</td>
+                        <td class="td-m" v-show="tbData==='allList'">{{item.report_user}}</td>
+                        <td class="td-m">{{statusSwitch(item.report_status)}}</td>
                         <td class="td-l">{{item.d}}</td>
-                        <td class="td-m">{{item.report_process}}</td>
-                        <td class="td-m"><van-tag :class="tagStyle(item.report_status).type">{{tagStyle(item.report_status).text}}</van-tag></td>
+                        <td class="td-m"><van-tag :class="tagStyle(item.report_process).type" class="tag">{{tagStyle(item.report_process).text}}</van-tag></td>
                         <td class="td-xl" @click="ToastEvent(item.report_note)">{{item.report_note}}</td>
-                        <td class="td-s">
+                        <td class="td-xl">{{item.check_response}}</td>
+                        <td class="td-s" @click="LocatePosition(item.switch_tpclid)">
                             <van-image
                                 :src="require(`@/assets/img/ICON/favicon/position.svg`)"
                                 title="定位位置"
@@ -46,8 +47,11 @@ export default {
     },
     data:()=>{
         return{
-            tableHeader:[
-                '編號','通報人員','通報時間','通報事項','狀態','回覆','定位'
+            tableHeader1:[
+                '編號','通報人員','設備狀態','通報時間','事件狀態','通報備註','通報回覆','定位'
+            ],
+            tableHeader2:[
+                '編號','設備狀態','通報時間','事件狀態','通報備註','通報回覆','定位'
             ],
             receviedList:[
                 // {id:'01',name:'王小明',resource:'行動端',time:'2021-5-16 12:11:22',event:'停電',status:'已發布',content:'派員處理中，現場無須處理，請於現場待命，等待支援1'},
@@ -88,23 +92,29 @@ export default {
         ToastEvent(e){
             this.$toast(e);
         },
-        source(e){
+        LocatePosition(o){
+            locate1(o);
+        },
+        statusSwitch(e){
             let result = '';
             switch(e){
                 case 1:
-                    result = {type:'tagSuccess',text:'待審核'};
+                    result = '瞬時故障';
                     break;
                 case 2:
-                    result = {type:'tagPanding',text:'審核中'};
-                    break;
-                case 3:
-                    result = {type:'tagSuccess',text:'已發布'};
+                    result = '永久性故障';
                     break;
                 case 4:
-                    result = {type:'tagPanding',text:'已結案'};
+                    result = '復電';
                     break;
                 case 5:
-                    result = {type:'tagPanding',text:'已解除'};
+                    result = '切開';
+                    break;
+                case 6:
+                    result = '投入';
+                    break;
+                case 7:
+                    result = '線路湧流';
                     break;
             }
             return result;
@@ -113,7 +123,7 @@ export default {
             let result = '';
             switch(e){
                 case 1:
-                    result = {type:'tagSuccess',text:'待審核'};
+                    result = {type:'tagWarning',text:'待審核'};
                     break;
                 case 2:
                     result = {type:'tagPanding',text:'審核中'};
@@ -122,10 +132,10 @@ export default {
                     result = {type:'tagSuccess',text:'已發布'};
                     break;
                 case 4:
-                    result = {type:'tagPanding',text:'已結案'};
+                    result = {type:'tagDefault ',text:'已結案'};
                     break;
                 case 5:
-                    result = {type:'tagPanding',text:'已解除'};
+                    result = {type:'tagFinish',text:'已解除'};
                     break;
             }
             return result;
@@ -141,6 +151,14 @@ export default {
         announceObj(){
             const event = this.announceEvent;
             return this.setAnnounceObj[event];
+        },
+        tableHeader(){
+            const tbData = this.tbData;
+            if(tbData === "myList"){
+                return this.tableHeader2
+            }else{
+                return this.tableHeader1
+            }
         }
     },
     watch:{
@@ -230,6 +248,15 @@ export default {
     right: 5px; 
 }
 
+.tag{
+    border-radius: 3px;
+}
+
+.tagWarning{
+    background-color: #FFF5E0;
+    border: 1px solid #DEA74F;
+    color: #DEA74F;
+}
 .tagSuccess{
     background-color: #E2FAE4;
     border: 1px solid #1DB65A;
@@ -244,5 +271,15 @@ export default {
     background-color: #EEEEEE;
     border: 1px solid #666666;
     color:#666666;
+}
+.tagFinish{
+    background-color: #DAE9EF;
+    border: 1px solid #4C7DA2;
+    color: #4C7DA2;
+}
+.tagError{
+    background-color: #FCE8E8;
+    border: 1px solid #DC6969;
+    color: #DC6969;
 }
 </style>
