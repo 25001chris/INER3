@@ -359,7 +359,7 @@
       <RightListBox @closeEvent="listEvent" @rightListEvent="listItemType"/>
     </van-popup>
     <AnnounceBtn @btnEvent="openAnnounce"/>
-    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent"/>
+    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent" @testEvent="testEvent" @plusEvent="plusEvent"/>
     <van-popup v-model="popShow" class="vw-40" :round="true">
       <PopupTool @btnEvent="popupConfirm"/>
     </van-popup>
@@ -631,6 +631,15 @@
                     break;
         }
         return result;
+      },
+      testEvent(e){
+        //this.$toast(e);
+        console.log(e);
+        zoomIn(e);
+      },
+      plusEvent(e){
+        console.log(e);
+        zoomIn(e);
       },
     },
     computed:{

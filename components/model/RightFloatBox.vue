@@ -8,7 +8,7 @@
             <FloatButton icon="position" @btnEvent="positionEvent"/>
         </van-col>
         <van-col class="floatBottomBox" :class="setPosition">
-            <FloatButton icon="plus" @btnEvent="plusEvent"/>
+            <FloatButton icon="plus" @btnEvent="plusEvent" @testEvent="testEvent"/>
             <FloatButton icon="reduce" @btnEvent="reduceEvent"/>
             <FloatButton icon="home" @btnEvent="homeEvent"/>
         </van-col>
@@ -59,6 +59,9 @@ export default {
         },
         homeEvent(e){
             this.$emit("homeEvent",e);
+        },
+        testEvent(e){
+            this.$emit("testEvent",e);
         }
     },
     computed:{

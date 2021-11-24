@@ -1,6 +1,6 @@
 <template>
   <div
-    class="floatButton" @click="sendEvent"
+    class="floatButton" @click="sendEvent" @touchstart="test1" @touchend="test2"
   >
     <van-image
         :src="require(`@/assets/img/ICON/${icon}.svg`)"
@@ -32,9 +32,20 @@ export default {
       }
   },
   methods: {
-      sendEvent(){
-          this.$emit("btnEvent",true);
-      }
+      sendEvent(e){
+          console.log(e);
+          this.$emit("btnEvent",e);
+      },
+      test1(e){
+          this.$toast(e);
+          this.$emit("testEvent",e);
+          //this.$emit("testEvent",'zoomIn');
+      },
+      // test2(e){
+      //     console.log('test2')
+      //     console.log(e)
+      //     this.$emit("testEvent",'zoomStop');
+      // }
   }
 
 };
