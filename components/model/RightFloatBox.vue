@@ -8,9 +8,9 @@
             <FloatButton icon="position" @btnEvent="positionEvent"/>
         </van-col>
         <van-col class="floatBottomBox" :class="setPosition">
-            <FloatButton icon="plus" @btnEvent="plusEvent" @testEvent="testEvent"/>
-            <FloatButton icon="reduce" @btnEvent="reduceEvent"/>
-            <FloatButton icon="home" @btnEvent="homeEvent"/>
+            <FloatButton icon="plus" type="zoomIn" @btnEvent="plusEvent" @testEvent="testEvent"/>
+            <FloatButton icon="reduce" type="zoomOut" @btnEvent="reduceEvent" @testEvent="testEvent"/>
+            <FloatButton icon="home" type="home" @btnEvent="homeEvent"/>
         </van-col>
     </van-row>
 </template>
@@ -140,16 +140,16 @@ export default {
     }
     .floatMidBox{
         position: absolute;
-        top: calc( 100vh - 420px );
+        top: calc( 100vh - 450px );
         &.horizontal{
-            top: calc( 100vh - 420px );
+            top: calc( 100vh - 450px );
         }
     }
     .floatBottomBox{
         position: absolute;
-        top: calc( 100vh - 340px );
+        top: calc( 100vh - 360px );
         &.horizontal{
-            top: calc( 100vh - 340px );
+            top: calc( 100vh - 360px );
         }
     }
 }

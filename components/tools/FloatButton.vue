@@ -21,6 +21,10 @@ export default {
           typeof:String,
           default:'list'
       },
+      type:{
+          typeof:String,
+          default:''
+      },
       position:{
           typeof:Number,
           default:0
@@ -37,15 +41,13 @@ export default {
           this.$emit("btnEvent",e);
       },
       test1(e){
-          this.$toast(e);
-          this.$emit("testEvent",e);
-          //this.$emit("testEvent",'zoomIn');
+          //this.$emit("testEvent",e);
+          this.$toast(this.type)
+          this.$emit("testEvent",{type:this.type,action:e});
       },
-      // test2(e){
-      //     console.log('test2')
-      //     console.log(e)
-      //     this.$emit("testEvent",'zoomStop');
-      // }
+      test2(e){
+          this.$emit("testEvent",{type:'zoomStop',action:e});
+      }
   }
 
 };

@@ -633,9 +633,17 @@
         return result;
       },
       testEvent(e){
-        //this.$toast(e);
-        console.log(e);
-        zoomIn(e);
+        this.$toast(e.type);
+        if(e.type === "zoomIn"){
+          this.$toast(e.type);
+          zoomIn(e.action);
+        }else if(e.type === "zoomOut"){
+          this.$toast(e.type);
+          zoomOut(e.action);
+        }else{
+          this.$toast(e.type);
+          zoomStop(e.action);
+        }
       },
       plusEvent(e){
         console.log(e);
