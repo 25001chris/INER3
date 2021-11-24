@@ -98,34 +98,34 @@ export default {
         &.ishorizontal{
             height: calc( 66vh - 60px );
             .floatMidBox{
-                bottom: 40vh;
+                top: calc( 100vh - 620px );
             }
             .floatBottomBox{
-                bottom: 5vh;
+                top: calc( 100vh - 600px );
             }
         }
         .floatMidBox{
-            bottom: 32vh;
+            top: calc( 100vh - 610px );
         }
         .floatBottomBox{
-            bottom: 15vh;
+            top: calc( 100vh - 540px );
         }
     }
     &.isAnnounceItem{
         height: calc( 66vh - 60px );
         &.ishorizontal{
             .floatMidBox{
-                bottom: 40vh;
+                top: calc( 100vh - 610px );
             }
             .floatBottomBox{
-                bottom: 15vh;
+                top: calc( 100vh - 550px );
             }
         }
         .floatMidBox{
-            bottom: 34vh;
+            top: calc( 100vh - 610px );
         }
         .floatBottomBox{
-            bottom: 16vh;
+            top: calc( 100vh - 540px );
         }
     }
     .floatTopBox{
@@ -137,16 +137,16 @@ export default {
     }
     .floatMidBox{
         position: absolute;
-        bottom: 30vh;
+        top: calc( 100vh - 420px );
         &.horizontal{
-            bottom: 44vh;
+            top: calc( 100vh - 420px );
         }
     }
     .floatBottomBox{
         position: absolute;
-        bottom: 12vh;
+        top: calc( 100vh - 340px );
         &.horizontal{
-            bottom: 16vh;
+            top: calc( 100vh - 340px );
         }
     }
 }

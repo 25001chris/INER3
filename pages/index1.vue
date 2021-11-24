@@ -658,7 +658,7 @@
         bDown : false,
         bPan : false,
         host_url : "https://demo.supergeotek.com/",
-		    data_url : "https://demo.supergeotek.com/INERADMS_Integration/磚New/",
+		    data_url : "../ineradms/磚New/",
         down_x:'',
         down_y:'',
         query: false,
@@ -1038,7 +1038,7 @@
               state = "Transfer";
             }
             var loc = { X: (ext.xmin + ext.xmax) / 2, Y:(ext.ymin + ext.ymax) / 2, Z: 0 };
-            var marker = new SuperGIS.Marker(this.earth_, loc, "", "https://demo.supergeotek.com/INERADMS_Integration/images/" + state + ".png",{FixedSize : true});
+            var marker = new SuperGIS.Marker(this.earth_, loc, "", "../ineradms/images/" + state + ".png",{FixedSize : true});
             var pmlabel = marker.getPlacemark();
             pmlabel.DDDSymbol.Size = 60;
             pmlabel.DDDSymbol.DynamicSize = false;
@@ -1724,7 +1724,7 @@
         {
           var lnglat = (new TaipowerCoordinateTransform()).TPCPointToEPSG3857(tpclidlist[i]);
           var loc = { X: lnglat.X, Y:lnglat.Y , Z: 0 };
-          var marker = new SuperGIS.Marker(this.earth_, loc, "這是標題文字", "https://demo.supergeotek.com/INERADMS_Integration/images/map.svg",{FixedSize : true}); //地圖物件 / 位置 / 標題文字 / 圖片路徑 / 樣式參數
+          var marker = new SuperGIS.Marker(this.earth_, loc, "這是標題文字", "../ineradms/images/map.svg",{FixedSize : true}); //地圖物件 / 位置 / 標題文字 / 圖片路徑 / 樣式參數
           var pmlabel = marker.getPlacemark();
           pmlabel.DDDSymbol.Size = 60; // 標記大小
           pmlabel.DDDSymbol.DynamicSize = false; // 標記是否隨比例尺縮放變換大小

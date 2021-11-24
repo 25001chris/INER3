@@ -476,7 +476,7 @@
         const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
         this.sumbitStatus = false;
         const data = {
-          "report_user": sessionStorage.getItem('loginUser'),
+          "report_user": sessionStorage.getItem('loginUserName'),
           "report_tpclid": e.location,
           "switch_tpclid": e.location,
           "report_status": this.switchSelect(e.status),
@@ -500,18 +500,18 @@
           console.log(this.announceListError)
           //return;
         }else{
-          axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`,data).then(r=>{
+          axios.post(`${this.apiurl}/REST/FaultReport`,data).then(r=>{
             console.log(r);
             this.announceListData = e;
             this.announceList = false;
             this.popShow = true;
             this.sumbitStatus = true;
-            axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`).then(r=>{
+            axios.get(`${this.apiurl}/REST/FaultReport`).then(r=>{
               console.log(r)
             }).catch(e=>{
               console.log(e)
             })
-            axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/GetFaultReportPhoto?id=3677`).then(r=>{
+            axios.get(`${this.apiurl}/REST/GetFaultReportPhoto?id=3677`).then(r=>{
               //const img1 = r.data[0].report_photo1;
               //const imgData = img1.replace("data:image/jpg;base64,","")
               //console.log(window.atob(imgData));
@@ -588,11 +588,7 @@
         }
       },
       getLocation1() {//取得 經緯度
-        alert(navigator.geolocation);
-        console.log('test1');
         if (navigator.geolocation) {
-          console.log('test2');
-          console.log(navigator.geolocation.getCurrentPosition)
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
           alert("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
@@ -639,14 +635,15 @@
     },
     computed:{
       resizeAnnounceBox(){
-        let verticalHeight = this.announceEvent === "coordinate" ? 'height : 40vh' : 'height : 36vh';
-        return this.windowWidth === 1318 ? 'height : 60vh' : verticalHeight;
+        let verticalHeight = this.announceEvent === "coordinate" ? 'height : 36vh' : 'height : 36vh';
+        return this.windowWidth === 1318 ? 'height : 36vh' : verticalHeight;
       },
       resizeAnnounceItem(){
-        return this.windowWidth === 1318 ? 'height : 38vh' : 'height : 40vh'
+        return this.windowWidth === 1318 ? 'height : 36vh' : 'height : 36vh'
       },
       ...mapState([
-        'windowWidth'
+        'windowWidth',
+        'apiurl'
       ]),
       ...mapGetters([
         'ishorizontal'

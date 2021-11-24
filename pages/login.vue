@@ -54,6 +54,7 @@
   import Title from '~/components/Title.vue';
   import InputArea from '~/components/InputArea.vue';
   import ButtonTool from '~/components/tools/ButtonTool.vue';
+  import { mapState } from 'vuex';
   import axios from 'axios';
   export default {
     layout: 'login',
@@ -84,15 +85,26 @@
     methods:{
       onSubmit(values) {
         const data = `UserID=${values.user}&Password=${values.password}`;
-        axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/Login`,data).then(r=>{
-          sessionStorage.setItem('loginStatus', 1);
-          sessionStorage.setItem('loginUser', r.data[0].CURRENTUSERID);
-          this.$store.commit('setUserInfo', r);
-          this.$router.push({ path: '/' });
+        axios.post(`${this.apiurl}/REST/Login`,data).then(r=>{
+          console.log(r.data);
+          if(r.data === '帳號或密碼錯誤'){
+            this.$toast('帳號或密碼錯誤');
+          }else{
+            sessionStorage.setItem('loginStatus', 1);
+            sessionStorage.setItem('loginUser', r.data[0].CURRENTUSERID);
+            sessionStorage.setItem('loginUserName', r.data[0].CURRENTUSERNAME);
+            this.$store.commit('setUserInfo', r);
+            this.$router.push({ path: '/' });
+          };
         }).catch(e=>{
           console.log(e)
         })
       },
+    },
+    computed:{
+      ...mapState([
+        'apiurl'
+      ]),
     }
   }
 </script>

@@ -52,7 +52,8 @@ export default {
             return result;
         },
         ...mapState([
-            'windowWidth'
+            'windowWidth',
+            'apiurl'
         ]),
         ...mapGetters([
             'ishorizontal'
@@ -78,7 +79,7 @@ export default {
         },
         logout(e){
             if(e){
-                axios.post(`https://demo.supergeotek.com/ineradms_Integration/REST/Logout`).then(r=>{
+                axios.post(`${this.apiurl}/REST/Logout`).then(r=>{
                     console.log(r);
                     sessionStorage.setItem('loginStatus', 0);
                     this.$router.push({ path: '/login' });

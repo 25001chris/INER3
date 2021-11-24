@@ -27,7 +27,8 @@ export default {
   width: 123px;
   height: 123px;
   position: absolute;
-  bottom:7.5em;
+  //bottom:7.5em;
+  top: calc( 100vh - 270px );
   background-image: url("~/assets/img/BUTTON/announceDefault.svg");
   background-repeat: no-repeat;
   background-size: contain;

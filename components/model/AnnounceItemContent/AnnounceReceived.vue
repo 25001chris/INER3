@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import axios from 'axios'
 export default {
     name:'announceReceivedContent',
@@ -74,7 +75,7 @@ export default {
         getData(){
             const user = sessionStorage.getItem('loginUser');
             this.receviedList = [];
-            axios.get(`https://demo.supergeotek.com/ineradms_Integration/REST/FaultReport`).then(r=>{
+            axios.get(`${this.apiurl}/REST/FaultReport`).then(r=>{
                 console.log(this.tbData)
                 if(this.tbData === "myList"){
                     this.receviedList = r.data.filter(d => d.report_user === user );
@@ -93,7 +94,9 @@ export default {
             this.$toast(e);
         },
         LocatePosition(o){
-            locate1(o);
+            //locate1(o);
+            const test = setLocate(o);
+            locate1(test);
         },
         statusSwitch(e){
             let result = '';
@@ -159,7 +162,10 @@ export default {
             }else{
                 return this.tableHeader1
             }
-        }
+        },
+        ...mapState([
+            'apiurl'
+        ]),
     },
     watch:{
         tbData(){
