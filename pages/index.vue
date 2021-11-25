@@ -313,7 +313,7 @@
         </div>
       </div>
     </div>
-    <table style="position:absolute; top:0px;" v-show="testOpen">
+    <table style="position:absolute; top:0px;">
       <tbody>
       <tr>
 			<td><input type="button" style="width:100px" value="圖層管理" onclick="LayerManager();" />
@@ -442,7 +442,7 @@
         }else if(event==="confirm"){
           this.openAnnounceList(e.val);
         }else if(event==="location"){
-          this.getLocation1();
+          this.getLocationObj();
         }else if(event==="select"){
           this.openMapEvent();
         }else{
@@ -468,12 +468,13 @@
         this.setDefault();
       },
       setAnnounceListData(e){
-        console.log(e)
-        //const _this = this;
         const uploaderLength = e.uploader.length;
-        const photo1 = uploaderLength >= 1 ? window.btoa(e.uploader[0].content) : "";
-        const photo2 = uploaderLength >= 2 ? window.btoa(e.uploader[1].content) : "";
-        const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
+        // const photo1 = uploaderLength >= 1 ? window.btoa(e.uploader[0].content) : "";
+        // const photo2 = uploaderLength >= 2 ? window.btoa(e.uploader[1].content) : "";
+        // const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
+        const photo1 = uploaderLength >= 1 ? e.uploader[0].content.replace("data:image/jpeg;base64,","") : "";
+        const photo2 = uploaderLength >= 2 ? e.uploader[1].content.replace("data:image/jpeg;base64,","") : "";
+        const photo3 = uploaderLength >= 3 ? e.uploader[2].content.replace("data:image/jpeg;base64,","") : "";
         this.sumbitStatus = false;
         const data = {
           "report_user": sessionStorage.getItem('loginUserName'),
@@ -511,7 +512,7 @@
             }).catch(e=>{
               console.log(e)
             })
-            axios.get(`${this.apiurl}/REST/GetFaultReportPhoto?id=3677`).then(r=>{
+            axios.get(`${this.apiurl}/REST/GetFaultReportPhoto?id=3738`).then(r=>{
               //const img1 = r.data[0].report_photo1;
               //const imgData = img1.replace("data:image/jpg;base64,","")
               //console.log(window.atob(imgData));
@@ -587,7 +588,14 @@
           this.isMapEvent = false;
         }
       },
-      getLocation1() {//取得 經緯度
+      getNowLocation(){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.showNowPosition);//有拿到位置就呼叫 showPosition 函式
+        } else {
+          alert("您的瀏覽器不支援 顯示地理位置 API ，請使用其它瀏覽器開啟 這個網址");
+        }
+      },
+      getLocationObj() {//取得 經緯度
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
@@ -597,7 +605,9 @@
       showPosition(position) {
         this.openAnnounceList(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
         this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
-        console.log(this.getLocate)
+      },
+      showNowPosition(position) {
+        locate1({X:position.coords.longitude,Y:position.coords.latitude});
       },
       switchSelect(data){
         let result;
@@ -633,21 +643,42 @@
         return result;
       },
       testEvent(e){
-        this.$toast(e.type);
-        if(e.type === "zoomIn"){
-          this.$toast(e.type);
-          zoomIn(e.action);
-        }else if(e.type === "zoomOut"){
-          this.$toast(e.type);
-          zoomOut(e.action);
-        }else{
-          this.$toast(e.type);
-          zoomStop(e.action);
+        switch(e.type){
+          case 'zoomIn':
+            zoomIn(e.action);
+            break;
+          case 'zoomOut':
+            zoomOut(e.action);
+            break;
+          case 'home':
+            locate();
+            break;
+          case 'position':
+            this.getNowLocation();
+            break;
+          default:
+            zoomStop(e.action);
+            break;
         }
       },
       plusEvent(e){
-        console.log(e);
-        zoomIn(e);
+        switch(e.type){
+          case 'zoomIn':
+            zoomIn(e.action);
+            break;
+          case 'zoomOut':
+            zoomOut(e.action);
+            break;
+          case 'home':
+            locate();
+            break;
+          case 'position':
+            this.getNowLocation();
+            break;
+          default:
+            zoomStop(e.action);
+            break;
+        }
       },
     },
     computed:{

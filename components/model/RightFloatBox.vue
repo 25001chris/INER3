@@ -9,8 +9,8 @@
         </van-col>
         <van-col class="floatBottomBox" :class="setPosition">
             <FloatButton icon="plus" type="zoomIn" @btnEvent="plusEvent" @testEvent="testEvent"/>
-            <FloatButton icon="reduce" type="zoomOut" @btnEvent="reduceEvent" @testEvent="testEvent"/>
-            <FloatButton icon="home" type="home" @btnEvent="homeEvent"/>
+            <FloatButton icon="reduce" type="zoomOut" @btnEvent="plusEvent" @testEvent="testEvent"/>
+            <FloatButton icon="home" type="home" @btnEvent="plusEvent" @testEvent="testEvent"/>
         </van-col>
     </van-row>
 </template>
