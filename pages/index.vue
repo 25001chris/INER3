@@ -317,7 +317,7 @@
       <tbody>
       <tr>
 			<td><input type="button" style="width:100px" value="圖層管理" onclick="LayerManager();" />
-			<td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" onclick="QueryOpen();" />			
+			<td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" @click="QueryTPLIDOpen1" />			
 			<td><input id="querybutton2" style="width:100px" type="button" value="開啟坐標查詢" onclick="QueryTPLIDOpen();" />
 			<td><input id="querybutton2" style="width:100px" type="button" value="定位方法" onclick="locate();" />
 			<td><input id="Createmarker" style="width:100px" type="button" value="建立標記" onclick="createmarker();" />			
@@ -352,6 +352,7 @@
         @btnEvent="announceItemEvent"
         :announceItemType="announceItemType"
         :announceItemData="announceItemData"
+        :announceResultInfo="announceResultInfo"
         :style="resizeAnnounceItem"
       />
     </transition>
@@ -411,6 +412,8 @@
         getLocate:null,
         sumbitStatus:false,
         announceItemData:'',
+        faultReport:{},
+        announceResultInfo:{},
         announceListError:{
           status:'',
           loop:''
@@ -420,6 +423,8 @@
     middleware:'routerAuth',
     mounted(){
       this.documentLoad();
+      this.getAllFaultReport();
+      //this.getFaultReportInfo();
     },
     methods:{
       /*map methods*/
@@ -467,11 +472,16 @@
         this.announceList = true;
         this.setDefault();
       },
+      getAllFaultReport(){
+        axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
+          this.faultReport = r.data;
+          console.log(this.faultReport);
+        }).catch(e=>{
+          console.log(e)
+        })
+      },
       setAnnounceListData(e){
         const uploaderLength = e.uploader.length;
-        // const photo1 = uploaderLength >= 1 ? window.btoa(e.uploader[0].content) : "";
-        // const photo2 = uploaderLength >= 2 ? window.btoa(e.uploader[1].content) : "";
-        // const photo3 = uploaderLength >= 3 ? window.btoa(e.uploader[2].content) : "";
         const photo1 = uploaderLength >= 1 ? e.uploader[0].content.replace("data:image/jpeg;base64,","") : "";
         const photo2 = uploaderLength >= 2 ? e.uploader[1].content.replace("data:image/jpeg;base64,","") : "";
         const photo3 = uploaderLength >= 3 ? e.uploader[2].content.replace("data:image/jpeg;base64,","") : "";
@@ -501,18 +511,19 @@
           console.log(this.announceListError)
           //return;
         }else{
-          axios.post(`${this.apiurl}/REST/FaultReport`,data).then(r=>{
+          axios.post(`${this.apiurl}REST/FaultReport`,data).then(r=>{
             console.log(r);
             this.announceListData = e;
             this.announceList = false;
             this.popShow = true;
             this.sumbitStatus = true;
-            axios.get(`${this.apiurl}/REST/FaultReport`).then(r=>{
-              console.log(r)
+            axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
+              this.faultReport = r;
+              console.log(this.faultReport);
             }).catch(e=>{
               console.log(e)
             })
-            axios.get(`${this.apiurl}/REST/GetFaultReportPhoto?id=3738`).then(r=>{
+            axios.get(`${this.apiurl}REST/GetFaultReportPhoto?id=3738`).then(r=>{
               //const img1 = r.data[0].report_photo1;
               //const imgData = img1.replace("data:image/jpg;base64,","")
               //console.log(window.atob(imgData));
@@ -680,6 +691,23 @@
             break;
         }
       },
+      QueryTPLIDOpen1(){
+        const report = this.faultReport;
+        QueryOpen();
+        let faultReportList = {};
+        const _this = this;
+        setTimeout(function(){
+          report.forEach(element => {
+            if(element.report_ufid === '5000149'){
+              faultReportList  = element
+            }
+          });
+          console.log(faultReportList)
+          _this.announceItem = true;
+          _this.announceItemType = 'AnnounceResult';
+          _this.announceResultInfo = faultReportList;
+        }, 2000);
+      }
     },
     computed:{
       resizeAnnounceBox(){
@@ -687,7 +715,9 @@
         return this.windowWidth === 1318 ? 'height : 36vh' : verticalHeight;
       },
       resizeAnnounceItem(){
-        return this.windowWidth === 1318 ? 'height : 36vh' : 'height : 36vh'
+        const a = this.windowWidth === 1318 ? 'height : 36vh' : 'height : 36vh';
+        const b = this.announceItemType = 'AnnounceResult' ? 'height : 50vh' : a;
+        return b
       },
       ...mapState([
         'windowWidth',

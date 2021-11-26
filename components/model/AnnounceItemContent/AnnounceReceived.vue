@@ -75,7 +75,7 @@ export default {
         getData(){
             const user = sessionStorage.getItem('loginUser');
             this.receviedList = [];
-            axios.get(`${this.apiurl}/REST/FaultReport`).then(r=>{
+            axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
                 console.log(this.tbData)
                 if(this.tbData === "myList"){
                     this.receviedList = r.data.filter(d => d.report_user === user );

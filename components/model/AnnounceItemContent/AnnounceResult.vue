@@ -1,25 +1,44 @@
 <template>
-    <van-row class="announceItemContent" type="flex" justify="center">
+    <van-row class="announceItemContent" type="flex" justify="center" :class="{ishorizontal:ishorizontal}">
         <van-col :span="listSpan" type="flex" justify="center">
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報編號</van-col>
-                <van-col span="20" class="test">50</van-col>
+                <van-col span="20" class="test">{{reportList.report_id}}</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報事項</van-col>
-                <van-col span="20">設備壞掉</van-col>
+                <van-col span="20">{{reportList.report_status}}</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" justify="center">
                 <van-col span="4" class="announceItemTitle">通報備註</van-col>
-                <van-col span="20" class="announceItemText" @click="ToastEvent(resultText)">{{resultText}}</van-col>
+                <van-col span="20" class="announceItemText" @click="ToastEvent(reportList.report_note)">{{reportList.report_note}}</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報時間</van-col>
-                <van-col span="20">2021-1-1 12:00:00</van-col>
+                <van-col span="20">{{reportList.d}}</van-col>
             </van-col>
         </van-col>
-        <van-col :span="listSpan" class="announcePhotoList" type="flex">
-            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" :preview-options="previewOption" max-count="3"/>
+        <van-col :span="listSpan" class="announcePhotoList" type="flex" justify="left">
+            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" result-type='text' :preview-options="previewOption" max-count="3"/>
+            <!-- <van-image
+                v-if="fileList[0].url!==''"
+                width="30%"
+                height="auto"
+                :src="fileList[0].url"
+            />
+            <van-image
+                v-if="fileList[1].url!==''"
+                width="30%"
+                height="auto"
+                :src="fileList[1].url"
+
+            />
+            <van-image
+                v-if="fileList[2].url!==''"
+                width="30%"
+                height="auto"
+                :src="fileList[2].url"
+            /> -->
         </van-col>
         <van-col span="24" class="announceBtnBox w-100" type="flex">
             <ButtonTool text="定位至畫面正中間" @btnEvent="sendEvent"/>
@@ -28,8 +47,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import ButtonTool from '~/components/tools/ButtonTool';
+import axios from 'axios';
 export default {
     name:'announceItemContent',
     components: {
@@ -39,6 +59,12 @@ export default {
         announceEvent:{
             type: String,
             default:''
+        },
+        reportList:{
+            type:Object,
+            default: () => {
+                return {};
+            }
         }
     },
     data:()=>{
@@ -47,17 +73,17 @@ export default {
             index: 0,
             fileList : [
                 { 
-                    url: require(`@/assets/img/PHOTO/image1.png`),
+                    url: '',
                     imageFit: 'contain',
                     previewSize: '100%'
                 },
                 {
-                    url: require(`@/assets/img/PHOTO/image2.png`),
+                    url: '',
                     imageFit: 'contain',
                     previewSize: '100%'
                 },
                 {
-                    url: require(`@/assets/img/PHOTO/image3.png`),
+                    url: '',
                     imageFit: 'contain',
                     previewSize: '100%'
                 }
@@ -68,6 +94,9 @@ export default {
             },
             resultText:'預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字預設文字150字測試'
         }
+    },
+    mounted(){
+        this.fileListPhoto()
     },
     methods: {
         sendEvent(e){
@@ -81,11 +110,31 @@ export default {
         },
         ToastEvent(e){
             this.$toast(e);
+        },
+        fileListPhoto(){
+            const _id = this.reportList.report_id;
+            axios.get(`${this.apiurl}REST/GetFaultReportPhoto?id=${_id}`).then(r=>{
+              if(r.data[0].report_photo1){
+                  this.fileList[0].url = r.data[0].report_photo1;
+              }
+              if(r.data[1].report_photo1){
+                  this.fileList[1].url = r.data[1].report_photo1;
+              }
+              if(r.data[2].report_photo1){
+                  this.fileList[2].url = r.data[2].report_photo1;
+              }
+            }).catch(e=>{
+                console.log(e);
+            })
         }
     },
     computed:{
         ...mapGetters([
             'ishorizontal'
+        ]),
+        ...mapState([
+            'apiurl',
+            'windowWidth',
         ]),
         btnLength(){
             return 24 / this.announceObj.btn.length
@@ -112,9 +161,12 @@ export default {
 <style lang="scss">
 .announceItemContent{
     width: 100%;
-    height: 30vh;
+    height: 20vh;
     justify-content: center;
     padding-top: 0.5em;
+    &.ishorizontal{
+        height: 50vh;
+    }
     .announceItemList{
         text-align: left;
     }

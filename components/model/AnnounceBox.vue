@@ -81,7 +81,7 @@ export default {
     },
     methods: {
         sendEvent(e){
-            const a = /^[A-Za-z]{1}\d{4}[A-Za-z]{2}\d{4}/;
+            const a = /^[A-Za-z]{1}\d{4}[A-Za-z]{2}/;
             if(this.announceEvent === "coordinate" && e === "confirm"){
                 console.log(a.test(this.inputValue))
                 if(this.inputValue === ""){
