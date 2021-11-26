@@ -425,6 +425,9 @@
       this.documentLoad();
       this.getAllFaultReport();
       //this.getFaultReportInfo();
+      /*promiseTest().then(function(res) {
+        console.log(res); // resolved
+      });*/
     },
     methods:{
       /*map methods*/
@@ -595,17 +598,16 @@
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
         const _this = this;
-        QueryTPLIDOpen();
-        setTimeout(function(){
-          _this.listenMapEvent();
-        }, 2000);
+        promiseTest().then(function(res) {    
+          if(res){
+            _this.listenMapEvent(res);
+          };
+        });
       },
-      listenMapEvent(e){
-        console.log(selectLocation)
-        console.log(queryTPCLID)
-        if(selectLocation && queryTPCLID && this.isMapEvent){
+      listenMapEvent(res){
+        if(res && queryTPCLID && this.isMapEvent){
           QueryTPLIDOpen();
-          this.openAnnounceList(selectLocation);
+          this.openAnnounceList(res);
           this.getLocate = setLocate(this.getLocation);
           this.$toast('已選取坐標:'+ this.getLocation);
           this.isMapEvent = false;
