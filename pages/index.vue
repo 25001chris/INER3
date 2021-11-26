@@ -432,6 +432,18 @@
 		    SuperGIS.Initialize("/ServerGate/", function () {
 		      SuperGIS.ServerEarth.Initialize(InitEarth)
 		    })
+        const wsdb = new WebSocket("wss://demo.supergeotek.com/ineradms_integration/GisMap/DBWS");
+        wsdb.onopen = function () { };
+        wsdb.onmessage = function (r) {
+          alert(r.data);
+          if (r.data) {
+            const rec = JSON.parse(r.data);
+            console.log('test');
+            console.log(rec);
+            alert("收到訊息了，來自" + rec.table + "表單的" + rec.action);
+            this.getAllFaultReport();
+          }
+        }
 		  },
       /*map methods*/
       openAnnounce(e){

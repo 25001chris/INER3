@@ -19,12 +19,14 @@
             </van-col>
         </van-col>
         <van-col :span="listSpan" class="announcePhotoList" type="flex" justify="left">
-            <van-uploader span="24" type="flex" v-model="fileList" :deletable="false" result-type='text' :preview-options="previewOption" max-count="3"/>
-            <!-- <van-image
+            <!--<van-uploader span="24" type="flex" v-model="fileList" :deletable="false" result-type='text' :preview-options="previewOption" max-count="3"/>-->
+            <van-image
                 v-if="fileList[0].url!==''"
                 width="30%"
-                height="auto"
+                height="10rem"
                 :src="fileList[0].url"
+                fit="cover"
+                @click="showImg(fileList[0].url)"
             />
             <van-image
                 v-if="fileList[1].url!==''"
@@ -38,7 +40,7 @@
                 width="30%"
                 height="auto"
                 :src="fileList[2].url"
-            /> -->
+            />
         </van-col>
         <van-col span="24" class="announceBtnBox w-100" type="flex">
             <ButtonTool text="定位至畫面正中間" @btnEvent="sendEvent"/>
@@ -49,6 +51,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import ButtonTool from '~/components/tools/ButtonTool';
+import { ImagePreview } from 'vant';
 import axios from 'axios';
 export default {
     name:'announceItemContent',
@@ -110,6 +113,10 @@ export default {
         },
         ToastEvent(e){
             this.$toast(e);
+        },
+        showImg(o){
+            console.log(o);
+            ImagePreview({images:[o],closeable:true});
         },
         fileListPhoto(){
             const _id = this.reportList.report_id;
@@ -191,7 +198,7 @@ export default {
         text-align: center;
         align-items: center;
         align-content: center;
-        justify-content: center;
+        justify-content: flex-start;
         display: flex;
         .van-uploader__preview{
             width: 30%;
