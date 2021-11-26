@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div id="body" class="mainBody"/>
+    <van-switch v-model="isQueryInfoOpen" class="switchQueryInfoBtn" @click="QueryInfoOpen"/>
     <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -316,12 +317,7 @@
     <table style="position:absolute; top:0px;">
       <tbody>
       <tr>
-			<td><input type="button" style="width:100px" value="圖層管理" onclick="LayerManager();" />
-			<td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" @click="QueryTPLIDOpen1" />			
-			<td><input id="querybutton2" style="width:100px" type="button" value="開啟坐標查詢" onclick="QueryTPLIDOpen();" />
-			<td><input id="querybutton2" style="width:100px" type="button" value="定位方法" onclick="locate();" />
-			<td><input id="Createmarker" style="width:100px" type="button" value="建立標記" onclick="createmarker();" />			
-			<td><input id="Createmarker" style="width:100px" type="button" value="標記群聚" onclick="markercluster();" />
+			<td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" @click="QueryInfoOpen" />
       </tr>
       </tbody>
     </table>
@@ -408,6 +404,8 @@
         listData:{},
         testOpen:false,
         isMapEvent:false,
+        isFaultInfo:false,
+        isQueryInfoOpen:false,
         getLocation:'',
         getLocate:null,
         sumbitStatus:false,
@@ -705,22 +703,28 @@
             break;
         }
       },
-      QueryTPLIDOpen1(){
+      QueryInfoOpen(){
         const report = this.faultReport;
-        QueryOpen();
-        let faultReportList = {};
         const _this = this;
-        setTimeout(function(){
-          report.forEach(element => {
-            if(element.report_ufid === '5000149'){
-              faultReportList  = element
-            }
-          });
-          console.log(faultReportList)
-          _this.announceItem = true;
-          _this.announceItemType = 'AnnounceResult';
-          _this.announceResultInfo = faultReportList;
-        }, 2000);
+        let faultReportList = {};
+        QueryOpen();
+        /*promiseTest1().then(function(res) { 
+          _this.isQueryInfoOpen = query;
+          if(res.id !== 0 && query){
+            alert(res.id)
+            const d = '5000149'
+            QueryOpen();
+            report.forEach(element => {
+              if(element.report_ufid === d){
+                faultReportList  = element
+              }
+            });
+            _this.announceItem = true;
+            _this.announceItemType = 'AnnounceResult';
+            _this.announceResultInfo = faultReportList;
+            _this.isQueryInfoOpen=false
+          };
+        })*/
       }
     },
     computed:{
@@ -789,6 +793,12 @@
   width: 100vw;
   height: calc(100vh-60px);
   touch-action: none;
+}
+
+.switchQueryInfoBtn{
+  position: absolute;
+  left: 0.5em;
+  top:0.5em;
 }
 
 .links {
