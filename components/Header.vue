@@ -14,6 +14,9 @@
             <van-col :span="setHeaderSpan.title" offset="2">
                 <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
             </van-col>
+            <van-col span="2" type="flex" justify="center" class="pd-t-half userName">
+                <span>{{userName}}</span>
+            </van-col>
             <van-col span="2" type="flex" justify="center" class="pd-t-half">
                 <Button type="btn-primary-dark" @btnEvent="logout" text="登出"/>
             </van-col>
@@ -43,13 +46,16 @@ export default {
             const ishorizontal = this.ishorizontal;
             let result = {}
             if(ishorizontal){
-                result.title = 18;
+                result.title = 16;
                 result.logo = 2
             }else{
-                result.title = 15;
+                result.title = 13;
                 result.logo = 4
             }
             return result;
+        },
+        userName(){
+            return sessionStorage.getItem('loginUserName');
         },
         ...mapState([
             'windowWidth',
@@ -109,5 +115,10 @@ export default {
 }
 .mainLogo{
     width: 200px;
+}
+.userName{
+    span{
+        line-height: 50px;
+    }
 }
 </style>

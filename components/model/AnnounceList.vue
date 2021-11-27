@@ -174,6 +174,9 @@ export default {
             isReadonly: true
         }
     },
+    mounted(){
+        alert('test33333:'+selectLocation)
+    },
     methods: {
         setPicker1(e){
             console.log(e);

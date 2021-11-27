@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <div id="body" class="mainBody"/>
-    <van-switch v-model="isQueryInfoOpen" class="switchQueryInfoBtn" @click="QueryInfoOpen"/>
+    <van-cell center title="點擊查詢" class="switchQueryInfoBtn" >
+      <template #right-icon>
+        <van-switch v-model="isQueryInfoOpen" active-color="#4C7DA2" @click="QueryInfoOpen"/>
+      </template>
+    </van-cell>
+    
+    <div id="lookAtZ" class="lookAtZBox">當前比例尺 1:<span></span></div>
     <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -323,7 +329,7 @@
     </table>
     <transition name="van-slide-up">
       <AnnounceList
-        v-show="announceList"
+        v-if="announceList"
         @sendEvent="toggleAnnounceList"
         @submit="setAnnounceListData"
         :location="getLocation"
@@ -799,6 +805,23 @@
   position: absolute;
   left: 0.5em;
   top:0.5em;
+  width:160px;
+  border-radius: 5px;
+  color: #4C7DA2;
+}
+
+.lookAtZBox{
+  position: absolute;
+  left: 0.5em;
+  bottom:0.5em;
+  background: #F0F0F0;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  padding: 3px;
+  border-radius: 5px;
 }
 
 .links {
