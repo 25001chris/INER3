@@ -630,11 +630,19 @@
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
         const _this = this;
-        promiseTest().then(function(res) {    
-          if(res){
-            _this.listenMapEvent(res);
-          };
-        });
+        QueryTPLIDOpen();
+        document.querySelector(".mainBody").addEventListener("click", function(e){
+          e.preventDefault();
+          if(queryTPCLID){
+            alert(selectLocation)
+            _this.listenMapEvent(selectLocation);
+          }
+        })
+        // promiseTest().then(function(res) {    
+        //   if(res){
+        //     _this.listenMapEvent(res);
+        //   };
+        // });
       },
       listenMapEvent(res){
         if(res && queryTPCLID && this.isMapEvent){
@@ -744,7 +752,7 @@
         QueryOpen();
         _this.isQueryInfoOpen=!_this.isQueryInfoOpen;
         document.querySelector(".mainBody").addEventListener("click", function(e){
-          e.preventDefault()
+          e.preventDefault();
           if(query){
             setTimeout(function(){
               alert(alertId)
