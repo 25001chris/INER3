@@ -362,9 +362,9 @@
       <RightListBox @closeEvent="listEvent" @rightListEvent="listItemType"/>
     </van-popup>
     <AnnounceBtn @btnEvent="openAnnounce"/>
-    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent" @testEvent="testEvent" @plusEvent="plusEvent"/>
+    <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent" @mapToolEvent="mapToolEvent" @plusEvent="plusEvent"/>
     <van-popup v-model="popShow" class="vw-40" :round="true">
-      <PopupTool @btnEvent="popupConfirm"/>
+      <PopupTool @btnEvent="popupConfirm" :popupEvent="setPopupEvent" :popupInit="popupInit"/>
     </van-popup>
   </div>
 </template>
@@ -417,7 +417,9 @@
         sumbitStatus:false,
         announceItemData:'',
         faultReport:{},
+        setPopupEvent:'',
         announceResultInfo:{},
+        popupInit:{},
         announceListError:{
           status:'',
           loop:''
@@ -439,16 +441,42 @@
 		    SuperGIS.Initialize("/ServerGate/", function () {
 		      SuperGIS.ServerEarth.Initialize(InitEarth)
 		    })
+        const _this = this;
         const wsdb = new WebSocket("wss://demo.supergeotek.com/ineradms_integration/GisMap/DBWS");
         wsdb.onopen = function () { };
         wsdb.onmessage = function (r) {
-          alert(r.data);
           if (r.data) {
             const rec = JSON.parse(r.data);
-            console.log('test');
-            console.log(rec);
-            alert("收到訊息了，來自" + rec.table + "表單的" + rec.action);
-            this.getAllFaultReport();
+            //console.log(rec);
+            //alert("收到訊息了，來自" + rec.table + "表單的" + rec.action);
+            _this.getAllFaultReport();
+            _this.setpopupEvent = 'warning';
+            _this.popShow = true;
+            if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
+              _this.popupInit = {
+                icon:'success',
+                title:'通報成功',
+                confirm: 'AnnounceResult',
+                tips:{
+                  url:'/',
+                  link:'查看',
+                  text:''
+                },
+                btn:'確認'
+              }
+            }else{
+              _this.popupInit = {
+                icon:'warning',
+                title:'',
+                confirm: 'AnnounceResult',
+                tips:{
+                  url:'/',
+                  link:'查看',
+                  text:rec.data.report_time+' 於某處發佈了通報，請立即'
+                },
+                btn:'確認'
+              }
+            }
           }
         }
 		  },
@@ -671,7 +699,7 @@
         }
         return result;
       },
-      testEvent(e){
+      mapToolEvent(e){
         switch(e.type){
           case 'zoomIn':
             zoomIn(e.action);
@@ -714,6 +742,33 @@
         const _this = this;
         let faultReportList = {};
         QueryOpen();
+        _this.isQueryInfoOpen=!_this.isQueryInfoOpen;
+        document.querySelector(".mainBody").addEventListener("click", function(e){
+          e.preventDefault()
+          if(query){
+            setTimeout(function(){
+              alert(alertId)
+              report.forEach(element => {
+                if(element.report_ufid === '5000149'){
+                  faultReportList  = element
+                }
+              });
+              _this.announceItem = true;
+              _this.announceItemType = 'AnnounceResult';
+              _this.announceResultInfo = faultReportList;
+            },2000)
+          }
+          
+          // report.forEach(element => {
+          //   if(element.report_ufid === '5000149'){
+          //     faultReportList  = element
+          //   }
+          // });
+          // _this.announceItem = true;
+          // _this.announceItemType = 'AnnounceResult';
+          // _this.announceResultInfo = faultReportList;
+          // _this.isQueryInfoOpen=false;
+        });
         /*promiseTest1().then(function(res) { 
           _this.isQueryInfoOpen = query;
           if(res.id !== 0 && query){

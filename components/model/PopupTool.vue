@@ -2,19 +2,19 @@
     <van-row class="popupBox" type="flex" justify="center">
         <van-col span="20">
             <van-image
-                :src="require(`@/assets/img/ICON/${popupInit[popupEvent].icon}.svg`)"
+                :src="require(`@/assets/img/ICON/${popupInit.icon}.svg`)"
                 title="彈出圖示"
                 class="popupIcon"
                 fit="contain"
             />
         </van-col>
-        <van-col span="20" class="popupTitle">{{popupInit[popupEvent].title}}</van-col>
+        <van-col span="20" class="popupTitle">{{popupInit.title}}</van-col>
         <van-col span="20" class="popupTips" v-show="isTips">
-            {{popupInit[popupEvent].tips.text}}
+            {{popupInit.tips.text}}
             <!--<nuxt-link :to="popupInit[popupEvent].tips.url">{{popupInit[popupEvent].tips.link}}</nuxt-link>-->
-            <span class="checkLink" @click="sendEvent(popupInit[popupEvent].confirm)">{{popupInit[popupEvent].tips.link}}</span>
+            <span class="checkLink" @click="sendEvent(popupInit.confirm)">{{popupInit.tips.link}}</span>
         </van-col>
-        <van-col span="20" class="popupBtn"><ButtonTool :text="popupInit[popupEvent].btn" @btnEvent="sendEvent('cancel')"/></van-col>
+        <van-col span="20" class="popupBtn"><ButtonTool :text="popupInit.btn" @btnEvent="sendEvent('cancel')"/></van-col>
     </van-row>
 </template>
 
@@ -29,16 +29,34 @@ export default {
         popupEvent:{
             type: String,
             default:'success'
+        },
+        popupInit:{
+            type:Object,
+            default: () => {
+                return {
+                    icon:'success',
+                    title:'通報成功',
+                    confirm: 'AnnounceResult',
+                    tips:{
+                        url:'/',
+                        link:'查看',
+                        text:''
+                    },
+                    btn:'確認'
+                }
+            }
         }
     },
     data:()=>{
         return{
-            popupInit:{
+            popupInit1:{
                 success:{
                     icon:'success',
                     title:'通報成功',
                     confirm: 'AnnounceResult',
                     tips:{
+                        url:'/',
+                        link:'查看',
                         text:''
                     },
                     btn:'確認'
@@ -55,13 +73,13 @@ export default {
                     btn:'確認'
                 },
                 warning:{
-                    icon:'success',
+                    icon:'warning',
                     title:'',
                     confirm: 'AnnounceResult',
                     tips:{
                         url:'/',
                         link:'查看',
-                        text:'2021/5/6 12:11 發布了通報，請立即'
+                        text:'2021/5/6 12:11 於某處發佈了通報，發布了通報，請立即'
                     },
                     btn:'確認'
                 },
@@ -76,7 +94,7 @@ export default {
     computed:{
         isTips(){
             const popupEvent = this.popupEvent;
-            const tips = this.popupInit[popupEvent].tips;
+            const tips = this.popupInit.tips;
             if(tips.text!==""){
                 return true;
             }else{
