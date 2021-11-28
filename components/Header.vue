@@ -14,7 +14,7 @@
             <van-col :span="setHeaderSpan.title" offset="2">
                 <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
             </van-col>
-            <van-col span="2" type="flex" justify="center" class="pd-t-half userName">
+            <van-col :span="setHeaderSpan.user" type="flex" justify="center" class="pd-t-half userName">
                 <span>{{userName}}</span>
             </van-col>
             <van-col span="2" type="flex" justify="center" class="pd-t-half">
@@ -47,10 +47,12 @@ export default {
             let result = {}
             if(ishorizontal){
                 result.title = 16;
-                result.logo = 2
+                result.logo = 2;
+                result.user = 2;
             }else{
                 result.title = 13;
-                result.logo = 4
+                result.logo = 4;
+                result.user = 3;
             }
             return result;
         },

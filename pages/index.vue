@@ -320,7 +320,7 @@
         </div>
       </div>
     </div>
-    <table style="position:absolute; top:0px;">
+    <table v-show="testOpen" style="position:absolute; top:0px;">
       <tbody>
       <tr>
 			<td><input id="querybutton" style="width:100px" type="button" value="開啟圖資查詢" @click="QueryInfoOpen" />
@@ -503,9 +503,10 @@
       },
       announceItemEvent(e){
         if(e){
-          this.announceItem = !this.announceItem
+          this.announceItem = !this.announceItem;
           if(e.type="setLocate"){
-            locate1(this.getLocate);
+            const setItemLocate = setLocate(this.announceResultInfo.switch_tpclid);
+            locate1(setItemLocate);
           }
         }
       },
@@ -634,7 +635,7 @@
         document.querySelector(".mainBody").addEventListener("click", function(e){
           e.preventDefault();
           if(queryTPCLID){
-            alert(selectLocation)
+            //alert(selectLocation)
             _this.listenMapEvent(selectLocation);
           }
         })
@@ -751,11 +752,11 @@
         let faultReportList = {};
         QueryOpen();
         _this.isQueryInfoOpen=!_this.isQueryInfoOpen;
-        document.querySelector(".mainBody").addEventListener("click", function(e){
+        document.querySelector(".mainBody").addEventListener("touchend", function(e){
           e.preventDefault();
           if(query){
             setTimeout(function(){
-              alert(alertId)
+              //alert(alertId)
               report.forEach(element => {
                 if(element.report_ufid === '5000149'){
                   faultReportList  = element
@@ -764,6 +765,8 @@
               _this.announceItem = true;
               _this.announceItemType = 'AnnounceResult';
               _this.announceResultInfo = faultReportList;
+              console.log(_this.announceResultInfo.switch_tpclid)
+              //this.getLocate
             },2000)
           }
           
@@ -803,7 +806,7 @@
       },
       resizeAnnounceItem(){
         const a = this.windowWidth === 1318 ? 'height : 36vh' : 'height : 36vh';
-        const b = this.announceItemType = 'AnnounceResult' ? 'height : 50vh' : a;
+        const b = this.announceItemType = 'AnnounceResult' ? 'height : 36vh' : a;
         return b
       },
       ...mapState([

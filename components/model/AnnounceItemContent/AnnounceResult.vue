@@ -6,13 +6,29 @@
                 <van-col span="20" class="test">{{reportList.report_id}}</van-col>
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
-                <van-col span="4" class="announceItemTitle">通報事項</van-col>
+                <van-col span="4" class="announceItemTitle">通報人員</van-col>
+                <van-col span="20">{{reportList.report_user}}</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">饋線編號</van-col>
+                <van-col span="20">{{reportList.report_feederid}}</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">圖號坐標</van-col>
+                <van-col span="20">{{reportList.switch_tpclid}}</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">迴路別</van-col>
+                <van-col span="20">{{reportList.report_loopid}}</van-col>
+            </van-col>
+            <van-col span="24" class="announceItemList" type="flex" >
+                <van-col span="4" class="announceItemTitle">設備狀態</van-col>
                 <van-col span="20">{{reportList.report_status}}</van-col>
             </van-col>
-            <van-col span="24" class="announceItemList" type="flex" justify="center">
+            <!--<van-col span="24" class="announceItemList" type="flex" justify="center">
                 <van-col span="4" class="announceItemTitle">通報備註</van-col>
                 <van-col span="20" class="announceItemText" @click="ToastEvent(reportList.report_note)">{{reportList.report_note}}</van-col>
-            </van-col>
+            </van-col>-->
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="4" class="announceItemTitle">通報時間</van-col>
                 <van-col span="20">{{reportList.d}}</van-col>
@@ -23,7 +39,7 @@
             <van-image
                 v-if="fileList[0].url!==''"
                 width="30%"
-                height="10rem"
+                height="8rem"
                 :src="fileList[0].url"
                 fit="cover"
                 @click="showImg(fileList[0].url)"
@@ -172,7 +188,7 @@ export default {
     justify-content: center;
     padding-top: 0.5em;
     &.ishorizontal{
-        height: 50vh;
+        height: 36vh;
     }
     .announceItemList{
         text-align: left;
@@ -200,6 +216,7 @@ export default {
         align-content: center;
         justify-content: flex-start;
         display: flex;
+        padding: 0.5em;
         .van-uploader__preview{
             width: 30%;
         }
