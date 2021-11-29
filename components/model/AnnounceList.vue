@@ -20,7 +20,7 @@
                     :class="{isReadonly:isReadonly}"
                 />
                 <van-field
-                    v-model="report_loopid"
+                    v-model="loopId"
                     name="report_loopid"
                     label="迴路別"
                     :required="true"
@@ -134,6 +134,10 @@ export default {
     },
     props:{
         location: {
+            type: String,
+            default: ''
+        },
+        loopId:{
             type: String,
             default: ''
         },

@@ -55,6 +55,7 @@ export default {
         toggleEyeStatus(){
             this.eyeOpen = !this.eyeOpen;
             this.eyeClose = !this.eyeClose;
+            this.$emit("markerVisible",'all');
         }
     }
 };

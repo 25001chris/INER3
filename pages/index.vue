@@ -333,6 +333,7 @@
         @sendEvent="toggleAnnounceList"
         @submit="setAnnounceListData"
         :location="getLocation"
+        :loopId="getLoopId"
         :errorMsg="announceListError"
         :sendSubmit="sumbitStatus"
       />
@@ -413,6 +414,7 @@
         isFaultInfo:false,
         isQueryInfoOpen:false,
         getLocation:'',
+        getLoopId:'',
         getLocate:null,
         sumbitStatus:false,
         announceItemData:'',
@@ -430,10 +432,6 @@
     mounted(){
       this.documentLoad();
       this.getAllFaultReport();
-      //this.getFaultReportInfo();
-      /*promiseTest().then(function(res) {
-        console.log(res); // resolved
-      });*/
     },
     methods:{
       /*map methods*/
@@ -515,8 +513,11 @@
           this.setDefault();
         }
       },
-      openAnnounceList(data){
+      openAnnounceList(data,loopId){
         this.getLocation = data;
+        if(loopId){
+          this.getLoopId = loopId;
+        }
         this.announceList = true;
         this.setDefault();
       },
@@ -556,8 +557,6 @@
         if(e.status === "" || e.report_loopid === ""){
           this.announceListError.status = e.status === "" ? "狀態不得為空" : "";
           this.announceListError.loop = e.report_loopid === "" ? "迴路別不得為空" : "";
-          console.log(this.announceListError)
-          //return;
         }else{
           axios.post(`${this.apiurl}REST/FaultReport`,data).then(r=>{
             console.log(r);
@@ -632,27 +631,27 @@
         this.isMapEvent = true;
         const _this = this;
         QueryTPLIDOpen();
-        document.querySelector(".mainBody").addEventListener("click", function(e){
+        document.querySelector(".mainBody").addEventListener("touchend", function(e){
           e.preventDefault();
-          if(queryTPCLID){
-            //alert(selectLocation)
-            _this.listenMapEvent(selectLocation);
+          if(queryTPCLID && !query){
+            _this.listenMapEvent(selectLocation,selectLoopId);
+            if(!selectLocation || !selectLoopId){
+              _this.$toast('未取得坐標,請重新點擊');
+            }
           }
         })
-        // promiseTest().then(function(res) {    
-        //   if(res){
-        //     _this.listenMapEvent(res);
-        //   };
-        // });
       },
-      listenMapEvent(res){
-        if(res && queryTPCLID && this.isMapEvent){
-          QueryTPLIDOpen();
-          this.openAnnounceList(res);
-          this.getLocate = setLocate(this.getLocation);
-          this.$toast('已選取坐標:'+ this.getLocation);
-          this.isMapEvent = false;
-        }
+      listenMapEvent(res,loopId){
+        const _this = this;
+        setTimeout(function(){
+          if(res && loopId && queryTPCLID && _this.isMapEvent){
+            _this.openAnnounceList(res,loopId);
+            _this.getLocate = setLocate(this.getLocation);
+            _this.$toast('已選取坐標:'+ this.getLocation);
+            _this.isMapEvent = !_this.isMapEvent;
+            QueryTPLIDOpen();
+          }
+        },2000)
       },
       getNowLocation(){
         if (navigator.geolocation) {
@@ -752,24 +751,26 @@
         let faultReportList = {};
         QueryOpen();
         _this.isQueryInfoOpen=!_this.isQueryInfoOpen;
-        document.querySelector(".mainBody").addEventListener("touchend", function(e){
+        document.querySelector(".mainBody").addEventListener("touchstart", function(e){
           e.preventDefault();
-          if(query){
+          _this.$toast(alertId)
+          if(query && alertId !== "" && !queryTPCLID){
             setTimeout(function(){
-              //alert(alertId)
               report.forEach(element => {
-                if(element.report_ufid === '5000149'){
-                  faultReportList  = element
+                if(element.report_ufid === alertId){
+                  faultReportList  = element;
+                  _this.announceItem = true;
+                  _this.announceItemType = 'AnnounceResult';
+                  _this.announceResultInfo = faultReportList;
+                }else{
+                  _this.$toast('無故障通報事項');
                 }
               });
-              _this.announceItem = true;
-              _this.announceItemType = 'AnnounceResult';
-              _this.announceResultInfo = faultReportList;
-              console.log(_this.announceResultInfo.switch_tpclid)
-              //this.getLocate
+              
             },2000)
+          }else{
+            _this.$toast('無選取物件');
           }
-          
           // report.forEach(element => {
           //   if(element.report_ufid === '5000149'){
           //     faultReportList  = element
@@ -780,23 +781,6 @@
           // _this.announceResultInfo = faultReportList;
           // _this.isQueryInfoOpen=false;
         });
-        /*promiseTest1().then(function(res) { 
-          _this.isQueryInfoOpen = query;
-          if(res.id !== 0 && query){
-            alert(res.id)
-            const d = '5000149'
-            QueryOpen();
-            report.forEach(element => {
-              if(element.report_ufid === d){
-                faultReportList  = element
-              }
-            });
-            _this.announceItem = true;
-            _this.announceItemType = 'AnnounceResult';
-            _this.announceResultInfo = faultReportList;
-            _this.isQueryInfoOpen=false
-          };
-        })*/
       }
     },
     computed:{

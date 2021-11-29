@@ -172,11 +172,11 @@ export default {
       },
       {
         src:
-          'https://code.jquery.com/jquery-1.12.4.js',
+          'http://192.168.1.103/iner3_mobile/Scripts/jquery-1.12.4.js',
       },
       {
         src:
-          'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
+          'http://192.168.1.103/iner3_mobile/Scripts/jquery-ui.js',
       }, 
       { 
         href: 

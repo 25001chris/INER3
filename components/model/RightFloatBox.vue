@@ -61,7 +61,7 @@ export default {
             this.$emit("homeEvent",e);
         },
         testEvent(e){
-            this.$emit("testEvent",e);
+            this.$emit("mapToolEvent",e);
         }
     },
     computed:{
