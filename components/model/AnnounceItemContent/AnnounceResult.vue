@@ -143,7 +143,7 @@ export default {
         fileListPhoto(){
             const _id = this.reportList.report_id;
             axios.get(`${this.apiurl}REST/GetFaultReportPhoto?id=${_id}`).then(r=>{
-              console.log(r);
+              //console.log(r);
               if(r.data[0].report_photo1){
                   this.fileList[0].url = r.data[0].report_photo1;
               }

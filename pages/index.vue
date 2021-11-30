@@ -419,6 +419,7 @@
         sumbitStatus:false,
         announceItemData:'',
         faultReport:{},
+        faultReportClick:true,
         setPopupEvent:'',
         announceResultInfo:{},
         popupInit:{},
@@ -598,6 +599,8 @@
             })
           }).catch(e=>{
             this.announceList = false;
+            this.popShow = true;
+            this.setpopupEvent = 'error';
             this.popupInit = {
               icon:'error',
               title:'通報失敗',
@@ -798,7 +801,8 @@
         const report = this.faultReport;
         const _this = this;
         if(query){
-          if(alertId !== ""){
+          if(alertId !== "" && _this.faultReportClick){
+            _this.faultReportClick = false;
             setTimeout(function(){
               report.forEach(element => {
                 if(parseInt(element.report_ufid) === alertId){
@@ -808,6 +812,7 @@
                   _this.announceResultInfo = element;
                 }
               });
+              _this.faultReportClick = true;
             },2000)
           }else{
             _this.$toast('無故障通報事項');
