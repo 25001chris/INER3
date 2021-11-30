@@ -183,18 +183,14 @@ export default {
     },
     methods: {
         setPicker1(e){
-            console.log(e);
             this.showPicker1 = true;
             this.pickerData = this[e.data];
             this.pickerEvent = this[e.event];
-            console.log(this.pickerEvent);
         },
         setPicker2(e){
-            console.log(e);
             this.showPicker2 = true;
             this.pickerData = this[e.data];
             this.pickerEvent = this[e.event];
-            console.log(this.pickerEvent);
         },
         onConfirm1(value) {
             this.status = value;
@@ -248,7 +244,6 @@ export default {
     },
     watch:{
         sendSubmit:function(n){
-            console.log(n)
             if(n){
                 this.clearData();
             }

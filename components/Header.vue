@@ -5,14 +5,14 @@
                 <nuxt-link to="/">
                     <van-image
                         :src="logo"
-                        title="智慧電力圖資演算地理資訊應用系統"
+                        title="智慧故障通報地理資訊應用系統"
                         class="pd-t-min w-90 mainLogo"
                         fit="contain"
                     />
                 </nuxt-link>
             </van-col>
             <van-col :span="setHeaderSpan.title" offset="2">
-                <nuxt-link class="mainTitle" to="/">智慧電力圖資演算地理資訊應用系統</nuxt-link>
+                <nuxt-link class="mainTitle" to="/">智慧故障通報地理資訊應用系統</nuxt-link>
             </van-col>
             <van-col :span="setHeaderSpan.user" type="flex" justify="center" class="pd-t-half userName">
                 <span>{{userName}}</span>
