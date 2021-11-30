@@ -14,14 +14,14 @@
                 :src="require(`@/assets/img/ICON/favicon/openEye.svg`)"
                 class="listIcon"
                 fit="contain"
-                v-show="eyeOpen"
+                v-if="eyeOpen && isEye"
                 @click="toggleEyeStatus"
             />
             <van-image
                 :src="require(`@/assets/img/ICON/favicon/closeEye.svg`)"
                 class="listIcon"
                 fit="contain"
-                v-show="eyeClose"
+                v-if="!eyeOpen  && isEye"
                 @click="toggleEyeStatus"
             />
         </van-col>
@@ -41,11 +41,14 @@ export default {
             type:String,
             default:''
         },
+        isEye:{
+            type:Boolean,
+            default:false
+        },
     },
     data:()=>{
         return{
-            eyeOpen:true,
-            eyeClose:false
+            eyeOpen:false,
         }
     },
     methods: {
@@ -54,8 +57,7 @@ export default {
         },
         toggleEyeStatus(){
             this.eyeOpen = !this.eyeOpen;
-            this.eyeClose = !this.eyeClose;
-            this.$emit("markerVisible",'all');
+            this.$emit("markerVisible",true)
         }
     }
 };

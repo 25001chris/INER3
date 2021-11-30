@@ -360,7 +360,7 @@
       />
     </transition>
     <van-popup v-model="rightListBox" :overlay="false" position="right" :style="{ width:'300px',height: 'calc( 100vh - 60px )',position:'absolute' }" >
-      <RightListBox @closeEvent="listEvent" @rightListEvent="listItemType"/>
+      <RightListBox @closeEvent="listEvent" @rightListEvent="listItemType" @markerVisible="getMarkerVisible"/>
     </van-popup>
     <AnnounceBtn @btnEvent="openAnnounce"/>
     <RightFloatBox :isAnnounceBox="announceBox" :isRightListBox="rightListBox" :isAnnounceItem="announceItem" @listEvent="listEvent" @mapToolEvent="mapToolEvent" @plusEvent="plusEvent"/>
@@ -445,12 +445,41 @@
         wsdb.onmessage = function (r) {
           if (r.data) {
             const rec = JSON.parse(r.data);
-            //console.log(rec);
+            if(rec.table === "faultreport"){
+              _this.getAllFaultReport();
+              _this.popShow = true;
+              _this.announceResultInfo = rec.data;
+              if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
+                _this.setpopupEvent = 'success';
+                _this.popupInit = {
+                  icon:'success',
+                  title:'通報成功',
+                  confirm: 'AnnounceResult',
+                  tips:{
+                    url:'/',
+                    link:'查看',
+                    text:''
+                  },
+                  btn:'確認'
+                }
+              }else{
+                _this.setpopupEvent = 'warning';
+                _this.popupInit = {
+                    icon:'warning',
+                    title:'',
+                    confirm: 'AnnounceResult',
+                    tips:{
+                      url:'/',
+                      link:'查看',
+                      text:rec.data.report_time+' 於某處發佈了通報，請立即'
+                    },
+                    btn:'確認'
+                }
+              }
+            };
             //alert("收到訊息了，來自" + rec.table + "表單的" + rec.action);
-            _this.getAllFaultReport();
-            _this.setpopupEvent = 'warning';
-            _this.popShow = true;
-            if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
+
+            /*if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
               _this.popupInit = {
                 icon:'success',
                 title:'通報成功',
@@ -474,7 +503,7 @@
                 },
                 btn:'確認'
               }
-            }
+            }*/
           }
         }
 		  },
@@ -524,7 +553,6 @@
       getAllFaultReport(){
         axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
           this.faultReport = r.data;
-          console.log(this.faultReport);
         }).catch(e=>{
           console.log(e)
         })
@@ -559,31 +587,34 @@
           this.announceListError.loop = e.report_loopid === "" ? "迴路別不得為空" : "";
         }else{
           axios.post(`${this.apiurl}REST/FaultReport`,data).then(r=>{
-            console.log(r);
             this.announceListData = e;
             this.announceList = false;
             this.popShow = true;
             this.sumbitStatus = true;
             axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
-              this.faultReport = r;
-              console.log(this.faultReport);
+              this.faultReport = r.data;
             }).catch(e=>{
               console.log(e)
             })
-            axios.get(`${this.apiurl}REST/GetFaultReportPhoto?id=3738`).then(r=>{
-              //const img1 = r.data[0].report_photo1;
-              //const imgData = img1.replace("data:image/jpg;base64,","")
-              //console.log(window.atob(imgData));
-              console.log(r);
-            }).catch(e=>{
-              console.log(e);
-            })
           }).catch(e=>{
             this.announceList = false;
-            this.$toast('error');
+            this.popupInit = {
+              icon:'error',
+              title:'通報失敗',
+              confirm: 'cancel',
+              tips:{
+                url:'/',
+                link:'',
+                text:'可以暫存文字請等網路連線狀況良好時，再重新通報一次'
+              },
+              btn:'確認'
+            },
             console.log(e)
           })
         }
+      },
+      getMarkerVisible(e){
+        toggleAllVisibleStatus();
       },
       toggleAnnounceList(e){
         if(e === "close"){
@@ -601,7 +632,6 @@
         setTimeout(() => {this.announceEvent = 'default'}, 500);
       },
       listItemType(e){
-        console.log(e)
         if(e){
           this.rightListBox = false;
           this.announceItem = true;
@@ -630,26 +660,33 @@
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
         const _this = this;
-        QueryTPLIDOpen();
-        document.querySelector(".mainBody").addEventListener("touchend", function(e){
-          e.preventDefault();
-          if(queryTPCLID && !query){
-            _this.listenMapEvent(selectLocation,selectLoopId);
-            if(!selectLocation || !selectLoopId){
-              _this.$toast('未取得坐標,請重新點擊');
-            }
+        if(!queryTPCLID){
+          QueryTPLIDOpen();
+        };
+        if(query){
+          this.isQueryInfoOpen=!this.isQueryInfoOpen;
+        }
+        document.querySelector(".mainBody").removeEventListener("touchstart", _this.test2);
+        document.querySelector(".mainBody").addEventListener("touchstart", _this.test1);
+      },
+      test1(e){
+        e.preventDefault(e);
+        if(queryTPCLID && !query && this.isMapEvent){
+          this.listenMapEvent(selectLocation,selectLoopId);
+          if(!selectLocation || !selectLoopId){
+            this.$toast('未取得坐標,請重新點擊');
           }
-        })
+        }
       },
       listenMapEvent(res,loopId){
         const _this = this;
         setTimeout(function(){
-          if(res && loopId && queryTPCLID && _this.isMapEvent){
-            _this.openAnnounceList(res,loopId);
-            _this.getLocate = setLocate(this.getLocation);
-            _this.$toast('已選取坐標:'+ this.getLocation);
-            _this.isMapEvent = !_this.isMapEvent;
+          if(res && loopId && _this.isMapEvent){
             QueryTPLIDOpen();
+            _this.isMapEvent = !_this.isMapEvent;
+            _this.openAnnounceList(res,loopId);
+            _this.getLocate = setLocate(_this.getLocation);
+            _this.$toast('已選取坐標:'+ _this.getLocation);
           }
         },2000)
       },
@@ -661,6 +698,7 @@
         }
       },
       getLocationObj() {//取得 經緯度
+        console.log('getLocation')
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
@@ -672,6 +710,7 @@
         this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
       },
       showNowPosition(position) {
+        console.log(position)
         locate1({X:position.coords.longitude,Y:position.coords.latitude});
       },
       switchSelect(data){
@@ -746,52 +785,42 @@
         }
       },
       QueryInfoOpen(){
+        QueryOpen();
+        // if(queryTPCLID){
+        //   QueryTPLIDOpen();
+        // }
+        this.isQueryInfoOpen=!this.isQueryInfoOpen;
+        document.querySelector(".mainBody").removeEventListener("touchstart", this.test1);
+        document.querySelector(".mainBody").addEventListener("touchstart", this.test2);
+      },
+      test2(e){
+        e.preventDefault();
         const report = this.faultReport;
         const _this = this;
-        let faultReportList = {};
-        QueryOpen();
-        _this.isQueryInfoOpen=!_this.isQueryInfoOpen;
-        document.querySelector(".mainBody").addEventListener("touchstart", function(e){
-          e.preventDefault();
-          _this.$toast(alertId)
-          if(query && alertId !== "" && !queryTPCLID){
-            setTimeout(function(){
-              report.forEach(element => {
-                if(element.report_ufid === alertId){
-                  faultReportList  = element;
-                  _this.announceItem = true;
-                  _this.announceItemType = 'AnnounceResult';
-                  _this.announceResultInfo = faultReportList;
-                }else{
-                  _this.$toast('無故障通報事項');
-                }
-              });
-              
-            },2000)
-          }else{
-            _this.$toast('無選取物件');
-          }
-          // report.forEach(element => {
-          //   if(element.report_ufid === '5000149'){
-          //     faultReportList  = element
-          //   }
-          // });
-          // _this.announceItem = true;
-          // _this.announceItemType = 'AnnounceResult';
-          // _this.announceResultInfo = faultReportList;
-          // _this.isQueryInfoOpen=false;
-        });
+        if(query && alertId !== ""){
+          setTimeout(function(){
+            report.forEach(element => {
+              if(parseInt(element.report_ufid) === alertId){
+                _this.announceItem = true;
+                _this.announceItemType = 'AnnounceResult';
+                _this.announceResultInfo = element;
+              }
+            });
+          },2000)
+        }else{
+          _this.$toast('無故障通報事項');
+        }
       }
     },
     computed:{
       resizeAnnounceBox(){
         let verticalHeight = this.announceEvent === "coordinate" ? 'height : 36vh' : 'height : 36vh';
-        return this.windowWidth === 1318 ? 'height : 36vh' : verticalHeight;
+        return this.ishorizontal ? 'height : 36vh' : verticalHeight;
       },
       resizeAnnounceItem(){
-        const a = this.windowWidth === 1318 ? 'height : 36vh' : 'height : 36vh';
-        const b = this.announceItemType = 'AnnounceResult' ? 'height : 36vh' : a;
-        return b
+        const a = this.ishorizontal ? 'height : 42vh' : 'height : 36vh';
+        //const b = this.announceItemType = 'AnnounceResult' ? 'height : 48vh' : a;
+        return a
       },
       ...mapState([
         'windowWidth',

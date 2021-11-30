@@ -101,27 +101,27 @@ export default {
         &.ishorizontal{
             height: calc( 66vh - 60px );
             .floatMidBox{
-                top: calc( 100vh - 620px );
+                top: calc( 100vh - 670px );
             }
             .floatBottomBox{
                 top: calc( 100vh - 600px );
             }
         }
         .floatMidBox{
-            top: calc( 100vh - 610px );
+            top: calc( 100vh - 820px );
         }
         .floatBottomBox{
-            top: calc( 100vh - 540px );
+            top: calc( 100vh - 740px );
         }
     }
     &.isAnnounceItem{
         height: calc( 66vh - 60px );
         &.ishorizontal{
             .floatMidBox{
-                top: calc( 100vh - 610px );
+                top: calc( 100vh - 670px );
             }
             .floatBottomBox{
-                top: calc( 100vh - 550px );
+                top: calc( 100vh - 600px );
             }
         }
         .floatMidBox{

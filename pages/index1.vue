@@ -1588,7 +1588,6 @@
       },
       /* no used*/
       LayerManager(){
-        console.log('test111');
         $("#div_layer").dialog("open");
       },
       LayerVisible(name){
@@ -1780,8 +1779,6 @@
       /*map methods*/
       openAnnounce(e){
         if(e){
-          console.log(e)
-          console.log(QueryTPLIDOpen)
           QueryTPLIDOpen();
           this.announceBox = true;
           this.rightListBox = false;

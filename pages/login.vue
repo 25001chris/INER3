@@ -86,7 +86,6 @@
       onSubmit(values) {
         const data = `UserID=${values.user}&Password=${values.password}`;
         axios.post(`${this.apiurl}/REST/Login`,data).then(r=>{
-          console.log(r.data);
           if(r.data === '帳號或密碼錯誤'){
             this.$toast('帳號或密碼錯誤');
           }else{

@@ -82,7 +82,7 @@ export default {
         },
         isLogout(e){
             if(e){
-                console.log('gogo')
+                console.log('logout')
             }
         },
         logout(e){

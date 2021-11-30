@@ -110,7 +110,7 @@
                 />
                 <van-field name="uploader" label="現場照片">
                     <template type="flex" #input>
-                        <van-col span="24" :class="{ishorizontal:ishorizontal}"><van-uploader v-model="uploader" offset="2" max-count="3" capture="camera" :preview-size="photoWidth"/></van-col>
+                        <van-col span="24" :class="{ishorizontal:ishorizontal}"><van-uploader v-model="uploader" offset="2" max-count="3" capture="camera" :preview-size="photoWidth" class="vanUploader"/></van-col>
                     </template>
                 </van-field>
                 <van-row class="announceBtnBox" type="flex" style="margin: 16px;">
@@ -284,5 +284,8 @@ export default {
     align-items: center;
     justify-content: center;
     @include noto-sans-tc-30-medium;
+}
+.vanUploader{
+    min-width: 80vh !important;
 }
 </style>
