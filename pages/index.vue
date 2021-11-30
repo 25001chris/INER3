@@ -797,18 +797,21 @@
         e.preventDefault();
         const report = this.faultReport;
         const _this = this;
-        if(query && alertId !== ""){
-          setTimeout(function(){
-            report.forEach(element => {
-              if(parseInt(element.report_ufid) === alertId){
-                _this.announceItem = true;
-                _this.announceItemType = 'AnnounceResult';
-                _this.announceResultInfo = element;
-              }
-            });
-          },2000)
-        }else{
-          _this.$toast('無故障通報事項');
+        if(query){
+          if(alertId !== ""){
+            setTimeout(function(){
+              report.forEach(element => {
+                if(parseInt(element.report_ufid) === alertId){
+                  _this.announceItem = true;
+                  _this.rightListBox = false;
+                  _this.announceItemType = 'AnnounceResult';
+                  _this.announceResultInfo = element;
+                }
+              });
+            },2000)
+          }else{
+            _this.$toast('無故障通報事項');
+          }
         }
       }
     },
