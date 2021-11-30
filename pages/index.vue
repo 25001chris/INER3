@@ -660,12 +660,12 @@
         this.$toast('請點擊地圖選取坐標');
         this.isMapEvent = true;
         const _this = this;
+        if(query){
+          this.QueryInfoOpen();
+        }
         if(!queryTPCLID){
           QueryTPLIDOpen();
         };
-        if(query){
-          this.isQueryInfoOpen=!this.isQueryInfoOpen;
-        }
         document.querySelector(".mainBody").removeEventListener("touchstart", _this.test2);
         document.querySelector(".mainBody").addEventListener("touchstart", _this.test1);
       },
@@ -785,11 +785,11 @@
         }
       },
       QueryInfoOpen(){
-        QueryOpen();
-        // if(queryTPCLID){
-        //   QueryTPLIDOpen();
-        // }
         this.isQueryInfoOpen=!this.isQueryInfoOpen;
+        if(queryTPCLID){
+          QueryTPLIDOpen();
+        };
+        QueryOpen();
         document.querySelector(".mainBody").removeEventListener("touchstart", this.test1);
         document.querySelector(".mainBody").addEventListener("touchstart", this.test2);
       },
