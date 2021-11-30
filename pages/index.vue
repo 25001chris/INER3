@@ -691,6 +691,7 @@
         },2000)
       },
       getNowLocation(){
+        console.log('getLocation');
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showNowPosition);//有拿到位置就呼叫 showPosition 函式
         } else {
@@ -698,7 +699,6 @@
         }
       },
       getLocationObj() {//取得 經緯度
-        console.log('getLocation')
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);//有拿到位置就呼叫 showPosition 函式
         } else {

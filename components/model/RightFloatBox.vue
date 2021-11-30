@@ -5,7 +5,7 @@
             <FloatButton icon="list" @btnEvent="listEvent"/>
         </van-col>
         <van-col class="floatMidBox" :class="setPosition">
-            <FloatButton icon="position" @btnEvent="positionEvent"/>
+            <FloatButton icon="position" type="position" @btnEvent="positionEvent" @testEvent="testEvent"/>
         </van-col>
         <van-col class="floatBottomBox" :class="setPosition">
             <FloatButton icon="plus" type="zoomIn" @btnEvent="plusEvent" @testEvent="testEvent"/>

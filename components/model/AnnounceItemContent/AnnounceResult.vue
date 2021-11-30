@@ -23,7 +23,7 @@
             </van-col>
             <van-col span="24" class="announceItemList" type="flex" >
                 <van-col span="6" class="announceItemTitle">設備狀態</van-col>
-                <van-col span="18">{{reportList.report_status}}</van-col>
+                <van-col span="18">{{reportStatus}}</van-col>
             </van-col>
             <!--<van-col span="24" class="announceItemList" type="flex" justify="center">
                 <van-col span="4" class="announceItemTitle">通報備註</van-col>
@@ -182,6 +182,25 @@ export default {
                 return 10;
             }else{
                 return 20;
+            }
+        },
+        reportStatus(){
+            const s = this.reportList.report_status;
+            switch(s){
+                case 0:
+                    return '正常';
+                case 1:
+                    return '瞬時故障';
+                case 2:
+                    return '永久性故障';
+                case 4:
+                    return '復電';
+                case 7:
+                    return '線路湧流';
+                case 5:
+                    return '切開';
+                case 6:
+                    return '投入';
             }
         }
     }

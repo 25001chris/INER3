@@ -5,8 +5,9 @@ export const state = () => ({
     announceList:null,
     loginStatus:0,
     userInfo:{},
+    //apiurl:'http://demo.supergeotek.com/ineradms_Integration/',
     apiurl:'https://demo.supergeotek.com/ineradms_Integration/',
-    apiurlTest:'../ineradms/'
+    //apiurlTest:'../ineradms/'
 })
 export const mutations = {
     increment(state) {
