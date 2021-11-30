@@ -87,8 +87,7 @@ export default {
         },
         logout(e){
             if(e){
-                axios.post(`${this.apiurl}/REST/Logout`).then(r=>{
-                    console.log(r);
+                axios.post(`${this.apiurl}REST/Logout`).then(r=>{
                     sessionStorage.setItem('loginStatus', 0);
                     this.$router.push({ path: '/login' });
                 }).catch(e=>{

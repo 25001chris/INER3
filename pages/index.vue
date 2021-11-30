@@ -336,6 +336,7 @@
         :loopId="getLoopId"
         :errorMsg="announceListError"
         :sendSubmit="sumbitStatus"
+        :announceListStatus="announceListStatus"
       />
     </transition>
     <transition name="van-slide-up">
@@ -420,6 +421,7 @@
         announceItemData:'',
         faultReport:{},
         faultReportClick:true,
+        announceListStatus:false,
         setPopupEvent:'',
         announceResultInfo:{},
         popupInit:{},
@@ -592,12 +594,14 @@
             this.announceList = false;
             this.popShow = true;
             this.sumbitStatus = true;
+            this.announceListStatus = true;
             axios.get(`${this.apiurl}REST/FaultReport`).then(r=>{
               this.faultReport = r.data;
             }).catch(e=>{
               console.log(e)
             })
           }).catch(e=>{
+            this.announceListStatus = false;
             this.announceList = false;
             this.popShow = true;
             this.setpopupEvent = 'error';

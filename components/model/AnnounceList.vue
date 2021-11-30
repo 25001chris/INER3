@@ -141,6 +141,10 @@ export default {
             type: String,
             default: ''
         },
+        announceListStatus:{
+            type: Boolean,
+            default: false
+        },
         errorMsg:{
             type:Object,
             default: () => {
@@ -243,7 +247,7 @@ export default {
         }
     },
     watch:{
-        sendSubmit:function(n){
+        announceListStatus:function(n){
             if(n){
                 this.clearData();
             }

@@ -13,7 +13,7 @@
                         <td class="td-l">{{item.d}}</td>
                         <td class="td-m"><van-tag :class="tagStyle(item.report_process).type" class="tag">{{tagStyle(item.report_process).text}}</van-tag></td>
                         <td class="td-xl" @click="ToastEvent(item.report_note)">{{item.report_note}}</td>
-                        <td class="td-xl">{{item.check_response}}</td>
+                        <td class="td-xl" @click="ToastEvent(item.check_response)">{{item.check_response}}</td>
                         <td class="td-s" @click="LocatePosition(item.switch_tpclid)">
                             <van-image
                                 :src="require(`@/assets/img/ICON/favicon/position.svg`)"

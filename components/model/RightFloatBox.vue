@@ -125,10 +125,10 @@ export default {
             }
         }
         .floatMidBox{
-            top: calc( 100vh - 610px );
+            top: calc( 100vh - 820px );
         }
         .floatBottomBox{
-            top: calc( 100vh - 540px );
+            top: calc( 100vh - 740px );
         }
     }
     .floatTopBox{
