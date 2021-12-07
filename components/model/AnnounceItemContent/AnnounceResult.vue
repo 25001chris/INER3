@@ -121,7 +121,10 @@ export default {
         }
     },
     mounted(){
-        this.fileListPhoto()
+        this.fileListPhoto();
+    },
+    updated(){
+        this.fileListPhoto();
     },
     methods: {
         sendEvent(e){

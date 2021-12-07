@@ -7,6 +7,7 @@ export const state = () => ({
     userInfo:{},
     //apiurl:'http://demo.supergeotek.com/ineradms_Integration/',
     apiurl:'https://demo.supergeotek.com/ineradms_Integration/',
+    wsurl:'wss://demo.supergeotek.com/ineradms_integration/GisMap/DBWS'
     //apiurlTest:'../ineradms/'
 })
 export const mutations = {

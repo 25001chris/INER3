@@ -7,7 +7,11 @@
       </template>
     </van-cell>
     
-    <div id="lookAtZ" class="lookAtZBox">當前比例尺 1:<span></span></div>
+    <!--<div id="lookAtZ" class="lookAtZBox">當前比例尺 1:<span></span></div>-->
+    <div id="dpi"></div>
+    <div id="scalebar" style="width: 64.4415px;">
+		  <div id="secondNumber" style="left: 35px;">5 公里</div>		
+	  </div>
     <div v-show="testOpen" id="div_results" class="ui-widget-content" title="查詢結果" style="background-color:rgba(255,255,255,0.8)">
       <div id="list_context">
       </div>
@@ -443,16 +447,18 @@
 		      SuperGIS.ServerEarth.Initialize(InitEarth)
 		    })
         const _this = this;
-        const wsdb = new WebSocket("wss://demo.supergeotek.com/ineradms_integration/GisMap/DBWS");
+        const wsdb = new WebSocket(this.$store.state.wsurl);
         wsdb.onopen = function () { };
         wsdb.onmessage = function (r) {
           if (r.data) {
             const rec = JSON.parse(r.data);
+            const type = rec.action;
+            const process = rec.data["report_process"];
             if(rec.table === "faultreport"){
               _this.getAllFaultReport();
               _this.popShow = true;
               _this.announceResultInfo = rec.data;
-              if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
+              if(rec.data.report_user === sessionStorage.getItem('loginUserName') && type === "INSERT"){
                 _this.setpopupEvent = 'success';
                 _this.popupInit = {
                   icon:'success',
@@ -465,7 +471,7 @@
                   },
                   btn:'確認'
                 }
-              }else{
+              }else if(type == "UPDATE" && process == 3){
                 _this.setpopupEvent = 'warning';
                 _this.popupInit = {
                     icon:'warning',
@@ -474,12 +480,14 @@
                     tips:{
                       url:'/',
                       link:'查看',
-                      text:rec.data.report_time+' 於某處發佈了通報，請立即'
+                      text:rec.data.report_time+' 於 ' + rec.data.switch_tpclid + '發佈了通報，請立即'
                     },
                     btn:'確認'
                 }
               }
             };
+            const zippi = new Audio('./alarm.wav');
+            zippi.play();
             //alert("收到訊息了，來自" + rec.table + "表單的" + rec.action);
 
             /*if(rec.data.report_user === sessionStorage.getItem('loginUserName')){
@@ -717,7 +725,6 @@
         this.getLocate = setLocate(getLngLatToTPCPoint({X:position.coords.longitude,Y:position.coords.latitude}));
       },
       showNowPosition(position) {
-        console.log(position)
         locate1({X:position.coords.longitude,Y:position.coords.latitude});
       },
       switchSelect(data){
@@ -922,4 +929,23 @@
 ul { height: 100px; overflow: auto; width: 200px; border: 1px solid #000; }
 ul { list-style-type: none; margin: 0; padding: 0; overflow-x: hidden; }
 li { margin: 0; padding: 0; }
+
+#scalebar{
+	position: absolute;
+	width: 5.2cm;
+	bottom: 20px;
+	left: 20px;
+	background: rgba(0,0,0,.3);
+	border-radius: 4px;
+	padding: 2px;
+}
+#scalebar #secondNumber{
+	border: 1px solid #eee;
+	border-top: none;
+	color: #eee;
+	font-size: 10px;
+	text-align: center;
+	margin: 1px;
+	will-change: contents,width;
+}
 </style>
